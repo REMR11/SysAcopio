@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace SysAcopio.Controllers
 {
-    public class DbContext
+    public class SysAcopioDbContext
     {
         private readonly string connectionStringDeRL;
 
-        public DbContext()
+        public SysAcopioDbContext()
         {
             // Accede a la cadena de conexión desde el archivo de configuración
             connectionStringDeRL = ConfigurationManager.ConnectionStrings["ConnectionStringDeRL"].ConnectionString;
