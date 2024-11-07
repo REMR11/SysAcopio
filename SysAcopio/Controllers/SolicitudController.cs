@@ -91,7 +91,7 @@ namespace SysAcopio.Controllers
         /// <returns>Una colección de solicitudes activas.</returns>
         public IEnumerable<Solicitud> ObtenerSolicitudesActivas()
         {
-            return ObtenerTodasLasSolicitudes().Where(s => s.Estado);
+            return ObtenerTodasLasSolicitudes().Where(s => s.Estado == true);
         }
 
         /// <summary>

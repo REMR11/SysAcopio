@@ -28,9 +28,9 @@ namespace SysAcopio.Controllers
             {
                 using (SqlConnection conn = dbContext.ConnectionServer())
                 {
-                    string query = @"INSERT INTO Solicitud (Ubicacion, Fecha, Estado, IsCancel, NombreSolicitante, Urgencia, Motivo) 
-                             VALUES (@Ubicacion, @Fecha, @Estado, @IsCancel, @NombreSolicitante, @Urgencia, @Motivo);
-                             SELECT SCOPE_IDENTITY();";
+                    string query = @"INSERT INTO SOLICITUD(ubicacion, fecha, estado, nombre_solicitante, urgencia, motivo, is_cancel) VALUES
+                                        (@Ubicacion, @Fecha, @Estado, @IsCancel, @NombreSolicitante, @Urgencia, @Motivo);
+                                    SELECT SCOPE_IDENTITY();";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -79,11 +79,11 @@ namespace SysAcopio.Controllers
                                 IdSolicitud = reader.GetInt64(0),
                                 Ubicacion = reader.GetString(1),
                                 Fecha = reader.GetDateTime(2),
-                                Estado = reader.GetBoolean(3),
-                                IsCancel = reader.GetBoolean(4),
-                                NombreSolicitante = reader.GetString(5),
-                                Urgencia = reader.GetByte(6),
-                                Motivo = reader.GetString(7)
+                                Estado = reader.IsDBNull(3) ? false : reader.GetBoolean(3), // Manejo de nulos
+                                NombreSolicitante = reader.GetString(4),
+                                Urgencia = reader.GetByte(5),
+                                Motivo = reader.GetString(6),
+                                IsCancel = reader.IsDBNull(7) ? false : reader.GetBoolean(7), // Manejo de nulos
                             });
                         }
                     }
@@ -101,7 +101,7 @@ namespace SysAcopio.Controllers
         {
             using (SqlConnection conn = dbContext.ConnectionServer())
             {
-                string query = "SELECT * FROM Solicitud WHERE IdSolicitud = @IdSolicitud";
+                string query = "SELECT * FROM Solicitud WHERE id_solicitud = @IdSolicitud";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@IdSolicitud", id);
@@ -115,11 +115,11 @@ namespace SysAcopio.Controllers
                                 IdSolicitud = reader.GetInt64(0),
                                 Ubicacion = reader.GetString(1),
                                 Fecha = reader.GetDateTime(2),
-                                Estado = reader.GetBoolean(3),
-                                IsCancel = reader.GetBoolean(4),
-                                NombreSolicitante = reader.GetString(5),
-                                Urgencia = reader.GetByte(6),
-                                Motivo = reader.GetString(7)
+                                Estado = reader.IsDBNull(3) ? false : reader.GetBoolean(3), // Manejo de nulos
+                                NombreSolicitante = reader.GetString(4),
+                                Urgencia = reader.GetByte(5),
+                                Motivo = reader.GetString(6),
+                                IsCancel = reader.IsDBNull(7) ? false : reader.GetBoolean(7), // Manejo de nulos
                             };
                         }
                     }
@@ -138,9 +138,16 @@ namespace SysAcopio.Controllers
             {
                 using (SqlConnection conn = dbContext.ConnectionServer())
                 {
-                    string query = "UPDATE Solicitud SET Ubicacion = @Ubicacion, Fecha = @Fecha, Estado = @Estado, " +
-                                   "IsCancel = @IsCancel, NombreSolicitante = @NombreSolicitante, Urgencia = @Urgencia, " +
-                                   "Motivo = @Motivo WHERE IdSolicitud = @IdSolicitud";
+                    string query = @"UPDATE Solicitud SET 
+                                        Ubicacion = @Ubicacion, 
+                                        Fecha = @Fecha, 
+                                        Estado = @Estado,
+                                        nombre_solicitante = @NombreSolicitante, 
+                                        Urgencia = @Urgencia, 
+                                        Motivo = @Motivo 
+                                        is_cancel = @IsCancel, 
+                                    WHERE 
+                                        IdSolicitud = @IdSolicitud";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -148,10 +155,10 @@ namespace SysAcopio.Controllers
                         cmd.Parameters.AddWithValue("@Ubicacion", solicitud.Ubicacion);
                         cmd.Parameters.AddWithValue("@Fecha", solicitud.Fecha);
                         cmd.Parameters.AddWithValue("@Estado", solicitud.Estado);
-                        cmd.Parameters.AddWithValue("@IsCancel", solicitud.IsCancel);
                         cmd.Parameters.AddWithValue("@NombreSolicitante", solicitud.NombreSolicitante);
                         cmd.Parameters.AddWithValue("@Urgencia", solicitud.Urgencia);
                         cmd.Parameters.AddWithValue("@Motivo", solicitud.Motivo);
+                        cmd.Parameters.AddWithValue("@IsCancel", solicitud.IsCancel);
 
                         return cmd.ExecuteNonQuery() > 0;
                     }
@@ -163,6 +170,11 @@ namespace SysAcopio.Controllers
             }
         }
 
+        /// <summary>
+        /// Metodo para eliminar logicamente un registro
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Booleano que verifica el exito del metodo</returns>
         public bool DeleteLogic(long id)
         {
             try
@@ -190,7 +202,7 @@ namespace SysAcopio.Controllers
             {
                 using (SqlConnection conn = dbContext.ConnectionServer())
                 {
-                    string query = "DELETE FROM Solicitud WHERE IdSolicitud = @IdSolicitud";
+                    string query = "DELETE FROM Solicitud WHERE id_solicitud = @IdSolicitud";
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@IdSolicitud", id);
