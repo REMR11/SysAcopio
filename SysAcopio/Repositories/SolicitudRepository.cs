@@ -170,6 +170,11 @@ namespace SysAcopio.Controllers
             }
         }
 
+        /// <summary>
+        /// Metodo para eliminar logicamente un registro
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Booleano que verifica el exito del metodo</returns>
         public bool DeleteLogic(long id)
         {
             try
