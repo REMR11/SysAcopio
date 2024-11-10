@@ -16,7 +16,7 @@ namespace SysAcopio.Controllers
         public SysAcopioDbContext()
         {
             // Accede a la cadena de conexión desde el archivo de configuración
-            connectionStringDeRL = ConfigurationManager.ConnectionStrings["ConnectionStringDeRL"].ConnectionString;
+            connectionStringDeRL = ConfigurationManager.ConnectionStrings["ConnectionLocalString"].ConnectionString;
         }
 
         public SqlConnection ConnectionServer()
