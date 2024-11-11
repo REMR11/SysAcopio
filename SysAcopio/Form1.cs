@@ -54,5 +54,39 @@ namespace SysAcopio
 
             return dt;
         }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+
+            // Obtener los valores de los TextBox
+            string ubicacion = txtUbicacion.Text;
+            string nombreSolicitante = txtNombreSolicitante.Text;
+            byte urgencia;
+
+            // Intentar convertir el texto de urgencia a byte
+            if (!byte.TryParse(txtUrgencia.Text, out urgencia))
+            {
+                MessageBox.Show("Por favor, ingrese un valor numérico válido para la urgencia.");
+                return; // Salir del método si la conversión falla
+            }
+
+            string motivo = txtMotivo.Text;
+
+            // Crear una nueva instancia de Solicitud
+            Solicitud nuevaSolicitud = new Solicitud(ubicacion, nombreSolicitante, urgencia, motivo);
+
+            // Agregar la nueva solicitud a la lista
+            long idSolicitud = _controller.CrearSolicitud(nuevaSolicitud);
+
+            // (Opcional) Limpiar los TextBox después de guardar
+            txtUbicacion.Clear();
+            txtNombreSolicitante.Clear();
+            txtUrgencia.Clear();
+            txtMotivo.Clear();
+
+            // (Opcional) Actualizar el DataGridView para mostrar las solicitudes
+            dataGridView1.DataSource = null; // Limpiar la fuente de datos
+
+        }
     }
 }
