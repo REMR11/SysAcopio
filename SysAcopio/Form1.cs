@@ -1,5 +1,6 @@
 ﻿using SysAcopio.Controllers;
 using SysAcopio.Models;
+using SysAcopio.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,44 +17,77 @@ namespace SysAcopio
 {
     public partial class Form1 : Form
     {
-        private readonly SolicitudController _controller;
+        private Point mouseLocationDrag;
+
         public Form1()
         {
             InitializeComponent();
-            _controller = new SolicitudController();
+            DashBoardManager.MainPanel = ContenedorPanel;
         }
-
-        SqlDataAdapter solicituDataAdapter;
-        BindingSource solicitudBindingSource;
-        DataSet SolicitudDS;
         private void Form1_Load(object sender, EventArgs e)
         {
-            SolicitudDS = new DataSet();
-            var solicitudes = _controller.ObtenerTodasLasSolicitudes(); // Obtén las solicitudes
-
-            DataTable dtSolicitudes = ConvertToDataTable(solicitudes);
-            solicitudBindingSource = new BindingSource { DataSource = dtSolicitudes };
-            dataGridView1.DataSource = solicitudBindingSource;
+            DashBoardManager.LoadForm(new InicioView());
         }
-        private DataTable ConvertToDataTable(IEnumerable<Solicitud> solicitudes)
+
+        private void button2_Click(object sender, EventArgs e)
         {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Id", typeof(long));
-            dt.Columns.Add("Ubicacion", typeof(string));
-            dt.Columns.Add("Fecha", typeof(DateTime));
-            dt.Columns.Add("Estado", typeof(bool));
-            dt.Columns.Add("Solicitante", typeof(string));
-            dt.Columns.Add("Urgencia", typeof(byte));
-            dt.Columns.Add("Motivo", typeof (string));
-            dt.Columns.Add("cancelado", typeof(bool));
-            // Agrega otras columnas según sea necesario
+            //Cuando este se descomenta y se cambia el nombre de ser necesario
+            //LoadForm(new DonacionForm());
+            DashBoardManager.LoadForm(new Prueba());
+        }
 
-            foreach (var solicitud in solicitudes)
+
+        private void btnSolicitud_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new SolicitudView());
+        }
+
+        private void btnUsuario_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new UsuarioView());
+        }
+
+        private void btnInventario_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new InventarioView());
+        }
+        //btnproveedor
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            //Aquí iria la de Proveedor cuando este
+        }
+
+        private void btnReporte_Click(object sender, EventArgs e)
+        {
+
+            //Aquí iria la de Reporte cuando este
+
+        }
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new InicioView());
+        }
+
+        private void panel2_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseLocationDrag = new Point(-e.X, -e.Y);
+        }
+
+        private void panel2_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
             {
-                dt.Rows.Add(solicitud.IdSolicitud, solicitud.Ubicacion,solicitud.Fecha, solicitud.Estado, solicitud.NombreSolicitante, solicitud.Urgencia, solicitud.Motivo, solicitud.IsCancel); // Asegúrate de que las propiedades sean correctas
+                Point mousePose = Control.MousePosition;
+                mousePose.Offset(mouseLocationDrag.X, mouseLocationDrag.Y);
+                Location = mousePose;
             }
-
-            return dt;
         }
     }
 }

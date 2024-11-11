@@ -21,6 +21,9 @@ namespace SysAcopio.Models
         /// <param name="contrasenia"></param>
         /// <param name="idRol"></param>
         /// <param name="estado"></param>
+
+        // Propiedad de navegación para el rol
+        public Rol Rol { get; set; }
         public Usuario(long idUsuario, string aliasUsuario, string nombreUsuario, string contrasenia, long idRol, bool estado)
         {
             IdUsuario = idUsuario;

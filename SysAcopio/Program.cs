@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SysAcopio.Repositories;
+using SysAcopio.Views;
 
 namespace SysAcopio
 {
@@ -17,7 +19,9 @@ namespace SysAcopio
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Login());
+          
+
         }
     }
 }
