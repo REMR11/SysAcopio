@@ -83,10 +83,28 @@ namespace SysAcopio
             txtNombreSolicitante.Clear();
             txtUrgencia.Clear();
             txtMotivo.Clear();
+            
+            var solicitudes = _controller.ObtenerTodasLasSolicitudes();
 
-            // (Opcional) Actualizar el DataGridView para mostrar las solicitudes
-            dataGridView1.DataSource = null; // Limpiar la fuente de datos
+            actualizarDataGrid(solicitudes);
 
+        }
+        private void actualizarDataGrid(IEnumerable<Solicitud> solicitudes) {
+            DataTable dt = ConvertToDataTable(solicitudes);
+            solicitudBindingSource.DataSource = dt;
+            dataGridView1.DataSource = solicitudBindingSource;
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            var solicitudes = ObtenerSolicitudesPorEstado(checkBox1.Checked);
+            actualizarDataGrid(solicitudes);
+
+        }
+
+        private IEnumerable<Solicitud> ObtenerSolicitudesPorEstado(bool isChecked)
+        {
+            return isChecked ? _controller.ObtenerSolicitudesActivas() : _controller.ObtenerTodasLasSolicitudes();
         }
     }
 }
