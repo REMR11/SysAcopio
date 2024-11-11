@@ -61,14 +61,18 @@ namespace SysAcopio
             // Obtener los valores de los TextBox
             string ubicacion = txtUbicacion.Text;
             string nombreSolicitante = txtNombreSolicitante.Text;
-            byte urgencia;
+            // Obtener el índice seleccionado del ComboBox
+            int selectedIndex = cmbUrgencia.SelectedIndex;
 
-            // Intentar convertir el texto de urgencia a byte
-            if (!byte.TryParse(txtUrgencia.Text, out urgencia))
+            // Verificar que se haya seleccionado un índice válido
+            if (selectedIndex < 0)
             {
-                MessageBox.Show("Por favor, ingrese un valor numérico válido para la urgencia.");
-                return; // Salir del método si la conversión falla
+                MessageBox.Show("Por favor, seleccione un valor válido para la urgencia.");
+                return; // Salir del método si no hay selección
             }
+
+            // Asignar el valor de urgencia basado en el índice seleccionado
+            byte urgencia = (byte)(selectedIndex + 1);
 
             string motivo = txtMotivo.Text;
 
@@ -81,7 +85,7 @@ namespace SysAcopio
             // (Opcional) Limpiar los TextBox después de guardar
             txtUbicacion.Clear();
             txtNombreSolicitante.Clear();
-            txtUrgencia.Clear();
+            cmbUrgencia.SelectedIndex = 0;
             txtMotivo.Clear();
             
             var solicitudes = _controller.ObtenerTodasLasSolicitudes();
@@ -95,16 +99,58 @@ namespace SysAcopio
             dataGridView1.DataSource = solicitudBindingSource;
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            var solicitudes = ObtenerSolicitudesPorEstado(checkBox1.Checked);
-            actualizarDataGrid(solicitudes);
+     
 
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Asegúrate de que se haya hecho clic en una fila válida
+            if (e.RowIndex >= 0)
+            {
+                // Obtener la fila seleccionada
+                DataGridViewRow selectedRow = dataGridView1.Rows[e.RowIndex];
+
+                // Extraer el ID de la columna correspondiente (asumiendo que la columna del ID es la primera)
+                long idSolicitud = Convert.ToInt64(selectedRow.Cells["Id"].Value);
+
+                // Ahora puedes usar idSolicitud en tus métodos
+                MessageBox.Show($"ID de la solicitud seleccionada: {idSolicitud}");
+
+                // Aquí puedes llamar a otros métodos y pasar el idSolicitud como parámetro
+                // Por ejemplo: RealizarAccionConSolicitud(idSolicitud);
+
+                var solicitud = _controller.ObtenerSolicitudPorId(idSolicitud);
+                txtUbicacion.Text = solicitud.Ubicacion;
+                txtNombreSolicitante.Text = solicitud.NombreSolicitante;
+                cmbUrgencia.SelectedIndex = solicitud.Urgencia;
+                txtMotivo.Text = solicitud.Motivo;
+
+            }
         }
 
-        private IEnumerable<Solicitud> ObtenerSolicitudesPorEstado(bool isChecked)
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            return isChecked ? _controller.ObtenerSolicitudesActivas() : _controller.ObtenerTodasLasSolicitudes();
+            var solicitudes = ObtenerSolicitudesPorSeleccion(comboBox1.SelectedIndex);
+            actualizarDataGrid(solicitudes);
+        }
+
+        private IEnumerable<Solicitud> ObtenerSolicitudesPorSeleccion(int selectedIndex)
+        {
+            switch (selectedIndex)
+            {
+                case 0:
+                    return _controller.ObtenerTodasLasSolicitudes();
+                case 1:
+                    return _controller.ObtenerSolicitudesActivas();
+                case 2:
+                    return _controller.ObtenerSolicitudesInactivas();
+                default:
+                    return Enumerable.Empty<Solicitud>(); // Retorna una colección vacía si no hay coincidencia
+            }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
