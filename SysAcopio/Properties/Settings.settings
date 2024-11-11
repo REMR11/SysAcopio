@@ -9,5 +9,13 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">workstation id=DbAcopioDeRL.mssql.somee.com;packet size=4096;user id=AMGC_SQLLogin_1;pwd=zbal1ojrif;data source=DbAcopioDeRL.mssql.somee.com;persist security info=False;initial catalog=DbAcopioDeRL;TrustServerCertificate=True</Value>
     </Setting>
+    <Setting Name="DbAcopioDeRLConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;ConnectionString&gt;Data Source=DbAcopioDeRL.mssql.somee.com;Initial Catalog=DbAcopioDeRL;User ID=AMGC_SQLLogin_1;Password=zbal1ojrif;TrustServerCertificate=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=DbAcopioDeRL.mssql.somee.com;Initial Catalog=DbAcopioDeRL;User ID=AMGC_SQLLogin_1;Password=zbal1ojrif;TrustServerCertificate=True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

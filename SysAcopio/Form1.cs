@@ -1,5 +1,6 @@
 ﻿using SysAcopio.Controllers;
 using SysAcopio.Models;
+using SysAcopio.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,44 +16,146 @@ namespace SysAcopio
 {
     public partial class Form1 : Form
     {
-        private readonly SolicitudController _controller;
+     
+      
         public Form1()
         {
             InitializeComponent();
-            _controller = new SolicitudController();
-        }
+           
 
-        SqlDataAdapter solicituDataAdapter;
-        BindingSource solicitudBindingSource;
-        DataSet SolicitudDS;
+
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
-            SolicitudDS = new DataSet();
-            var solicitudes = _controller.ObtenerTodasLasSolicitudes(); // Obtén las solicitudes
-
-            DataTable dtSolicitudes = ConvertToDataTable(solicitudes);
-            solicitudBindingSource = new BindingSource { DataSource = dtSolicitudes };
-            dataGridView1.DataSource = solicitudBindingSource;
+            
         }
-        private DataTable ConvertToDataTable(IEnumerable<Solicitud> solicitudes)
+
+
+
+        private void button2_Click(object sender, EventArgs e)
         {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Id", typeof(long));
-            dt.Columns.Add("Ubicacion", typeof(string));
-            dt.Columns.Add("Fecha", typeof(DateTime));
-            dt.Columns.Add("Estado", typeof(bool));
-            dt.Columns.Add("Solicitante", typeof(string));
-            dt.Columns.Add("Urgencia", typeof(byte));
-            dt.Columns.Add("Motivo", typeof (string));
-            dt.Columns.Add("cancelado", typeof(bool));
-            // Agrega otras columnas según sea necesario
+            
+            ContenedorPanel.Controls.Clear();
 
-            foreach (var solicitud in solicitudes)
+            DonacionView donacionView = new DonacionView
             {
-                dt.Rows.Add(solicitud.IdSolicitud, solicitud.Ubicacion,solicitud.Fecha, solicitud.Estado, solicitud.NombreSolicitante, solicitud.Urgencia, solicitud.Motivo, solicitud.IsCancel); // Asegúrate de que las propiedades sean correctas
-            }
+                TopLevel = false, 
+                FormBorderStyle = FormBorderStyle.None, 
+                Dock = DockStyle.Fill 
+            };
 
-            return dt;
+            
+            ContenedorPanel.Controls.Add(donacionView);
+            donacionView.Show();
+            
+        }
+
+       
+        private void btnSolicitud_Click(object sender, EventArgs e)
+        {
+            
+            ContenedorPanel.Controls.Clear();
+
+            SolicitudView solicitudview = new SolicitudView
+            {
+                TopLevel = false, 
+                FormBorderStyle = FormBorderStyle.None, 
+                Dock = DockStyle.Fill 
+            };
+
+            
+            ContenedorPanel.Controls.Add(solicitudview);
+            solicitudview.Show();
+            
+        }
+
+        private void btnUsuario_Click(object sender, EventArgs e)
+        {
+            ContenedorPanel.Controls.Clear();
+
+            UsuarioView usuarioView = new UsuarioView
+            {
+                TopLevel = false, 
+                FormBorderStyle = FormBorderStyle.None, 
+                Dock = DockStyle.Fill 
+            };
+
+            ContenedorPanel.Controls.Add(usuarioView);
+            usuarioView.Show();
+
+        }
+
+        private void btnInventario_Click(object sender, EventArgs e)
+        {
+            ContenedorPanel.Controls.Clear();
+            
+            InventarioView inventarioView = new InventarioView
+            {
+                TopLevel = false, 
+                FormBorderStyle = FormBorderStyle.None, 
+                Dock = DockStyle.Fill
+            };
+
+            
+            ContenedorPanel.Controls.Add(inventarioView);
+            inventarioView.Show();
+        }
+        //btnproveedor
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+            ContenedorPanel.Controls.Clear();
+
+            ProveedorView proveedorview = new ProveedorView
+            {
+                TopLevel = false, 
+                FormBorderStyle = FormBorderStyle.None, 
+                Dock = DockStyle.Fill 
+            };
+
+            
+            proveedorview.Controls.Add(proveedorview);
+            proveedorview.Show();
+            
+        }
+
+        private void btnReporte_Click(object sender, EventArgs e)
+        {
+            
+           ContenedorPanel.Controls.Clear();
+
+           ReporteView reporteview = new ReporteView
+           {
+               TopLevel = false, 
+               FormBorderStyle = FormBorderStyle.None, 
+               Dock = DockStyle.Fill 
+           };
+
+
+           reporteview.Controls.Add(reporteview);
+           reporteview.Show();
+           
+        }
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            ContenedorPanel.Controls.Clear();
+
+            InicioView inicioview = new InicioView
+            {
+                TopLevel = false,
+                FormBorderStyle = FormBorderStyle.None,
+                Dock = DockStyle.Fill
+            };
+
+
+            inicioview.Controls.Add(inicioview);
+            inicioview.Show();
         }
     }
 }
