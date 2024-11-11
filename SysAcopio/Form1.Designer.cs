@@ -59,11 +59,14 @@
             this.panel1.Controls.Add(this.btnSolicitud);
             this.panel1.Controls.Add(this.btnDonacion);
             this.panel1.Controls.Add(this.btnInventario);
-            this.panel1.Location = new System.Drawing.Point(0, -2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(244, 597);
+            this.panel1.Size = new System.Drawing.Size(244, 574);
             this.panel1.TabIndex = 1;
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown);
+            this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseMove);
             // 
             // panelContenedor
             // 
@@ -213,18 +216,22 @@
             // 
             // ContenedorPanel
             // 
-            this.ContenedorPanel.Location = new System.Drawing.Point(243, 12);
+            this.ContenedorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ContenedorPanel.Location = new System.Drawing.Point(244, 0);
             this.ContenedorPanel.Name = "ContenedorPanel";
-            this.ContenedorPanel.Size = new System.Drawing.Size(801, 562);
+            this.ContenedorPanel.Size = new System.Drawing.Size(801, 574);
             this.ContenedorPanel.TabIndex = 4;
             // 
             // panel2
             // 
             this.panel2.Controls.Add(this.btnCerrar);
-            this.panel2.Location = new System.Drawing.Point(243, -2);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(244, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(801, 19);
             this.panel2.TabIndex = 6;
+            this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown);
+            this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseMove);
             // 
             // Form1
             // 
@@ -243,7 +250,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.VisibleChanged += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

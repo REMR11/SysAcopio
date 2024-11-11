@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,125 +17,52 @@ namespace SysAcopio
 {
     public partial class Form1 : Form
     {
-     
-      
+        private Point mouseLocationDrag;
+
         public Form1()
         {
             InitializeComponent();
-           
-
-
+            DashBoardManager.MainPanel = ContenedorPanel;
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+            DashBoardManager.LoadForm(new InicioView());
         }
-
-
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
-            ContenedorPanel.Controls.Clear();
-
-            DonacionView donacionView = new DonacionView
-            {
-                TopLevel = false, 
-                FormBorderStyle = FormBorderStyle.None, 
-                Dock = DockStyle.Fill 
-            };
-
-            
-            ContenedorPanel.Controls.Add(donacionView);
-            donacionView.Show();
-            
+            //Cuando este se descomenta y se cambia el nombre de ser necesario
+            //LoadForm(new DonacionForm());
+            DashBoardManager.LoadForm(new Prueba());
         }
 
-       
+
         private void btnSolicitud_Click(object sender, EventArgs e)
         {
-            
-            ContenedorPanel.Controls.Clear();
-
-            SolicitudView solicitudview = new SolicitudView
-            {
-                TopLevel = false, 
-                FormBorderStyle = FormBorderStyle.None, 
-                Dock = DockStyle.Fill 
-            };
-
-            
-            ContenedorPanel.Controls.Add(solicitudview);
-            solicitudview.Show();
-            
+            DashBoardManager.LoadForm(new SolicitudView());
         }
 
         private void btnUsuario_Click(object sender, EventArgs e)
         {
-            ContenedorPanel.Controls.Clear();
-
-            UsuarioView usuarioView = new UsuarioView
-            {
-                TopLevel = false, 
-                FormBorderStyle = FormBorderStyle.None, 
-                Dock = DockStyle.Fill 
-            };
-
-            ContenedorPanel.Controls.Add(usuarioView);
-            usuarioView.Show();
-
+            DashBoardManager.LoadForm(new UsuarioView());
         }
 
         private void btnInventario_Click(object sender, EventArgs e)
         {
-            ContenedorPanel.Controls.Clear();
-            
-            InventarioView inventarioView = new InventarioView
-            {
-                TopLevel = false, 
-                FormBorderStyle = FormBorderStyle.None, 
-                Dock = DockStyle.Fill
-            };
-
-            
-            ContenedorPanel.Controls.Add(inventarioView);
-            inventarioView.Show();
+            DashBoardManager.LoadForm(new InventarioView());
         }
         //btnproveedor
         private void button1_Click(object sender, EventArgs e)
         {
-            
-            ContenedorPanel.Controls.Clear();
 
-            ProveedorView proveedorview = new ProveedorView
-            {
-                TopLevel = false, 
-                FormBorderStyle = FormBorderStyle.None, 
-                Dock = DockStyle.Fill 
-            };
-
-            
-            proveedorview.Controls.Add(proveedorview);
-            proveedorview.Show();
-            
+            //Aquí iria la de Proveedor cuando este
         }
 
         private void btnReporte_Click(object sender, EventArgs e)
         {
-            
-           ContenedorPanel.Controls.Clear();
 
-           ReporteView reporteview = new ReporteView
-           {
-               TopLevel = false, 
-               FormBorderStyle = FormBorderStyle.None, 
-               Dock = DockStyle.Fill 
-           };
+            //Aquí iria la de Reporte cuando este
 
-
-           reporteview.Controls.Add(reporteview);
-           reporteview.Show();
-           
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)
@@ -144,18 +72,22 @@ namespace SysAcopio
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            ContenedorPanel.Controls.Clear();
+            DashBoardManager.LoadForm(new InicioView());
+        }
 
-            InicioView inicioview = new InicioView
+        private void panel2_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseLocationDrag = new Point(-e.X, -e.Y);
+        }
+
+        private void panel2_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
             {
-                TopLevel = false,
-                FormBorderStyle = FormBorderStyle.None,
-                Dock = DockStyle.Fill
-            };
-
-
-            inicioview.Controls.Add(inicioview);
-            inicioview.Show();
+                Point mousePose = Control.MousePosition;
+                mousePose.Offset(mouseLocationDrag.X, mouseLocationDrag.Y);
+                Location = mousePose;
+            }
         }
     }
 }

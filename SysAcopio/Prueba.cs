@@ -1,4 +1,5 @@
 ﻿using SysAcopio.Controllers;
+using SysAcopio.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,13 +10,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SysAcopio.Views
+namespace SysAcopio
 {
-    public partial class InicioView : Form
+    public partial class Prueba : Form
     {
-        public InicioView()
+        public Prueba()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new InicioView());
         }
     }
 }

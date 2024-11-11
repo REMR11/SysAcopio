@@ -83,7 +83,7 @@ namespace SysAcopio.Controllers
         /// </summary>
         public void EncriptarContrasenasExistentes()
         {
-            usuarioRepository.EncryptExistingPasswords();
+            //usuarioRepository.EncryptExistingPasswords();
         }
     }
 }
