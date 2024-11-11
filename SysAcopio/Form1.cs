@@ -99,8 +99,6 @@ namespace SysAcopio
             dataGridView1.DataSource = solicitudBindingSource;
         }
 
-     
-
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Asegúrate de que se haya hecho clic en una fila válida
