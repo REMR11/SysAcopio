@@ -14,7 +14,7 @@ using SysAcopio.Repositories;
 
 namespace SysAcopio.Views
 {
-    public partial class Login: Form
+    public partial class Login : Form
     {
         private readonly UsuarioRepository usuarioRepository;
         private readonly SysAcopioDbContext dbContext;
@@ -55,7 +55,8 @@ namespace SysAcopio.Views
 
         private void txtPass_Leave(object sender, EventArgs e)
         {
-            if (txtPass.Text == ""){
+            if (txtPass.Text == "")
+            {
                 txtPass.Text = "Contraseña";
                 txtPass.ForeColor = Color.DimGray;
                 txtPass.UseSystemPasswordChar = false;

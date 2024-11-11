@@ -98,7 +98,7 @@
             this.txtUser.Margin = new System.Windows.Forms.Padding(4);
             this.txtUser.Name = "txtUser";
             this.txtUser.Size = new System.Drawing.Size(273, 17);
-            this.txtUser.TabIndex = 0;
+            this.txtUser.TabIndex = 1;
             this.txtUser.Text = "Usuario";
             this.txtUser.Enter += new System.EventHandler(this.txtUser_Enter);
             this.txtUser.Leave += new System.EventHandler(this.txtUser_Leave);
@@ -113,7 +113,7 @@
             this.txtPass.Margin = new System.Windows.Forms.Padding(4);
             this.txtPass.Name = "txtPass";
             this.txtPass.Size = new System.Drawing.Size(273, 17);
-            this.txtPass.TabIndex = 1;
+            this.txtPass.TabIndex = 2;
             this.txtPass.Text = "Contraseña";
             this.txtPass.Enter += new System.EventHandler(this.txtPass_Enter);
             this.txtPass.Leave += new System.EventHandler(this.txtPass_Leave);
@@ -141,7 +141,7 @@
             this.btnAcceder.Margin = new System.Windows.Forms.Padding(4);
             this.btnAcceder.Name = "btnAcceder";
             this.btnAcceder.Size = new System.Drawing.Size(151, 32);
-            this.btnAcceder.TabIndex = 0;
+            this.btnAcceder.TabIndex = 3;
             this.btnAcceder.Text = "Acceder";
             this.btnAcceder.UseVisualStyleBackColor = false;
             this.btnAcceder.Click += new System.EventHandler(this.btnAcceder_Click);
