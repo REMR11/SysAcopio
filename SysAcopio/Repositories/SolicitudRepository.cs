@@ -28,19 +28,19 @@ namespace SysAcopio.Controllers
             {
                 using (SqlConnection conn = dbContext.ConnectionServer())
                 {
-                    string query = @"INSERT INTO SOLICITUD(ubicacion, fecha, estado, nombre_solicitante, urgencia, motivo, is_cancel) VALUES
-                                        (@Ubicacion, @Fecha, @Estado, @IsCancel, @NombreSolicitante, @Urgencia, @Motivo);
-                                    SELECT SCOPE_IDENTITY();";
+                    string query = @"INSERT INTO SOLICITUD(ubicacion, fecha, estado, nombre_solicitante, urgencia, motivo, is_cancel) 
+                            VALUES (@Ubicacion, @Fecha, @Estado, @NombreSolicitante, @Urgencia, @Motivo, @IsCancel);
+                            SELECT SCOPE_IDENTITY();";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@Ubicacion", solicitud.Ubicacion);
                         cmd.Parameters.AddWithValue("@Fecha", solicitud.Fecha);
                         cmd.Parameters.AddWithValue("@Estado", solicitud.Estado);
-                        cmd.Parameters.AddWithValue("@IsCancel", solicitud.IsCancel);
                         cmd.Parameters.AddWithValue("@NombreSolicitante", solicitud.NombreSolicitante);
                         cmd.Parameters.AddWithValue("@Urgencia", solicitud.Urgencia);
                         cmd.Parameters.AddWithValue("@Motivo", solicitud.Motivo);
+                        cmd.Parameters.AddWithValue("@IsCancel", solicitud.IsCancel);
 
                         // ExecuteScalar devuelve el ID generado
                         object result = cmd.ExecuteScalar();
@@ -91,7 +91,8 @@ namespace SysAcopio.Controllers
             }
             return solicitudes;
         }
-
+        
+        
         /// <summary>
         /// Metodo para obtener una solicitud por Id
         /// </summary>

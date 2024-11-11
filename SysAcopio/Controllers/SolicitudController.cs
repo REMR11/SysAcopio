@@ -93,6 +93,14 @@ namespace SysAcopio.Controllers
         {
             return ObtenerTodasLasSolicitudes().Where(s => s.Estado == true);
         }
+        /// <summary>
+        /// Obtiene todas las solicitudes activas del sistema.
+        /// </summary>
+        /// <returns>Una colección de solicitudes activas.</returns>
+        public IEnumerable<Solicitud> ObtenerSolicitudesInactivas()
+        {
+            return ObtenerTodasLasSolicitudes().Where(s => s.Estado == false);
+        }
 
         /// <summary>
         /// Obtiene todas las solicitudes con un nivel de urgencia específico.
