@@ -27,7 +27,7 @@ namespace SysAcopio.Views
         SqlDataAdapter solicituDataAdapter;
         BindingSource solicitudBindingSource;
         DataSet SolicitudDS;
-       private void SolicitudView_Load_1(object sender, EventArgs e)
+        private void SolicitudView_Load_1(object sender, EventArgs e)
         {
             SolicitudDS = new DataSet();
             var solicitudes = _controller.ObtenerTodasLasSolicitudes(); // Obtén las solicitudes
@@ -35,7 +35,28 @@ namespace SysAcopio.Views
             DataTable dtSolicitudes = ConvertToDataTable(solicitudes);
             solicitudBindingSource = new BindingSource { DataSource = dtSolicitudes };
             dataGridView1.DataSource = solicitudBindingSource;
+            dataGridView1.Columns["Id"].Visible = false;
+            
+            dataGridView1.Columns.Add(new DataGridViewColumn
+            {
+                Name = "EstadoString",
+                HeaderText = "Estado",
+                ReadOnly = true
+            });
+
+
+            // Llenar la columna "estado" con los valores formateados
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.Cells["Estado"].Value is bool isActive)
+                {
+                    row.Cells["EstadoString"].Value = isActive ? "Completado" : "Pendiente";
+                }
+            }
         }
+
+
+
 
         private DataTable ConvertToDataTable(IEnumerable<Solicitud> solicitudes)
         {
@@ -48,8 +69,6 @@ namespace SysAcopio.Views
             dt.Columns.Add("Urgencia", typeof(byte));
             dt.Columns.Add("Motivo", typeof(string));
             dt.Columns.Add("cancelado", typeof(bool));
-            // Agrega otras columnas según sea necesario
-
             foreach (var solicitud in solicitudes)
             {
                 dt.Rows.Add(solicitud.IdSolicitud, solicitud.Ubicacion, solicitud.Fecha, solicitud.Estado, solicitud.NombreSolicitante, solicitud.Urgencia, solicitud.Motivo, solicitud.IsCancel); // Asegúrate de que las propiedades sean correctas
@@ -224,7 +243,8 @@ namespace SysAcopio.Views
             actualizarDataGrid(solicitudes);
         }
 
-        private void clearInputs() {
+        private void clearInputs()
+        {
             txtUbicacion.Clear();
             txtNombreSolicitante.Clear();
             cmbUrgencia.SelectedIndex = 0;
