@@ -32,18 +32,20 @@ namespace SysAcopio.Controllers
         /// Método para crear un Proveedor
         /// </summary>
         /// <param name="proveedor"></param>
-        public void Create(Proveedor proveedor)
+        public bool Create(Proveedor proveedor)
         {
             long id = repository.Create(proveedor);
 
             if (id > 0)
             {
                 alerts.ShowAlert("Proveedor creado", AlertsType.Confirm);
+                return true;
             }
             else
             {
                 alerts.ShowAlert("Lo sentimos, debido a un errror no se pudo crear el proveedor", AlertsType.Error);
             }
+            return false;
         }
 
         /// <summary>
@@ -53,6 +55,13 @@ namespace SysAcopio.Controllers
         /// <returns>Un booleano que confirma la modificación</returns>
         public bool Modify(Proveedor proveedor)
         {
+            Proveedor proveedorFinded = repository.GetById(proveedor.IdProveedor);
+
+            if (proveedorFinded == null)
+            {
+                alerts.ShowAlert("Proveedor no encontrado", AlertsType.Info);
+                return false;
+            }
             bool result = repository.Update(proveedor);
 
             if (result)

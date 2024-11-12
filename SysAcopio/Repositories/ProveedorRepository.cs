@@ -14,7 +14,7 @@ namespace SysAcopio.Repositories
         /// <returns></returns>
         public DataTable GetAll()
         {
-            string query = "SELECT id_proveedor, nombre_proveedor, estado FROM Proveedor WHERE estado = 1;";
+            string query = "SELECT id_proveedor, nombre_proveedor as NombreProveedor, estado FROM Proveedor WHERE estado = 1;";
 
             SqlParameter[] parameters = null;
 
@@ -61,7 +61,7 @@ namespace SysAcopio.Repositories
                             {
                                 IdProveedor = reader.GetInt64(0),
                                 NombreProveedor = reader.GetString(1),
-                                Estado = !reader.IsDBNull(3) && reader.GetBoolean(3), // Manejo de nulos
+                                Estado = !reader.IsDBNull(2) && reader.GetBoolean(2), // Manejo de nulos
                             };
                         }
                     }
@@ -92,7 +92,7 @@ namespace SysAcopio.Repositories
 
         public DataTable SearchProveedores(string searchQuery)
         {
-            string query = "SELECT id_proveedor, nombre_proveedor, estado FROM Proveedor WHERE estado = 1 AND nombre_proveedor LIKE @searchQuery;";
+            string query = "SELECT id_proveedor, nombre_proveedor as NombreProveedor, estado FROM Proveedor WHERE estado = 1 AND nombre_proveedor LIKE @searchQuery;";
 
             SqlParameter[] parametros = new SqlParameter[]
             {

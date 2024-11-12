@@ -27,6 +27,12 @@ namespace SysAcopio.Utils
             alertForm.ShowDialog();
         }
 
+        public static void ShowAlertS(string message, AlertsType type)
+        {
+            AlertForm alertForm = new AlertForm(message, type);
+            alertForm.ShowDialog();
+        }
+
     }
 }
 
