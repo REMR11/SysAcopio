@@ -1,36 +1,115 @@
 ﻿using SysAcopio.Controllers;
 using SysAcopio.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace SysAcopio.Repositories
 {
     public class DonacionRepository
     {
-        private readonly SysAcopioDbContext dbContext;
-
-        public DonacionRepository(SysAcopioDbContext dbContext)
+        /// <summary>
+        /// Método que retorna todas las donaciones
+        /// </summary>
+        /// <returns>Un DataTable con los registros de la tabla</returns>
+        public DataTable GetAll()
         {
-            this.dbContext = dbContext;
-        }
+            string query = "SELECT d.id_donacion, d.id_proveedor, p.nombre_proveedor, d.ubicacion, d.fecha " +
+                "FROM Donacion as d" +
+                "JOIN Proveedor as p;";
 
-        public long Create(Donacion solicitud)
+            SqlParameter[] parameters = null;
+            return GenericFuncDB.GetRowsToTable(query, parameters);
+        }
+        /// <summary>
+        /// Método para crear una donación
+        /// </summary>
+        /// <param name="donacion"></param>
+        /// <returns>Un long que representa el id de la Donación, si ocurrio un error retorn -1</returns>
+        public long Create(Donacion donacion)
         {
-            return 0;
-        }
-        public void update(Donacion solicitud) { 
-            // Codigo
+            string query = "INSERT INTO Donacion (id_proveedor, ubicacion, fecha) " +
+                "VALUES (@idProveedor, @ubicacion, @fecha);";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@idProveedor", donacion.IdProveedor),
+                new SqlParameter("@ubicacion", donacion.Ubicacion),
+                new SqlParameter("@fecha", DateTime.Now)
+            };
+
+            return GenericFuncDB.InsertRow(query, parameters);
         }
 
-        public List<Donacion> GetAll() {
-            return new List<Donacion>();
+        /// <summary>
+        /// Método para obtener la Donacion por ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Objeto de tipo Donacion o null en caso no exista</returns>
+        public Donacion GetById(long id)
+        {
+            SysAcopioDbContext dbContext = new SysAcopioDbContext();
+            using (SqlConnection conn = dbContext.ConnectionServer())
+            {
+                string query = "SELECT d.id_donacion, p.nombre_proveedor, d.id_proveedor, d.ubicacion, d.fecha " +
+                    "FROM Donacion as d" +
+                    "JOIN Proveedor as p ON d.id_proveedor = p.id_proveedor" +
+                    "WHERE d.id_donacion = @id;";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Donacion
+                            {
+                                IdDonacion = reader.GetInt64(0),
+                                IdProveedor = reader.GetInt64(1),
+                                Ubicacion = reader.GetString(2),
+                                Fecha = reader.GetDateTime(3)
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
-        public void delete(long id) { 
-            //codigo
+        /// <summary>
+        /// Método para buscar las donaciones
+        /// </summary>
+        /// <param name="searchQuery"></param>
+        /// <returns>Un objeto de tipo DataTable con los datos que coincidan</returns>
+        public DataTable SearchDonaciones(string searchQuery)
+        {
+            string query = "SELECT d.id_donacion, p.nombre_proveedor, d.ubicacion, d.fecha, d.id_proveedor" +
+                "FROM Donacion as d" +
+                "JOIN Proveedor as p ON d.id_proveedor = p.id_proveedor" +
+                "WHERE" +
+                "d.ubicacion LIKE @search OR" +
+                "CAST(d.fecha AS NVARCHAR) LIKE @search" +
+                "p.nombre_proveedor LIKE @search;";
+            SqlParameter[] parametros = new SqlParameter[]
+            {
+                new SqlParameter("@search", "%"+ searchQuery + "%"),
+            };
+            return GenericFuncDB.GetRowsToTable(query, parametros);
         }
+
+        /// <summary>
+        /// Método para obtener todos los productos activos
+        /// </summary>
+        /// <returns>Objeto de tipo DataTable con todos los Recursos disponibles</returns>
+        public DataTable GetActiveRecursos()
+        {
+            string query = "SELECT r.nombre_recurso, tr.nombre_tipo, r.id_tipo_recurso " +
+                "FROM Recurso as r" +
+                "JOIN Tipo_Recurso as tr ON r.id_tipo_recurso = tr.id_tipo_recurso" +
+                "WHERE r.cantidad >= 0";
+
+            SqlParameter[] parameters = null;
+            return GenericFuncDB.GetRowsToTable(query, parameters);
         }
+    }
 }
