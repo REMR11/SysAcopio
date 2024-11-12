@@ -23,12 +23,21 @@ namespace SysAcopio
         {
             InitializeComponent();
             DashBoardManager.MainPanel = ContenedorPanel;
+            LoadUserData();
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             DashBoardManager.LoadForm(new InicioView());
         }
+        // Método para cargar los datos del usuario desde la clase Sesion
+        private void LoadUserData()
+        {
+            // Mostrar el nombre del usuario en lblUsuario
+            lblUsuario.Text = Sesion.NombreUsuario;
 
+            // Mostrar el rol del usuario en lblRol
+            lblRol.Text = Sesion.RolUsuario;
+        }
         private void button2_Click(object sender, EventArgs e)
         {
             //Cuando este se descomenta y se cambia el nombre de ser necesario
@@ -88,6 +97,17 @@ namespace SysAcopio
                 mousePose.Offset(mouseLocationDrag.X, mouseLocationDrag.Y);
                 Location = mousePose;
             }
+        }
+
+      
+        private void btnLogout_Click_1(object sender, EventArgs e)
+        {
+            Sesion.LimpiarDatosUsuario();
+
+            this.Hide(); // Cierra el formulario actual
+            Login loginForm = new Login(); // Crea una nueva instancia del formulario Login
+            loginForm.Show();
+
         }
     }
 }
