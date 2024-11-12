@@ -42,7 +42,7 @@
             this.dtpFechaFin = new System.Windows.Forms.DateTimePicker();
             this.dtpFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
-            this.cmb = new System.Windows.Forms.ComboBox();
+            this.cmbProveedores = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.dgvDonaciones = new System.Windows.Forms.DataGridView();
@@ -96,7 +96,7 @@
             this.panel3.Controls.Add(this.dtpFechaFin);
             this.panel3.Controls.Add(this.dtpFechaInicio);
             this.panel3.Controls.Add(this.label2);
-            this.panel3.Controls.Add(this.cmb);
+            this.panel3.Controls.Add(this.cmbProveedores);
             this.panel3.Controls.Add(this.label3);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
@@ -118,6 +118,7 @@
             this.btnReiniciar.TabIndex = 22;
             this.btnReiniciar.Text = "Reiniciar Filtros";
             this.btnReiniciar.UseVisualStyleBackColor = false;
+            this.btnReiniciar.Click += new System.EventHandler(this.btnReiniciar_Click);
             // 
             // txtUbicación
             // 
@@ -197,13 +198,13 @@
             this.label2.TabIndex = 13;
             this.label2.Text = "Proveedores";
             // 
-            // cmb
+            // cmbProveedores
             // 
-            this.cmb.FormattingEnabled = true;
-            this.cmb.Location = new System.Drawing.Point(12, 58);
-            this.cmb.Name = "cmb";
-            this.cmb.Size = new System.Drawing.Size(191, 24);
-            this.cmb.TabIndex = 12;
+            this.cmbProveedores.FormattingEnabled = true;
+            this.cmbProveedores.Location = new System.Drawing.Point(12, 58);
+            this.cmbProveedores.Name = "cmbProveedores";
+            this.cmbProveedores.Size = new System.Drawing.Size(191, 24);
+            this.cmbProveedores.TabIndex = 12;
             // 
             // label3
             // 
@@ -259,6 +260,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "DonacionView";
             this.Text = "DonacionView";
+            this.Load += new System.EventHandler(this.DonacionView_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -285,7 +287,7 @@
         private System.Windows.Forms.DateTimePicker dtpFechaFin;
         private System.Windows.Forms.DateTimePicker dtpFechaInicio;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cmb;
+        private System.Windows.Forms.ComboBox cmbProveedores;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.DataGridView dgvDonaciones;
