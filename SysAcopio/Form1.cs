@@ -64,7 +64,7 @@ namespace SysAcopio
         private void button1_Click(object sender, EventArgs e)
         {
 
-            //Aquí iria la de Proveedor cuando este
+            DashBoardManager.LoadForm(new ProveedorView());
         }
 
         private void btnReporte_Click(object sender, EventArgs e)

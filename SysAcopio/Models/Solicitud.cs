@@ -20,16 +20,15 @@ namespace SysAcopio.Models
         /// <param name="nombreSolicitante"></param>
         /// <param name="urgencia"></param>
         /// <param name="motivo"></param>
-        public Solicitud(long idSolicitud, string ubicacion, DateTime fecha, bool estado, bool isCancel, string nombreSolicitante, byte urgencia, string motivo)
+        public Solicitud( string ubicacion, string nombreSolicitante, byte urgencia, string motivo)
         {
-            IdSolicitud = idSolicitud;
-            Ubicacion = ubicacion;
-            Fecha = fecha;
-            Estado = estado;
-            IsCancel = isCancel;
-            NombreSolicitante = nombreSolicitante;
-            Urgencia = urgencia;
-            Motivo = motivo;
+            this.Ubicacion = ubicacion;
+            this.Fecha = DateTime.Now;
+            this.Estado = true;
+            this.IsCancel = false;
+            this.NombreSolicitante = nombreSolicitante;
+            this.Urgencia = urgencia;
+            this.Motivo = motivo;
         }
 
         public long IdSolicitud { get; set; }

@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="Controllers\DashBoardManager.cs" />
     <Compile Include="Controllers\DonacionesController.cs" />
+    <Compile Include="Controllers\ProveedoresController.cs" />
+    <Compile Include="Controllers\RecursoDonacionController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\Sesion.cs" />
     <Compile Include="Controllers\SolicitudController.cs" />
@@ -76,6 +78,8 @@
       <DependentUpon>Prueba.cs</DependentUpon>
     </Compile>
     <Compile Include="Repositories\DonacionRepository.cs" />
+    <Compile Include="Repositories\ProveedorRepository.cs" />
+    <Compile Include="Repositories\RecursoDonacionRepository.cs" />
     <Compile Include="Repositories\RolRepository.cs" />
     <Compile Include="Repositories\SysAcopioDbContext.cs" />
     <Compile Include="Repositories\SolicitudRepository.cs" />
@@ -96,6 +100,20 @@
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Alerts.cs" />
+    <Compile Include="Utils\GenericFuncDB.cs" />
+    <Compile Include="Views\AlertForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\AlertForm.Designer.cs">
+      <DependentUpon>AlertForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProveedorView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ProveedorView.Designer.cs">
+      <DependentUpon>ProveedorView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Repositories\UsuarioRepository.cs" />
     <Compile Include="Views\InicioView.cs">
       <SubType>Form</SubType>
@@ -138,7 +156,14 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Views\AlertForm.resx">
+      <DependentUpon>AlertForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ProveedorView.resx">
+      <DependentUpon>ProveedorView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Prueba.resx">
       <DependentUpon>Prueba.cs</DependentUpon>
     </EmbeddedResource>
@@ -171,6 +196,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\advertenciaIcono.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconoExito.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconoError.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
