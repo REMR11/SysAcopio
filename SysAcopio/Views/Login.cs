@@ -83,9 +83,17 @@ namespace SysAcopio.Views
                     cmd.Parameters.AddWithValue("@contrasenia", txtPass.Text);
 
                     SqlDataReader lector = cmd.ExecuteReader();
-
+                    
                     if (lector.HasRows)
-                    {
+                    { // Si el usuario es válido, leer los datos
+                        lector.Read();
+                        string nombreUsuario = lector["nombre_usuario"].ToString();
+                        string rolUsuario = lector["id_rol"].ToString();  // Suponiendo que 'id_rol' es el rol como string
+
+                        // Guardar los datos del usuario en la clase estática Sesion
+                        Sesion.GuardarDatosUsuario(nombreUsuario, rolUsuario);
+
+                        // Mostrar el formulario principal
                         Form1 form1 = new Form1();
                         this.Hide();
                         form1.Show();

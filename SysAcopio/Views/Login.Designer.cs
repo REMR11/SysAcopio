@@ -126,9 +126,9 @@
             this.label1.Location = new System.Drawing.Point(125, 49);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(129, 37);
+            this.label1.Size = new System.Drawing.Size(118, 37);
             this.label1.TabIndex = 2;
-            this.label1.Text = "LOGUIN";
+            this.label1.Text = "LOG IN";
             // 
             // btnAcceder
             // 
