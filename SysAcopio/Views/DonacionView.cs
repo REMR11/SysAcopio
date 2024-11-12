@@ -16,10 +16,5 @@ namespace SysAcopio.Views
         {
             InitializeComponent();
         }
-
-        private void DonacionView_Load(object sender, EventArgs e)
-        {
-            DateTime selectedDate = dtpFechaFin.Value;
-        }
     }
 }
