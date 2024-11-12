@@ -15,7 +15,9 @@ namespace SysAcopio.Views
 {
     public partial class SolicitudView : Form
     {
+
         private readonly SolicitudController _controller;
+        private int selectedRowIndex = -1; // Variable para almacenar el índice de la fila seleccionada
         public SolicitudView()
         {
             InitializeComponent();
@@ -25,7 +27,7 @@ namespace SysAcopio.Views
         SqlDataAdapter solicituDataAdapter;
         BindingSource solicitudBindingSource;
         DataSet SolicitudDS;
-        private void SolicitudView_Load(object sender, EventArgs e)
+       private void SolicitudView_Load_1(object sender, EventArgs e)
         {
             SolicitudDS = new DataSet();
             var solicitudes = _controller.ObtenerTodasLasSolicitudes(); // Obtén las solicitudes
@@ -55,12 +57,6 @@ namespace SysAcopio.Views
 
             return dt;
         }
-
-        private void SolicitudView_Load_1(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             // Obtener los valores de los TextBox
@@ -88,10 +84,7 @@ namespace SysAcopio.Views
             long idSolicitud = _controller.CrearSolicitud(nuevaSolicitud);
 
             // (Opcional) Limpiar los TextBox después de guardar
-            txtUbicacion.Clear();
-            txtNombreSolicitante.Clear();
-            cmbUrgencia.SelectedIndex = 0;
-            txtMotivo.Clear();
+            clearInputs();
 
             var solicitudes = _controller.ObtenerTodasLasSolicitudes();
 
@@ -126,28 +119,118 @@ namespace SysAcopio.Views
         }
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Asegúrate de que se haya hecho clic en una fila válida
-            if (e.RowIndex >= 0)
+            if (IsRowIndexValid(e.RowIndex))
             {
-                // Obtener la fila seleccionada
-                DataGridViewRow selectedRow = dataGridView1.Rows[e.RowIndex];
-
-                // Extraer el ID de la columna correspondiente (asumiendo que la columna del ID es la primera)
-                long idSolicitud = Convert.ToInt64(selectedRow.Cells["Id"].Value);
-
-                // Ahora puedes usar idSolicitud en tus métodos
-                MessageBox.Show($"ID de la solicitud seleccionada: {idSolicitud}");
-
-                // Aquí puedes llamar a otros métodos y pasar el idSolicitud como parámetro
-                // Por ejemplo: RealizarAccionConSolicitud(idSolicitud);
-
-                var solicitud = _controller.ObtenerSolicitudPorId(idSolicitud);
-                txtUbicacion.Text = solicitud.Ubicacion;
-                txtNombreSolicitante.Text = solicitud.NombreSolicitante;
-                cmbUrgencia.SelectedIndex = solicitud.Urgencia;
-                txtMotivo.Text = solicitud.Motivo;
-
+                selectedRowIndex = e.RowIndex;
+                long solicitudId = GetSolicitudIdFromSelectedRow(e.RowIndex);
+                DisplaySolicitudDetails(solicitudId);
             }
+        }
+
+        private bool IsRowIndexValid(int rowIndex)
+        {
+            return rowIndex >= 0;
+        }
+
+        private long GetSolicitudIdFromSelectedRow(int rowIndex)
+        {
+            DataGridViewRow selectedRow = dataGridView1.Rows[rowIndex];
+            return Convert.ToInt64(selectedRow.Cells["Id"].Value);
+        }
+
+        private void DisplaySolicitudDetails(long solicitudId)
+        {
+            var solicitud = _controller.ObtenerSolicitudPorId(solicitudId);
+            if (solicitud != null)
+            {
+                ShowSolicitudId(solicitudId);
+                PopulateSolicitudFields(solicitud);
+            }
+            else
+            {
+                MessageBox.Show("No se encontró la solicitud.");
+            }
+        }
+
+        private void ShowSolicitudId(long solicitudId)
+        {
+            MessageBox.Show($"ID de la solicitud seleccionada: {solicitudId}");
+        }
+
+        private void PopulateSolicitudFields(Solicitud solicitud)
+        {
+            txtUbicacion.Text = solicitud.Ubicacion;
+            txtNombreSolicitante.Text = solicitud.NombreSolicitante;
+            cmbUrgencia.SelectedIndex = solicitud.Urgencia;
+            cmbEstado.Enabled = true;
+            cmbEstado.SelectedIndex = solicitud.Estado ? 0 : 1;
+            txtMotivo.Text = solicitud.Motivo;
+        }
+        private void btnActualizar_Click(object sender, EventArgs e)
+        {
+            if (selectedRowIndex < 0)
+            {
+                MessageBox.Show("No hay ninguna solicitud seleccionada para actualizar.");
+                return;
+            }
+
+            // Obtener los valores de los TextBox
+            string ubicacion = txtUbicacion.Text;
+            string nombreSolicitante = txtNombreSolicitante.Text;
+
+            // Obtener el índice seleccionado del ComboBox
+            int selectedIndex = cmbUrgencia.SelectedIndex;
+
+            // Verificar que se haya seleccionado un índice válido
+            if (selectedIndex < 0)
+            {
+                MessageBox.Show("Por favor, seleccione un valor válido para la urgencia.");
+                return; // Salir del método si no hay selección
+            }
+
+            // Asignar el valor de urgencia basado en el índice seleccionado
+            byte urgencia = (byte)(selectedIndex + 1);
+
+            int selectedIndexActive = cmbEstado.SelectedIndex;
+            bool isActive = selectedIndexActive == 0; // 0 para "Activo", 1 para "Inactivo"
+
+            // Verificar que se haya seleccionado un índice válido
+            if (selectedIndexActive < 0)
+            {
+                MessageBox.Show("Por favor, seleccione un valor válido para verificar si está activo o no.");
+                return; // Salir del método si no hay selección
+            }
+
+            string motivo = txtMotivo.Text;
+
+            long idSolicitud = GetSolicitudIdFromSelectedRow(selectedRowIndex);
+            // Crear una nueva instancia de Solicitud
+            var solicitudObjetivo = _controller.ObtenerSolicitudPorId(idSolicitud);
+
+            solicitudObjetivo.Ubicacion = ubicacion;
+            solicitudObjetivo.NombreSolicitante = nombreSolicitante;
+            solicitudObjetivo.Urgencia = urgencia;
+            solicitudObjetivo.Estado = isActive;
+            solicitudObjetivo.Motivo = motivo;
+
+            // Agregar la nueva solicitud a la lista
+            bool isCompleted = _controller.ActualizarSolicitud(solicitudObjetivo);
+
+            MessageBox.Show("Operación realizada? " + isCompleted);
+            // (Opcional) Limpiar los TextBox después de guardar
+            clearInputs();
+
+            var solicitudes = _controller.ObtenerTodasLasSolicitudes();
+            actualizarDataGrid(solicitudes);
+        }
+
+        private void clearInputs() {
+            txtUbicacion.Clear();
+            txtNombreSolicitante.Clear();
+            cmbUrgencia.SelectedIndex = 0;
+            cmbEstado.Enabled = false;
+            cmbEstado.SelectedIndex = 0;
+            txtMotivo.Clear();
         }
     }
 }
