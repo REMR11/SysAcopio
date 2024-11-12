@@ -63,7 +63,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(244, 574);
+            this.panel1.Size = new System.Drawing.Size(244, 800);
             this.panel1.TabIndex = 1;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseMove);
@@ -206,7 +206,7 @@
             this.btnCerrar.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCerrar.BackgroundImage")));
             this.btnCerrar.FlatAppearance.BorderSize = 0;
             this.btnCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCerrar.Location = new System.Drawing.Point(777, 3);
+            this.btnCerrar.Location = new System.Drawing.Point(968, 3);
             this.btnCerrar.Margin = new System.Windows.Forms.Padding(4);
             this.btnCerrar.Name = "btnCerrar";
             this.btnCerrar.Size = new System.Drawing.Size(20, 16);
@@ -219,7 +219,7 @@
             this.ContenedorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContenedorPanel.Location = new System.Drawing.Point(244, 0);
             this.ContenedorPanel.Name = "ContenedorPanel";
-            this.ContenedorPanel.Size = new System.Drawing.Size(801, 574);
+            this.ContenedorPanel.Size = new System.Drawing.Size(1001, 800);
             this.ContenedorPanel.TabIndex = 4;
             // 
             // panel2
@@ -228,7 +228,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(244, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(801, 19);
+            this.panel2.Size = new System.Drawing.Size(1001, 19);
             this.panel2.TabIndex = 6;
             this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown);
             this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseMove);
@@ -238,7 +238,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(1045, 574);
+            this.ClientSize = new System.Drawing.Size(1245, 800);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.ContenedorPanel);
             this.Controls.Add(this.panel1);
