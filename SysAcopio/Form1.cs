@@ -42,7 +42,7 @@ namespace SysAcopio
         {
             //Cuando este se descomenta y se cambia el nombre de ser necesario
             //LoadForm(new DonacionForm());
-            DashBoardManager.LoadForm(new Prueba());
+            DashBoardManager.LoadForm(new DonacionView());
         }
 
 
@@ -99,7 +99,7 @@ namespace SysAcopio
             }
         }
 
-      
+
         private void btnLogout_Click_1(object sender, EventArgs e)
         {
             Sesion.LimpiarDatosUsuario();
