@@ -109,7 +109,7 @@ namespace SysAcopio.Controllers
             // Filtrar por rango de fechas
             if (fechaInicio.HasValue && fechaFin.HasValue)
             {
-                filtro += $"fecha >= #{fechaInicio.Value.ToString("dd/MM/yyyy")}# AND fecha <= #{fechaFin.Value.ToString("dd/MM/yyyy")}# AND ";
+                filtro += $"fecha >= '{fechaInicio.Value.ToString("yyyy-MM-dd")}' AND fecha <= '{fechaFin.Value.ToString("yyyy-MM-dd")}' AND ";
             }
 
             // Eliminar el último " AND " si existe
@@ -117,7 +117,6 @@ namespace SysAcopio.Controllers
             {
                 filtro = filtro.Substring(0, filtro.Length - 5);
             }
-
             // Filtrar el DataTable
             DataRow[] filasFiltradas = donaciones.Select(filtro);
 

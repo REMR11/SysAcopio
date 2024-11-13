@@ -147,32 +147,47 @@ namespace SysAcopio.Views
 
         private void dtpFechaInicio_ValueChanged(object sender, EventArgs e)
         {
-            if (primerLoading) return;
+            try
+            {
 
-            if (dtpFechaInicio.Value >= dtpFechaFin.Value)
-            {
-                Alerts.ShowAlertS("En los filtros, la fecha de inicio no puede ser mayor que la fecha final", AlertsType.Info);
-                ResetDateTimePickers();
+                if (primerLoading) return;
+
+                if (dtpFechaInicio.Value >= dtpFechaFin.Value)
+                {
+                    Alerts.ShowAlertS("En los filtros, la fecha de inicio no puede ser mayor que la fecha final", AlertsType.Info);
+                    ResetDateTimePickers();
+                }
+                else
+                {
+                    //MessageBox.Show("TUVO QUE CAMBIAR");
+                    FiltrarDatos();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("TUVO QUE CAMBIAR");
-                FiltrarDatos();
+                Alerts.ShowAlertS(ex.Message, AlertsType.Error);
             }
         }
 
         private void dtpFechaFin_ValueChanged(object sender, EventArgs e)
         {
-            if (primerLoading) return;
+            try
+            {
 
-            if (dtpFechaFin.Value <= dtpFechaInicio.Value)
-            {
-                Alerts.ShowAlertS("En los filtros, la fecha de fin no puede ser menor que la fecha inicio", AlertsType.Info);
-                ResetDateTimePickers();
+                if (primerLoading) return;
+
+                if (dtpFechaFin.Value <= dtpFechaInicio.Value)
+                {
+                    Alerts.ShowAlertS("En los filtros, la fecha de fin no puede ser menor que la fecha inicio", AlertsType.Info);
+                }
+                else
+                {
+                    FiltrarDatos();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                FiltrarDatos();
+                Alerts.ShowAlertS(ex.Message, AlertsType.Error);
             }
         }
     }
