@@ -17,7 +17,15 @@ namespace SysAcopio
 {
     public partial class Form1 : Form
     {
+        // propiedadeds para acceder a los botones 
         private Point mouseLocationDrag;
+        public Button BtnUsuario => btnUsuario;
+        public Button BtnInventario => btnInventario;
+        public Button BtnReporte => btnReporte;
+        public Button BtnSolicitus => btnSolicitud;
+        public Button BtnDonacion => btnDonacion;
+        public Button Button1 => button1;
+
 
         public Form1()
         {
@@ -28,6 +36,8 @@ namespace SysAcopio
         private void Form1_Load(object sender, EventArgs e)
         {
             DashBoardManager.LoadForm(new InicioView());
+            //Asigna los permisos de usuarios
+            Sesion.Permisos(this);
         }
         // Método para cargar los datos del usuario desde la clase Sesion
         private void LoadUserData()
@@ -38,7 +48,7 @@ namespace SysAcopio
             // Mostrar el rol del usuario en lblRol
             lblRol.Text = Sesion.RolUsuario;
         }
-        private void button2_Click(object sender, EventArgs e)
+        private void btnDonacion_Click(object sender, EventArgs e)
         {
             //Cuando este se descomenta y se cambia el nombre de ser necesario
             //LoadForm(new DonacionForm());
@@ -108,6 +118,12 @@ namespace SysAcopio
             Login loginForm = new Login(); // Crea una nueva instancia del formulario Login
             loginForm.Show();
 
+        }
+        //boton de minimizar 
+
+        private void btnMinimizar_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
         }
     }
 }

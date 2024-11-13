@@ -45,6 +45,7 @@
             this.btnCerrar = new System.Windows.Forms.Button();
             this.ContenedorPanel = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnMinimizar = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -219,7 +220,7 @@
             this.btnDonacion.TabIndex = 1;
             this.btnDonacion.Text = "Donacion";
             this.btnDonacion.UseVisualStyleBackColor = true;
-            this.btnDonacion.Click += new System.EventHandler(this.button2_Click);
+            this.btnDonacion.Click += new System.EventHandler(this.btnDonacion_Click);
             // 
             // btnInventario
             // 
@@ -244,7 +245,7 @@
             this.btnCerrar.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCerrar.BackgroundImage")));
             this.btnCerrar.FlatAppearance.BorderSize = 0;
             this.btnCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCerrar.Location = new System.Drawing.Point(968, 3);
+            this.btnCerrar.Location = new System.Drawing.Point(968, 6);
             this.btnCerrar.Margin = new System.Windows.Forms.Padding(4);
             this.btnCerrar.Name = "btnCerrar";
             this.btnCerrar.Size = new System.Drawing.Size(20, 16);
@@ -262,14 +263,29 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnMinimizar);
             this.panel2.Controls.Add(this.btnCerrar);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(244, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1001, 19);
+            this.panel2.Size = new System.Drawing.Size(1001, 28);
             this.panel2.TabIndex = 6;
             this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown);
             this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseMove);
+            // 
+            // btnMinimizar
+            // 
+            this.btnMinimizar.BackColor = System.Drawing.Color.Transparent;
+            this.btnMinimizar.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMinimizar.BackgroundImage")));
+            this.btnMinimizar.FlatAppearance.BorderSize = 0;
+            this.btnMinimizar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMinimizar.Location = new System.Drawing.Point(940, 6);
+            this.btnMinimizar.Margin = new System.Windows.Forms.Padding(4);
+            this.btnMinimizar.Name = "btnMinimizar";
+            this.btnMinimizar.Size = new System.Drawing.Size(20, 19);
+            this.btnMinimizar.TabIndex = 3;
+            this.btnMinimizar.UseVisualStyleBackColor = false;
+            this.btnMinimizar.Click += new System.EventHandler(this.btnMinimizar_Click);
             // 
             // Form1
             // 
@@ -313,6 +329,7 @@
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Label lblRol;
+        private System.Windows.Forms.Button btnMinimizar;
     }
 }
 
