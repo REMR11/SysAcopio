@@ -1,5 +1,6 @@
 ﻿using SysAcopio.Controllers;
 using SysAcopio.Models;
+using SysAcopio.Utils;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,9 +15,9 @@ namespace SysAcopio.Repositories
         /// <returns>Un DataTable con los registros de la tabla</returns>
         public DataTable GetAll()
         {
-            string query = "SELECT d.id_donacion, d.id_proveedor, p.nombre_proveedor, d.ubicacion, d.fecha " +
-                "FROM Donacion as d" +
-                "JOIN Proveedor as p;";
+            string query = "SELECT d.id_donacion, d.id_proveedor, p.nombre_proveedor as NombreProveedor, d.ubicacion, d.fecha " +
+                "FROM Donacion as d " +
+                "JOIN Proveedor as p ON d.id_proveedor = p.id_proveedor;";
 
             SqlParameter[] parameters = null;
             return GenericFuncDB.GetRowsToTable(query, parameters);

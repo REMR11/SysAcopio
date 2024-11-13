@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -126,6 +126,7 @@
             this.txtUbicación.Name = "txtUbicación";
             this.txtUbicación.Size = new System.Drawing.Size(191, 22);
             this.txtUbicación.TabIndex = 21;
+            this.txtUbicación.TextChanged += new System.EventHandler(this.txtUbicación_TextChanged);
             // 
             // label6
             // 
@@ -179,6 +180,7 @@
             this.dtpFechaFin.Name = "dtpFechaFin";
             this.dtpFechaFin.Size = new System.Drawing.Size(114, 22);
             this.dtpFechaFin.TabIndex = 15;
+            this.dtpFechaFin.ValueChanged += new System.EventHandler(this.dtpFechaFin_ValueChanged);
             // 
             // dtpFechaInicio
             // 
@@ -187,6 +189,7 @@
             this.dtpFechaInicio.Name = "dtpFechaInicio";
             this.dtpFechaInicio.Size = new System.Drawing.Size(114, 22);
             this.dtpFechaInicio.TabIndex = 14;
+            this.dtpFechaInicio.ValueChanged += new System.EventHandler(this.dtpFechaInicio_ValueChanged);
             // 
             // label2
             // 
@@ -205,6 +208,7 @@
             this.cmbProveedores.Name = "cmbProveedores";
             this.cmbProveedores.Size = new System.Drawing.Size(191, 24);
             this.cmbProveedores.TabIndex = 12;
+            this.cmbProveedores.SelectedValueChanged += new System.EventHandler(this.cmbProveedores_SelectedValueChanged);
             // 
             // label3
             // 
@@ -234,19 +238,21 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvDonaciones.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvDonaciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvDonaciones.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvDonaciones.DefaultCellStyle = dataGridViewCellStyle5;
             this.dgvDonaciones.Location = new System.Drawing.Point(12, 0);
+            this.dgvDonaciones.MultiSelect = false;
             this.dgvDonaciones.Name = "dgvDonaciones";
             this.dgvDonaciones.ReadOnly = true;
             this.dgvDonaciones.RowHeadersWidth = 51;
             this.dgvDonaciones.RowTemplate.Height = 24;
+            this.dgvDonaciones.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvDonaciones.Size = new System.Drawing.Size(977, 620);
             this.dgvDonaciones.TabIndex = 0;
             // 

@@ -1,8 +1,10 @@
 ﻿using SysAcopio.Models;
 using SysAcopio.Repositories;
 using SysAcopio.Utils;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 
 namespace SysAcopio.Controllers
 {
@@ -76,6 +78,50 @@ namespace SysAcopio.Controllers
             }
             alerts.ShowAlert("Felicidades has recibido un donación, tus recursos se han actualizado automaticamente", AlertsType.Confirm);
             return true;
+        }
+
+
+        public DataRow[] FiltrarDatosDonacionesGrid(DataTable donaciones, string idProveedor, string ubicacion, DateTime? fechaInicio, DateTime? fechaFin)
+        {
+            string filtro = "";
+
+            // Filtrar por id_proveedor
+            if (!string.IsNullOrWhiteSpace(idProveedor) && idProveedor != "0")
+            {
+                // Asegúrate de que idProveedor se convierte a long
+                if (long.TryParse(idProveedor, out long id))
+                {
+                    filtro += $"id_proveedor = {id} AND ";
+                }
+                else
+                {
+                    // Manejar el caso donde la conversión falla (opcional)
+                    throw new ArgumentException("El idProveedor no es un número válido.");
+                }
+            }
+
+            // Filtrar por ubicacion
+            if (!string.IsNullOrWhiteSpace(ubicacion))
+            {
+                filtro += $"ubicacion LIKE '%{ubicacion}%' AND ";
+            }
+
+            // Filtrar por rango de fechas
+            if (fechaInicio.HasValue && fechaFin.HasValue)
+            {
+                filtro += $"fecha >= #{fechaInicio.Value.ToString("dd/MM/yyyy")}# AND fecha <= #{fechaFin.Value.ToString("dd/MM/yyyy")}# AND ";
+            }
+
+            // Eliminar el último " AND " si existe
+            if (filtro.EndsWith(" AND "))
+            {
+                filtro = filtro.Substring(0, filtro.Length - 5);
+            }
+
+            // Filtrar el DataTable
+            DataRow[] filasFiltradas = donaciones.Select(filtro);
+
+            return filasFiltradas;
         }
     }
 }
