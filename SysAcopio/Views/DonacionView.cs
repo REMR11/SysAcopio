@@ -16,6 +16,7 @@ namespace SysAcopio.Views
     {
         private readonly DonacionesController donacionesController = new DonacionesController();
         private readonly ProveedoresController proveedoresController = new ProveedoresController();
+        private readonly RecursoDonacionController recursoDonacionController = new RecursoDonacionController();
         private DataTable donaciones;
         private bool primerLoading = true;
         public DonacionView()
@@ -188,6 +189,25 @@ namespace SysAcopio.Views
             catch (Exception ex)
             {
                 Alerts.ShowAlertS(ex.Message, AlertsType.Error);
+            }
+        }
+
+        private void dgvDonaciones_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dgvDonaciones.Columns["detalleButton"].Index && e.RowIndex >= 0)
+            {
+                long idDonacion = Convert.ToInt64(dgvDonaciones.Rows[e.RowIndex].Cells["id_donacion"].Value);
+
+                DataTable dtDonacionDetalle = recursoDonacionController.GetDetailDonation(idDonacion);
+
+                string fechaDonacion = dgvDonaciones.Rows[e.RowIndex].Cells["fecha"].Value.ToString();
+                string proveedor = dgvDonaciones.Rows[e.RowIndex].Cells["NombreProveedor"].Value.ToString();
+
+                string titulo = $"Donaciones de {proveedor} el día {fechaDonacion}";
+                string[] camposOcultos = { "id_recurso_donacion", "id_donacion", "id_recurso" };
+
+                DetailsGridForm frm = new DetailsGridForm("Detalle de la donacion", titulo, dtDonacionDetalle, camposOcultos);
+                frm.Show();
             }
         }
     }

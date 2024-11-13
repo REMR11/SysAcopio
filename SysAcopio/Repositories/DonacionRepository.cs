@@ -52,8 +52,8 @@ namespace SysAcopio.Repositories
             using (SqlConnection conn = dbContext.ConnectionServer())
             {
                 string query = "SELECT d.id_donacion, p.nombre_proveedor, d.id_proveedor, d.ubicacion, d.fecha " +
-                    "FROM Donacion as d" +
-                    "JOIN Proveedor as p ON d.id_proveedor = p.id_proveedor" +
+                    "FROM Donacion as d " +
+                    "JOIN Proveedor as p ON d.id_proveedor = p.id_proveedor " +
                     "WHERE d.id_donacion = @id;";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -85,12 +85,12 @@ namespace SysAcopio.Repositories
         public DataTable SearchDonaciones(string searchQuery)
         {
             string query = "SELECT d.id_donacion, p.nombre_proveedor, d.ubicacion, d.fecha, d.id_proveedor" +
-                "FROM Donacion as d" +
-                "JOIN Proveedor as p ON d.id_proveedor = p.id_proveedor" +
-                "WHERE" +
-                "d.ubicacion LIKE @search OR" +
-                "CAST(d.fecha AS NVARCHAR) LIKE @search" +
-                "p.nombre_proveedor LIKE @search;";
+                " FROM Donacion as d" +
+                " JOIN Proveedor as p ON d.id_proveedor = p.id_proveedor" +
+                " WHERE" +
+                " d.ubicacion LIKE @search OR" +
+                " CAST(d.fecha AS NVARCHAR) LIKE @search" +
+                " p.nombre_proveedor LIKE @search;";
             SqlParameter[] parametros = new SqlParameter[]
             {
                 new SqlParameter("@search", "%"+ searchQuery + "%"),
@@ -105,9 +105,9 @@ namespace SysAcopio.Repositories
         public DataTable GetActiveRecursos()
         {
             string query = "SELECT r.nombre_recurso, tr.nombre_tipo, r.id_tipo_recurso " +
-                "FROM Recurso as r" +
-                "JOIN Tipo_Recurso as tr ON r.id_tipo_recurso = tr.id_tipo_recurso" +
-                "WHERE r.cantidad >= 0";
+                " FROM Recurso as r" +
+                " JOIN Tipo_Recurso as tr ON r.id_tipo_recurso = tr.id_tipo_recurso" +
+                " WHERE r.cantidad >= 0";
 
             SqlParameter[] parameters = null;
             return GenericFuncDB.GetRowsToTable(query, parameters);
