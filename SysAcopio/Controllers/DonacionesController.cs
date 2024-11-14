@@ -80,7 +80,16 @@ namespace SysAcopio.Controllers
             return true;
         }
 
-
+        /// <summary>
+        /// Método para filtrar los datos de Donaciones
+        /// </summary>
+        /// <param name="donaciones"></param>
+        /// <param name="idProveedor"></param>
+        /// <param name="ubicacion"></param>
+        /// <param name="fechaInicio"></param>
+        /// <param name="fechaFin"></param>
+        /// <returns>Un arreglo de DataRow</returns>
+        /// <exception cref="ArgumentException"></exception>
         public DataRow[] FiltrarDatosDonacionesGrid(DataTable donaciones, string idProveedor, string ubicacion, DateTime? fechaInicio, DateTime? fechaFin)
         {
             string filtro = "";
@@ -120,6 +129,59 @@ namespace SysAcopio.Controllers
             // Filtrar el DataTable
             DataRow[] filasFiltradas = donaciones.Select(filtro);
 
+            return filasFiltradas;
+        }
+
+        /// <summary>
+        /// Método que obtiene todos los recursos
+        /// </summary>
+        /// <returns>Retorna un objeto de tipo DataTable con los recursos</returns>
+        public DataTable GetAllRecursos()
+        {
+            return donacionRepository.GetAllRecursos();
+        }
+
+        /// <summary>
+        /// Método que obtiene todos los tipos de recurso
+        /// </summary>
+        /// <returns>Objeto de tipo DataTable con todos los recursos</returns>
+        public DataTable GetAllTipoRecurso()
+        {
+            return donacionRepository.GetAllTipoRecurso();
+        }
+
+        public DataRow[] FiltrarDatosRecursosGrid(DataTable recursos, string idTipo, string nombre)
+        {
+            string filtro = "";
+
+            // Filtrar por id_proveedor
+            if (!string.IsNullOrWhiteSpace(idTipo) && idTipo!= "0")
+            {
+                // Asegúrate de que idProveedor se convierte a long
+                if (long.TryParse(idTipo, out long id))
+                {
+                    filtro += $"id_tipo_recurso = {id} AND ";
+                }
+                else
+                {
+                    // Manejar el caso donde la conversión falla (opcional)
+                    throw new ArgumentException("El idProveedor no es un número válido.");
+                }
+            }
+
+            // Filtrar por ubicacion
+            if (!string.IsNullOrWhiteSpace(nombre))
+            {
+                filtro += $"NombreRecurso LIKE '%{nombre}%' AND ";
+            }
+
+            // Eliminar el último " AND " si existe
+            if (filtro.EndsWith(" AND "))
+            {
+                filtro = filtro.Substring(0, filtro.Length - 5);
+            }
+            // Filtrar el DataTable
+            DataRow[] filasFiltradas = recursos.Select(filtro);
             return filasFiltradas;
         }
     }

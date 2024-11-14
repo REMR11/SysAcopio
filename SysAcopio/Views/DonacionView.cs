@@ -117,7 +117,7 @@ namespace SysAcopio.Views
             {
                 dgvDonaciones.DataSource = null;
                 dgvDonaciones.Columns.Clear();
-                Alerts.ShowAlertS("No existen datos que cumplan con esos filtros, lo sentimos", AlertsType.Info);
+                //Alerts.ShowAlertS("No existen datos que cumplan con esos filtros, lo sentimos", AlertsType.Info);
             }
         }
 
@@ -209,6 +209,11 @@ namespace SysAcopio.Views
                 DetailsGridForm frm = new DetailsGridForm("Detalle de la donacion", titulo, dtDonacionDetalle, camposOcultos);
                 frm.Show();
             }
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new RecursoDonacionView());
         }
     }
 }

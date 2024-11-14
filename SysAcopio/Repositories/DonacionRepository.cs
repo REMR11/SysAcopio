@@ -112,5 +112,30 @@ namespace SysAcopio.Repositories
             SqlParameter[] parameters = null;
             return GenericFuncDB.GetRowsToTable(query, parameters);
         }
+
+        /// <summary>
+        /// Método que obtiene todos los recursos
+        /// </summary>
+        /// <returns>Objeto de tipo DataTable con todos los recurso</returns>
+        public DataTable GetAllRecursos()
+        {
+            string query = @"SELECT r.id_recurso, r.nombre_recurso AS NombreRecurso, r.id_tipo_recurso, tr.nombre_tipo AS 'Tipo'
+                FROM Recurso AS r
+                JOIN Tipo_Recurso AS tr on r.id_tipo_recurso = tr.id_tipo_recurso
+                WHERE r.cantidad > 1";
+
+            return GenericFuncDB.GetRowsToTable(query, null);
+        }
+
+        /// <summary>
+        /// Método que obtiene todos los tipos de recurso
+        /// </summary>
+        /// <returns>Objeto de tipo DataTable con todos los recursos</returns>
+        public DataTable GetAllTipoRecurso()
+        {
+            string query = "SELECT * FROM Tipo_Recurso";
+
+            return GenericFuncDB.GetRowsToTable(query, null);
+        }
     }
 }

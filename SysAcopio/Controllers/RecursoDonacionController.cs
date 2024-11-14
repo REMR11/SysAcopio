@@ -31,6 +31,12 @@ namespace SysAcopio.Controllers
             return repository.GetDetailDonation(IdDonacion);
         }
 
+        /// <summary>
+        /// Método para crear un detalle de una Donación
+        /// </summary>
+        /// <param name="recursoDonacion"></param>
+        /// <param name="idDonacion"></param>
+        /// <returns>Valor de tipo bool que representa si se creo o no se creo</returns>
         public bool CreateDetail(RecursoDonacion recursoDonacion, long idDonacion)
         {
             //Validamos que la donación exista

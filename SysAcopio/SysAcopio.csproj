@@ -145,6 +145,12 @@
     <Compile Include="Views\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\RecursoDonacionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\RecursoDonacionView.Designer.cs">
+      <DependentUpon>RecursoDonacionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\SolicitudView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RecursoDonacionView.resx">
+      <DependentUpon>RecursoDonacionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\SolicitudView.resx">
       <DependentUpon>SolicitudView.cs</DependentUpon>

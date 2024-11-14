@@ -189,6 +189,7 @@
             this.btnBuscar.TabIndex = 18;
             this.btnBuscar.Text = "Registrar una nueva Donación";
             this.btnBuscar.UseVisualStyleBackColor = false;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // label5
             // 
