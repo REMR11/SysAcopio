@@ -5,7 +5,7 @@
         /// <summary>
         /// Constructor vacio
         /// </summary>
-        public RecursoDonacion(){}
+        public RecursoDonacion() { }
         /// <summary>
         /// Constructor con parametros
         /// </summary>
