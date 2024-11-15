@@ -1,4 +1,6 @@
-﻿namespace SysAcopio.Views
+﻿using System;
+
+namespace SysAcopio.Views
 {
     partial class SolicitudView
     {
@@ -96,7 +98,7 @@
             "Todas las solicitudes",
             "Solicitudes activas",
             "solicitudes inactivas"});
-            this.comboBox1.Location = new System.Drawing.Point(546, 33);
+            this.comboBox1.Location = new System.Drawing.Point(546, 56);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 8;
@@ -184,7 +186,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(543, 17);
+            this.label1.Location = new System.Drawing.Point(543, 40);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 17;
@@ -193,7 +195,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(382, 17);
+            this.label2.Location = new System.Drawing.Point(382, 40);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 13);
             this.label2.TabIndex = 19;
@@ -206,7 +208,7 @@
             "Necesario",
             "Urgente",
             "Super urgente"});
-            this.comboBox2.Location = new System.Drawing.Point(385, 33);
+            this.comboBox2.Location = new System.Drawing.Point(385, 56);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(121, 21);
             this.comboBox2.TabIndex = 18;
@@ -243,6 +245,8 @@
             this.PerformLayout();
 
         }
+
+        
 
         #endregion
 
