@@ -4,6 +4,7 @@ using SysAcopio.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace SysAcopio.Controllers
@@ -12,7 +13,7 @@ namespace SysAcopio.Controllers
     {
         private readonly DonacionRepository donacionRepository;
         private readonly Alerts alerts;
-        public List<RecursoDonacion> DetalleRecursosDonacion { get; set; }
+        public List<Recurso> detalleRecursoDonacion = new List<Recurso>();
 
         /// <summary>
         /// Contructor parametrizado
@@ -46,9 +47,41 @@ namespace SysAcopio.Controllers
         /// Método que agrega un detalle a la lista
         /// </summary>
         /// <returns></returns>
-        public void AddDetalle(RecursoDonacion recursoDonacion)
+        public bool AddDetalle(Recurso recurso, int cantidad)
         {
-            DetalleRecursosDonacion.Add(recursoDonacion);
+            //Validar que no este añadido el recurso
+            var recursoDonacion = detalleRecursoDonacion.FirstOrDefault(detalle => detalle.IdRecurso == recurso.IdRecurso);
+
+            if (recursoDonacion == null)
+            {
+                detalleRecursoDonacion.Add(new Recurso()
+                {
+                    IdRecurso = recurso.IdRecurso,
+                    Cantidad = cantidad,
+                    NombreRecurso = recurso.NombreRecurso,
+                });
+            }
+            else//Ya que no esta añadido, actualizamos el recurso
+            {
+                recursoDonacion.Cantidad += cantidad;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Método para eliminar un recurso del Detalle
+        /// </summary>
+        /// <param name="idRecurso"></param>
+        /// <returns></returns>
+        public bool RemoveFromDetail(long idRecurso)
+        {
+            //Validar que no este añadido el recurso
+            var recursoDonacion = detalleRecursoDonacion.FirstOrDefault(detalle => detalle.IdRecurso == idRecurso);
+
+            if (recursoDonacion == null) return false;
+
+            detalleRecursoDonacion.Remove(recursoDonacion);
+            return true;
         }
 
         /// <summary>
@@ -69,7 +102,7 @@ namespace SysAcopio.Controllers
 
             RecursoDonacionController recursoDonacionController = new RecursoDonacionController();
             //Ahora creamos el detalle
-            foreach (var elementoDetalle in DetalleRecursosDonacion)
+            foreach (var elementoDetalle in detalleRecursoDonacion)
             {
                 if (!recursoDonacionController.CreateDetail(elementoDetalle, id))
                 {
@@ -155,7 +188,7 @@ namespace SysAcopio.Controllers
             string filtro = "";
 
             // Filtrar por id_proveedor
-            if (!string.IsNullOrWhiteSpace(idTipo) && idTipo!= "0")
+            if (!string.IsNullOrWhiteSpace(idTipo) && idTipo != "0")
             {
                 // Asegúrate de que idProveedor se convierte a long
                 if (long.TryParse(idTipo, out long id))

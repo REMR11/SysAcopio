@@ -66,9 +66,9 @@ namespace SysAcopio.Repositories
                             return new Donacion
                             {
                                 IdDonacion = reader.GetInt64(0),
-                                IdProveedor = reader.GetInt64(1),
-                                Ubicacion = reader.GetString(2),
-                                Fecha = reader.GetDateTime(3)
+                                IdProveedor = reader.GetInt64(2),
+                                Ubicacion = reader.GetString(3),
+                                Fecha = reader.GetDateTime(4)
                             };
                         }
                     }

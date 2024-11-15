@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlFormulario = new System.Windows.Forms.Panel();
@@ -40,19 +41,25 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cmbProveedores = new System.Windows.Forms.ComboBox();
             this.pnlGrids = new System.Windows.Forms.Panel();
+            this.pnlDetalle = new System.Windows.Forms.Panel();
+            this.dgvDetalle = new System.Windows.Forms.DataGridView();
+            this.btnReiniciarDetalle = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.dgvRecursos = new System.Windows.Forms.DataGridView();
             this.label7 = new System.Windows.Forms.Label();
             this.cmbTipoRecurso = new System.Windows.Forms.ComboBox();
             this.txtNombreRecurso = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnAgregarDetalle = new System.Windows.Forms.Button();
             this.txtRecursoCantidad = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.lblCantidad = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.pnlFormulario.SuspendLayout();
             this.pnlGrids.SuspendLayout();
+            this.pnlDetalle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDetalle)).BeginInit();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).BeginInit();
             this.SuspendLayout();
@@ -124,6 +131,7 @@
             this.btnCrear.TabIndex = 24;
             this.btnCrear.Text = "Guardar";
             this.btnCrear.UseVisualStyleBackColor = false;
+            this.btnCrear.Click += new System.EventHandler(this.btnCrear_Click);
             // 
             // txtUbicación
             // 
@@ -175,6 +183,7 @@
             // 
             // pnlGrids
             // 
+            this.pnlGrids.Controls.Add(this.pnlDetalle);
             this.pnlGrids.Controls.Add(this.panel2);
             this.pnlGrids.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlGrids.Location = new System.Drawing.Point(0, 184);
@@ -182,14 +191,83 @@
             this.pnlGrids.Size = new System.Drawing.Size(1001, 616);
             this.pnlGrids.TabIndex = 5;
             // 
+            // pnlDetalle
+            // 
+            this.pnlDetalle.Controls.Add(this.dgvDetalle);
+            this.pnlDetalle.Controls.Add(this.btnReiniciarDetalle);
+            this.pnlDetalle.Controls.Add(this.label8);
+            this.pnlDetalle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlDetalle.Location = new System.Drawing.Point(334, 0);
+            this.pnlDetalle.Name = "pnlDetalle";
+            this.pnlDetalle.Size = new System.Drawing.Size(667, 616);
+            this.pnlDetalle.TabIndex = 1;
+            // 
+            // dgvDetalle
+            // 
+            this.dgvDetalle.AllowUserToAddRows = false;
+            this.dgvDetalle.AllowUserToDeleteRows = false;
+            this.dgvDetalle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvDetalle.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvDetalle.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvDetalle.Location = new System.Drawing.Point(17, 113);
+            this.dgvDetalle.MultiSelect = false;
+            this.dgvDetalle.Name = "dgvDetalle";
+            this.dgvDetalle.ReadOnly = true;
+            this.dgvDetalle.RowHeadersWidth = 51;
+            this.dgvDetalle.RowTemplate.Height = 24;
+            this.dgvDetalle.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvDetalle.Size = new System.Drawing.Size(637, 490);
+            this.dgvDetalle.TabIndex = 32;
+            this.dgvDetalle.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDetalle_CellContentClick);
+            this.dgvDetalle.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvDetalle_DataBindingComplete);
+            // 
+            // btnReiniciarDetalle
+            // 
+            this.btnReiniciarDetalle.BackColor = System.Drawing.Color.LightGray;
+            this.btnReiniciarDetalle.FlatAppearance.BorderSize = 0;
+            this.btnReiniciarDetalle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReiniciarDetalle.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnReiniciarDetalle.ForeColor = System.Drawing.Color.Black;
+            this.btnReiniciarDetalle.Location = new System.Drawing.Point(440, 73);
+            this.btnReiniciarDetalle.Margin = new System.Windows.Forms.Padding(4);
+            this.btnReiniciarDetalle.Name = "btnReiniciarDetalle";
+            this.btnReiniciarDetalle.Size = new System.Drawing.Size(214, 32);
+            this.btnReiniciarDetalle.TabIndex = 26;
+            this.btnReiniciarDetalle.Text = "Reiniciar Detalle";
+            this.btnReiniciarDetalle.UseVisualStyleBackColor = false;
+            this.btnReiniciarDetalle.Click += new System.EventHandler(this.btnReiniciarDetalle_Click);
+            // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Century Gothic", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(194, 17);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(343, 26);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "Detalle de los recursos a Donar";
+            // 
             // panel2
             // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.dgvRecursos);
             this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.cmbTipoRecurso);
             this.panel2.Controls.Add(this.txtNombreRecurso);
             this.panel2.Controls.Add(this.label4);
-            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.btnAgregarDetalle);
             this.panel2.Controls.Add(this.txtRecursoCantidad);
             this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.lblCantidad);
@@ -208,14 +286,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvRecursos.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvRecursos.DefaultCellStyle = dataGridViewCellStyle4;
             this.dgvRecursos.Location = new System.Drawing.Point(15, 161);
             this.dgvRecursos.MultiSelect = false;
             this.dgvRecursos.Name = "dgvRecursos";
@@ -223,7 +301,7 @@
             this.dgvRecursos.RowHeadersWidth = 51;
             this.dgvRecursos.RowTemplate.Height = 24;
             this.dgvRecursos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvRecursos.Size = new System.Drawing.Size(303, 443);
+            this.dgvRecursos.Size = new System.Drawing.Size(301, 441);
             this.dgvRecursos.TabIndex = 31;
             this.dgvRecursos.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvRecursos_DataBindingComplete);
             this.dgvRecursos.SelectionChanged += new System.EventHandler(this.dgvRecursos_SelectionChanged);
@@ -265,20 +343,21 @@
             this.label4.TabIndex = 27;
             this.label4.Text = "Filtrar por nombre:";
             // 
-            // button1
+            // btnAgregarDetalle
             // 
-            this.button1.BackColor = System.Drawing.Color.ForestGreen;
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(173, 72);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(145, 32);
-            this.button1.TabIndex = 26;
-            this.button1.Text = "Agregar al detalle";
-            this.button1.UseVisualStyleBackColor = false;
+            this.btnAgregarDetalle.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnAgregarDetalle.FlatAppearance.BorderSize = 0;
+            this.btnAgregarDetalle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAgregarDetalle.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAgregarDetalle.ForeColor = System.Drawing.Color.White;
+            this.btnAgregarDetalle.Location = new System.Drawing.Point(173, 72);
+            this.btnAgregarDetalle.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAgregarDetalle.Name = "btnAgregarDetalle";
+            this.btnAgregarDetalle.Size = new System.Drawing.Size(145, 32);
+            this.btnAgregarDetalle.TabIndex = 26;
+            this.btnAgregarDetalle.Text = "Agregar Recurso";
+            this.btnAgregarDetalle.UseVisualStyleBackColor = false;
+            this.btnAgregarDetalle.Click += new System.EventHandler(this.btnAgregarDetalle_Click);
             // 
             // txtRecursoCantidad
             // 
@@ -286,6 +365,7 @@
             this.txtRecursoCantidad.Name = "txtRecursoCantidad";
             this.txtRecursoCantidad.Size = new System.Drawing.Size(151, 22);
             this.txtRecursoCantidad.TabIndex = 22;
+            this.txtRecursoCantidad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtRecursoCantidad_KeyPress);
             // 
             // label5
             // 
@@ -327,6 +407,9 @@
             this.pnlFormulario.ResumeLayout(false);
             this.pnlFormulario.PerformLayout();
             this.pnlGrids.ResumeLayout(false);
+            this.pnlDetalle.ResumeLayout(false);
+            this.pnlDetalle.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDetalle)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).EndInit();
@@ -353,9 +436,13 @@
         private System.Windows.Forms.TextBox txtRecursoCantidad;
         private System.Windows.Forms.TextBox txtNombreRecurso;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnAgregarDetalle;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cmbTipoRecurso;
         private System.Windows.Forms.DataGridView dgvRecursos;
+        private System.Windows.Forms.Panel pnlDetalle;
+        private System.Windows.Forms.DataGridView dgvDetalle;
+        private System.Windows.Forms.Button btnReiniciarDetalle;
+        private System.Windows.Forms.Label label8;
     }
 }

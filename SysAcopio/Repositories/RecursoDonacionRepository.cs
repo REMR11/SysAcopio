@@ -26,7 +26,7 @@ namespace SysAcopio.Repositories
             return GenericFuncDB.GetRowsToTable(query, parametros);
         }
 
-        public long Create(RecursoDonacion recursoDonacion, long idDonacion)
+        public long Create(Recurso recursoDonacion, long idDonacion)
         {
             string query = "INSERT INTO Recurso_Donacion(id_donacion, id_recurso, cantidad) " +
                 "VALUES (@idDonacion, @idRecurso, @cantidad)";
