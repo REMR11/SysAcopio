@@ -107,7 +107,7 @@ namespace SysAcopio.Repositories
             string query = "SELECT r.nombre_recurso, tr.nombre_tipo, r.id_tipo_recurso " +
                 " FROM Recurso as r" +
                 " JOIN Tipo_Recurso as tr ON r.id_tipo_recurso = tr.id_tipo_recurso" +
-                " WHERE r.cantidad >= 0";
+                " WHERE r.cantidad > 0";
 
             SqlParameter[] parameters = null;
             return GenericFuncDB.GetRowsToTable(query, parameters);
@@ -122,7 +122,7 @@ namespace SysAcopio.Repositories
             string query = @"SELECT r.id_recurso, r.nombre_recurso AS NombreRecurso, r.id_tipo_recurso, tr.nombre_tipo AS 'Tipo'
                 FROM Recurso AS r
                 JOIN Tipo_Recurso AS tr on r.id_tipo_recurso = tr.id_tipo_recurso
-                WHERE r.cantidad > 1";
+                WHERE r.cantidad > 0";
 
             return GenericFuncDB.GetRowsToTable(query, null);
         }
