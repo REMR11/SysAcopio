@@ -151,6 +151,12 @@
     <Compile Include="Views\RecursoDonacionView.Designer.cs">
       <DependentUpon>RecursoDonacionView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\RecursoSolicitudView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\RecursoSolicitudView.Designer.cs">
+      <DependentUpon>RecursoSolicitudView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\SolicitudView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -202,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\RecursoDonacionView.resx">
       <DependentUpon>RecursoDonacionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RecursoSolicitudView.resx">
+      <DependentUpon>RecursoSolicitudView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\SolicitudView.resx">
       <DependentUpon>SolicitudView.cs</DependentUpon>
