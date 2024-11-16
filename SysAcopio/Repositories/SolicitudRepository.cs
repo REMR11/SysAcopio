@@ -139,16 +139,7 @@ namespace SysAcopio.Controllers
             {
                 using (SqlConnection conn = dbContext.ConnectionServer())
                 {
-                    string query = @"UPDATE Solicitud SET 
-                                        Ubicacion = @Ubicacion, 
-                                        Fecha = @Fecha, 
-                                        Estado = @Estado,
-                                        nombre_solicitante = @NombreSolicitante, 
-                                        Urgencia = @Urgencia, 
-                                        Motivo = @Motivo 
-                                        is_cancel = @IsCancel, 
-                                    WHERE 
-                                        IdSolicitud = @IdSolicitud";
+                    string query = @"UPDATE Solicitud SET Ubicacion = @Ubicacion, Fecha = @Fecha, Estado = @Estado, nombre_solicitante = @NombreSolicitante, Urgencia = @Urgencia, Motivo = @Motivo, is_cancel = @IsCancel WHERE Id_Solicitud = @IdSolicitud";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {

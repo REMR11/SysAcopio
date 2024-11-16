@@ -146,7 +146,7 @@ namespace SysAcopio.Views
             dgvProveedores.ClearSelection();
             dgvProveedores.CurrentCell = null; // Esto quita la selección visual de la celda
             txtNombre.Clear();
-            idProveedor = 0;
+            idProveedor = 0;    
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)

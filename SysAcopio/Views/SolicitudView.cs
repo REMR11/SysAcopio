@@ -27,7 +27,7 @@ namespace SysAcopio.Views
         SqlDataAdapter solicituDataAdapter;
         BindingSource solicitudBindingSource;
         DataSet SolicitudDS;
-       private void SolicitudView_Load_1(object sender, EventArgs e)
+        private void SolicitudView_Load_1(object sender, EventArgs e)
         {
             SolicitudDS = new DataSet();
             var solicitudes = _controller.ObtenerTodasLasSolicitudes(); // Obtén las solicitudes
@@ -35,6 +35,26 @@ namespace SysAcopio.Views
             DataTable dtSolicitudes = ConvertToDataTable(solicitudes);
             solicitudBindingSource = new BindingSource { DataSource = dtSolicitudes };
             dataGridView1.DataSource = solicitudBindingSource;
+            dataGridView1.Columns["Id"].Visible = false;
+
+            // Crear la columna "EstadoString" y establecer el tipo de celda
+            var estadoColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "EstadoString",
+                HeaderText = "Estado",
+                ReadOnly = true
+            };
+
+            dataGridView1.Columns.Add(estadoColumn);
+
+            // Llenar la columna "EstadoString" con los valores formateados
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.Cells["Estado"].Value is bool isActive)
+                {
+                    row.Cells["EstadoString"].Value = isActive ? "Completado" : "Pendiente";
+                }
+            }
         }
 
         private DataTable ConvertToDataTable(IEnumerable<Solicitud> solicitudes)
@@ -48,7 +68,6 @@ namespace SysAcopio.Views
             dt.Columns.Add("Urgencia", typeof(byte));
             dt.Columns.Add("Motivo", typeof(string));
             dt.Columns.Add("cancelado", typeof(bool));
-            // Agrega otras columnas según sea necesario
 
             foreach (var solicitud in solicitudes)
             {
@@ -224,7 +243,8 @@ namespace SysAcopio.Views
             actualizarDataGrid(solicitudes);
         }
 
-        private void clearInputs() {
+        private void clearInputs()
+        {
             txtUbicacion.Clear();
             txtNombreSolicitante.Clear();
             cmbUrgencia.SelectedIndex = 0;
@@ -232,5 +252,13 @@ namespace SysAcopio.Views
             cmbEstado.SelectedIndex = 0;
             txtMotivo.Clear();
         }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            byte selectOption = Convert.ToByte(comboBox2.SelectedIndex+1);
+            IEnumerable<Solicitud> solicitudes = _controller.ObtenerSolicitudesPorUrgencia(selectOption);
+            actualizarDataGrid(solicitudes);
+        }
+
     }
 }

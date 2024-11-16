@@ -42,6 +42,9 @@
             this.cmbEstado = new System.Windows.Forms.ComboBox();
             this.lblEstado = new System.Windows.Forms.Label();
             this.btnActualizar = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,14 +59,14 @@
             // 
             // txtUbicacion
             // 
-            this.txtUbicacion.Location = new System.Drawing.Point(48, 97);
+            this.txtUbicacion.Location = new System.Drawing.Point(48, 110);
             this.txtUbicacion.Name = "txtUbicacion";
             this.txtUbicacion.Size = new System.Drawing.Size(269, 20);
             this.txtUbicacion.TabIndex = 1;
             // 
             // txtNombreSolicitante
             // 
-            this.txtNombreSolicitante.Location = new System.Drawing.Point(385, 97);
+            this.txtNombreSolicitante.Location = new System.Drawing.Point(385, 110);
             this.txtNombreSolicitante.Name = "txtNombreSolicitante";
             this.txtNombreSolicitante.Size = new System.Drawing.Size(269, 20);
             this.txtNombreSolicitante.TabIndex = 2;
@@ -93,7 +96,7 @@
             "Todas las solicitudes",
             "Solicitudes activas",
             "solicitudes inactivas"});
-            this.comboBox1.Location = new System.Drawing.Point(555, 33);
+            this.comboBox1.Location = new System.Drawing.Point(546, 33);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 8;
@@ -114,7 +117,7 @@
             // lblUbicacion
             // 
             this.lblUbicacion.AutoSize = true;
-            this.lblUbicacion.Location = new System.Drawing.Point(45, 70);
+            this.lblUbicacion.Location = new System.Drawing.Point(45, 94);
             this.lblUbicacion.Name = "lblUbicacion";
             this.lblUbicacion.Size = new System.Drawing.Size(52, 13);
             this.lblUbicacion.TabIndex = 10;
@@ -123,7 +126,7 @@
             // lblNombreSolicitante
             // 
             this.lblNombreSolicitante.AutoSize = true;
-            this.lblNombreSolicitante.Location = new System.Drawing.Point(382, 70);
+            this.lblNombreSolicitante.Location = new System.Drawing.Point(382, 94);
             this.lblNombreSolicitante.Name = "lblNombreSolicitante";
             this.lblNombreSolicitante.Size = new System.Drawing.Size(56, 13);
             this.lblNombreSolicitante.TabIndex = 11;
@@ -132,7 +135,7 @@
             // lblUrgencia
             // 
             this.lblUrgencia.AutoSize = true;
-            this.lblUrgencia.Location = new System.Drawing.Point(45, 142);
+            this.lblUrgencia.Location = new System.Drawing.Point(45, 151);
             this.lblUrgencia.Name = "lblUrgencia";
             this.lblUrgencia.Size = new System.Drawing.Size(50, 13);
             this.lblUrgencia.TabIndex = 12;
@@ -141,7 +144,7 @@
             // lblMotivo
             // 
             this.lblMotivo.AutoSize = true;
-            this.lblMotivo.Location = new System.Drawing.Point(382, 142);
+            this.lblMotivo.Location = new System.Drawing.Point(382, 151);
             this.lblMotivo.Name = "lblMotivo";
             this.lblMotivo.Size = new System.Drawing.Size(39, 13);
             this.lblMotivo.TabIndex = 13;
@@ -162,7 +165,7 @@
             // lblEstado
             // 
             this.lblEstado.AutoSize = true;
-            this.lblEstado.Location = new System.Drawing.Point(200, 142);
+            this.lblEstado.Location = new System.Drawing.Point(200, 151);
             this.lblEstado.Name = "lblEstado";
             this.lblEstado.Size = new System.Drawing.Size(40, 13);
             this.lblEstado.TabIndex = 15;
@@ -178,11 +181,45 @@
             this.btnActualizar.UseVisualStyleBackColor = true;
             this.btnActualizar.Click += new System.EventHandler(this.btnActualizar_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(543, 17);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(57, 13);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "por estado";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(382, 17);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(66, 13);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "por urgencia";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "Necesario",
+            "Urgente",
+            "Super urgente"});
+            this.comboBox2.Location = new System.Drawing.Point(385, 33);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(121, 21);
+            this.comboBox2.TabIndex = 18;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            // 
             // SolicitudView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(751, 650);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnActualizar);
             this.Controls.Add(this.lblEstado);
             this.Controls.Add(this.cmbEstado);
@@ -223,5 +260,8 @@
         private System.Windows.Forms.ComboBox cmbEstado;
         private System.Windows.Forms.Label lblEstado;
         private System.Windows.Forms.Button btnActualizar;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox comboBox2;
     }
 }
