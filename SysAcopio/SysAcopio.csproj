@@ -67,6 +67,7 @@
     <Compile Include="Controllers\DonacionesController.cs" />
     <Compile Include="Controllers\ProveedoresController.cs" />
     <Compile Include="Controllers\RecursoDonacionController.cs" />
+    <Compile Include="Controllers\RecursoSolicitudController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\Sesion.cs" />
     <Compile Include="Controllers\SolicitudController.cs" />

@@ -15,6 +15,7 @@ namespace SysAcopio.Views
     public partial class RecursoSolicitudView : Form
     {
         private readonly SolicitudController _controller;
+        private bool primerLoading = true;
 
         public RecursoSolicitudView()
         {
@@ -59,6 +60,38 @@ namespace SysAcopio.Views
             cmbEstado.Enabled = false;
             cmbEstado.SelectedIndex = 0;
             txtMotivo.Clear();
+        }
+
+        /// <summary>
+        /// Método para renderizar los recursos
+        /// </summary>
+        /// <param name="data"></param>
+        void SetRecursos(DataTable data)
+        {
+            dgvRecursos.DataSource = data;
+            dgvRecursos.Columns["id_recurso"].Visible = false;
+            dgvRecursos.Columns["id_tipo_recurso"].Visible = false;
+            primerLoading = false;
+        }
+
+        /// <summary>
+        /// Método para filtrar los datos de los recursos
+        /// </summary>
+        void FiltrarDatos()
+        {
+            string idTipoRecurso = cmbTipoRecurso.SelectedValue.ToString();
+            string nobreRecurso = txtNombreRecurso.Text.Trim();
+
+            // Filtrar los datos
+            DataRow[] filasFiltradas = SolicitudController.FiltrarDatosRecursosGrid(recursos, idTipoRecurso, nobreRecurso);
+
+            // Verificar si hay filas filtradas
+            if (!(filasFiltradas.Length > 0)) dgvRecursos.DataSource = null;
+            
+                // Crear un nuevo DataTable para almacenar las filas filtradas
+                DataTable dtFiltrado = filasFiltradas.CopyToDataTable();
+                SetRecursos(dtFiltrado);
+            
         }
     }
 }
