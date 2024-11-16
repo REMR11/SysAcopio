@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SysAcopio.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -9,6 +10,21 @@ namespace SysAcopio.Controllers
 {
     public class RecursoSolicitudController
     {
+        private readonly RecursoSolicitudRepository repoRecurso;
+
+        public RecursoSolicitudController()
+        {
+            this.repoRecurso = new RecursoSolicitudRepository();
+        }
+
+        public DataTable GetAllRecurso()
+        {
+            return repoRecurso.GetAllRecursos();
+        }
+
+        public DataTable GetAllTipoRecurso() {
+            return repoRecurso.GetAllTipoRecurso();
+        }
 
         public DataRow[] FiltrarDatosRecursosGrid(DataTable recursos, string idTipo, string nombre)
         {
@@ -43,10 +59,7 @@ namespace SysAcopio.Controllers
 
         private void AgregarFiltroPorNombre(string nombre, List<string> filtros)
         {
-            if (!string.IsNullOrWhiteSpace(nombre))
-            {
-                filtros.Add($"NombreRecurso LIKE '%{nombre}%'");
-            }
+            if (!string.IsNullOrWhiteSpace(nombre)) filtros.Add($"NombreRecurso LIKE '%{nombre}%'");
         }
 
         private string ConstruirFiltroFinal(List<string> filtros)

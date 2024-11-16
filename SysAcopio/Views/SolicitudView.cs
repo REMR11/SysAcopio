@@ -20,7 +20,7 @@ namespace SysAcopio.Views
         public SolicitudView()
         {
             InitializeComponent();
-            _controller = new SolicitudController();
+                _controller = new SolicitudController();
         }
 
         private void SolicitudView_Load_1(object sender, EventArgs e)
@@ -71,60 +71,6 @@ namespace SysAcopio.Views
             }
             return dt;
         }
-
-        private void btnGuardar_Click(object sender, EventArgs e)
-        {
-            if (!EsUrgenciaSeleccionada()) return;
-
-            var nuevaSolicitud = CrearNuevaSolicitudDesdeInputs();
-            _controller.CrearSolicitud(nuevaSolicitud);
-
-            LimpiarInputs();
-            CargarSolicitudes();
-        }
-
-        private bool EsUrgenciaSeleccionada()
-        {
-            if (cmbUrgencia.SelectedIndex < 0)
-            {
-                MessageBox.Show("Por favor, seleccione un valor válido para la urgencia.");
-                return false;
-            }
-            return true;
-        }
-
-        private Solicitud CrearNuevaSolicitudDesdeInputs()
-        {
-            return new Solicitud(
-                txtUbicacion.Text,
-                txtNombreSolicitante.Text,
-                (byte)(cmbUrgencia.SelectedIndex + 1),
-                txtMotivo.Text);
-        }
-
-        private void LimpiarInputs()
-        {
-            txtUbicacion.Clear();
-            txtNombreSolicitante.Clear();
-            cmbUrgencia.SelectedIndex = 0;
-            cmbEstado.Enabled = false;
-            cmbEstado.SelectedIndex = 0;
-            txtMotivo.Clear();
-        }
-
-        private void btnActualizar_Click(object sender, EventArgs e)
-        {
-            if (!EsFilaSeleccionada()) return;
-            if (!EsUrgenciaSeleccionada()) return;
-
-            var solicitudActualizada = ObtenerSolicitudDesdeInputs();
-            var isCompleted = _controller.ActualizarSolicitud(solicitudActualizada);
-
-            MessageBox.Show("Operación realizada? " + isCompleted);
-            LimpiarInputs();
-            CargarSolicitudes();
-        }
-
         private bool EsFilaSeleccionada()
         {
             if (selectedRowIndex < 0)
@@ -139,13 +85,6 @@ namespace SysAcopio.Views
         {
             long solicitudId = ObtenerIdSolicitudDeFilaSeleccionada();
             var solicitud = _controller.ObtenerSolicitudPorId(solicitudId);
-
-            solicitud.Ubicacion = txtUbicacion.Text;
-            solicitud.NombreSolicitante = txtNombreSolicitante.Text;
-            solicitud.Urgencia = (byte)(cmbUrgencia.SelectedIndex + 1);
-            solicitud.Estado = cmbEstado.SelectedIndex == 0;
-            solicitud.Motivo = txtMotivo.Text;
-
             return solicitud;
         }
 
@@ -201,7 +140,6 @@ namespace SysAcopio.Views
             if (solicitud != null)
             {
                 MessageBox.Show($"ID de la solicitud seleccionada: {solicitudId}");
-                RellenarCamposSolicitud(solicitud);
             }
             else
             {
@@ -209,14 +147,9 @@ namespace SysAcopio.Views
             }
         }
 
-        private void RellenarCamposSolicitud(Solicitud solicitud)
+        private void btnGuardar_Click(object sender, EventArgs e)
         {
-            txtUbicacion.Text = solicitud.Ubicacion;
-            txtNombreSolicitante.Text = solicitud.NombreSolicitante;
-            cmbUrgencia.SelectedIndex = solicitud.Urgencia - 1;
-            cmbEstado.Enabled = true;
-            cmbEstado.SelectedIndex = solicitud.Estado ? 0 : 1;
-            txtMotivo.Text = solicitud.Motivo;
+            DashBoardManager.LoadForm(new RecursoSolicitudView());
         }
     }
 }
