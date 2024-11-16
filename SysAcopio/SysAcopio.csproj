@@ -65,12 +65,15 @@
   <ItemGroup>
     <Compile Include="Controllers\DashBoardManager.cs" />
     <Compile Include="Controllers\DonacionesController.cs" />
+    <Compile Include="Controllers\InventarioController.cs" />
     <Compile Include="Controllers\ProveedoresController.cs" />
     <Compile Include="Controllers\RecursoDonacionController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\Sesion.cs" />
     <Compile Include="Controllers\SolicitudController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Models\Inventario.cs" />
+    <Compile Include="Repositories\InventarioRepository.cs" />
     <Compile Include="Prueba.cs">
       <SubType>Form</SubType>
     </Compile>

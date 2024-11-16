@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SysAcopio.Repositories;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,32 @@ namespace SysAcopio.Views
 {
     public partial class InventarioView : Form
     {
+        private readonly InventarioRepository inventarioRepository= new InventarioRepository();
         public InventarioView()
         {
             InitializeComponent();
+        }
+
+        private void InventarioView_Load(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dataGridView1.DataSource = inventarioRepository.GetInventario();
+
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
