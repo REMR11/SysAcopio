@@ -80,6 +80,7 @@
     <Compile Include="Repositories\DonacionRepository.cs" />
     <Compile Include="Repositories\ProveedorRepository.cs" />
     <Compile Include="Repositories\RecursoDonacionRepository.cs" />
+    <Compile Include="Repositories\RecursoSolicitudRepository.cs" />
     <Compile Include="Repositories\RolRepository.cs" />
     <Compile Include="Repositories\SysAcopioDbContext.cs" />
     <Compile Include="Repositories\SolicitudRepository.cs" />
