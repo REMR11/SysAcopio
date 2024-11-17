@@ -58,6 +58,7 @@
             this.txtRecursoCantidad = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.lblCantidad = new System.Windows.Forms.Label();
+            this.btn_Cancelar = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.pnlFormulario.SuspendLayout();
             this.pnlDetalle.SuspendLayout();
@@ -93,6 +94,7 @@
             // pnlFormulario
             // 
             this.pnlFormulario.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlFormulario.Controls.Add(this.btn_Cancelar);
             this.pnlFormulario.Controls.Add(this.label5);
             this.pnlFormulario.Controls.Add(this.txtDireccion);
             this.pnlFormulario.Controls.Add(this.lblNombreSolicitante);
@@ -152,12 +154,13 @@
             this.btnReiniciar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReiniciar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReiniciar.ForeColor = System.Drawing.Color.Black;
-            this.btnReiniciar.Location = new System.Drawing.Point(581, 84);
+            this.btnReiniciar.Location = new System.Drawing.Point(578, 82);
             this.btnReiniciar.Name = "btnReiniciar";
             this.btnReiniciar.Size = new System.Drawing.Size(160, 26);
             this.btnReiniciar.TabIndex = 25;
             this.btnReiniciar.Text = "Reiniciar";
             this.btnReiniciar.UseVisualStyleBackColor = false;
+            this.btnReiniciar.Click += new System.EventHandler(this.btnReiniciar_Click);
             // 
             // btnCrear
             // 
@@ -437,6 +440,21 @@
             this.lblCantidad.TabIndex = 16;
             this.lblCantidad.Text = "Cantidad:";
             // 
+            // btn_Cancelar
+            // 
+            this.btn_Cancelar.BackColor = System.Drawing.Color.IndianRed;
+            this.btn_Cancelar.FlatAppearance.BorderSize = 0;
+            this.btn_Cancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Cancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Cancelar.ForeColor = System.Drawing.Color.Transparent;
+            this.btn_Cancelar.Location = new System.Drawing.Point(579, 122);
+            this.btn_Cancelar.Name = "btn_Cancelar";
+            this.btn_Cancelar.Size = new System.Drawing.Size(160, 26);
+            this.btn_Cancelar.TabIndex = 32;
+            this.btn_Cancelar.Text = "Cancelar";
+            this.btn_Cancelar.UseVisualStyleBackColor = false;
+            this.btn_Cancelar.Click += new System.EventHandler(this.btn_Cancelar_Click);
+            // 
             // RecursoSolicitudView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -494,5 +512,6 @@
         private System.Windows.Forms.TextBox txtRecursoCantidad;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label lblCantidad;
+        private System.Windows.Forms.Button btn_Cancelar;
     }
 }
