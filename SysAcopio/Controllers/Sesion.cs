@@ -10,7 +10,7 @@ namespace SysAcopio.Controllers
     {
         public static string NombreUsuario { get; set; }
         public static string RolUsuario { get; set; }
-       
+
         // Método para guardar la información del usuario
         public static void GuardarDatosUsuario(string nombreUsuario, string rolUsuario)
         {
@@ -29,21 +29,21 @@ namespace SysAcopio.Controllers
             // si el rol del usuario es 1 permisos de admin
             if (RolUsuario == "1")
             {
-                form.BtnUsuario.Enabled = true;
-                form.BtnInventario.Enabled = true;
-                form.BtnReporte.Enabled = true;
-                form.BtnSolicitus.Enabled = true;
-                form.BtnDonacion.Enabled = true;
-                form.Button1.Enabled = true;
+                form.BtnUsuario.Visible = true;
+                form.BtnInventario.Visible = true;
+                form.BtnReporte.Visible = true;
+                form.BtnSolicitus.Visible = true;
+                form.BtnDonacion.Visible = true;
+                form.Button1.Visible = true;
             } // si el rol del usuario es 2 permisos de operador 
             else if (RolUsuario == "2")
             {
-                form.BtnUsuario.Enabled = false;
-                form.BtnInventario.Enabled = false;
-                form.BtnReporte.Enabled = false;
-                form.BtnSolicitus.Enabled = true;
-                form.BtnDonacion.Enabled = true;
-                form.Button1.Enabled = false;
+                form.BtnUsuario.Visible = false;
+                form.BtnInventario.Visible = false;
+                form.BtnReporte.Visible = false;
+                form.BtnSolicitus.Visible = true;
+                form.BtnDonacion.Visible = true;
+                form.Button1.Visible = false;
             }
         }
 
