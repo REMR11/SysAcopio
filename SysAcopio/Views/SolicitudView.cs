@@ -81,19 +81,7 @@ namespace SysAcopio.Views
             return true;
         }
 
-        private Solicitud ObtenerSolicitudDesdeInputs()
-        {
-            long solicitudId = ObtenerIdSolicitudDeFilaSeleccionada();
-            var solicitud = _controller.ObtenerSolicitudPorId(solicitudId);
-            return solicitud;
-        }
-
-        private long ObtenerIdSolicitudDeFilaSeleccionada()
-        {
-            DataGridViewRow selectedRow = dataGridView1.Rows[selectedRowIndex];
-            return Convert.ToInt64(selectedRow.Cells["Id"].Value);
-        }
-
+       
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var solicitudes = ObtenerSolicitudesPorFiltro(comboBox1.SelectedIndex);
@@ -126,26 +114,12 @@ namespace SysAcopio.Views
             if (EsFilaIndiceValido(e.RowIndex))
             {
                 selectedRowIndex = e.RowIndex;
-                MostrarDetallesSolicitudSeleccionada();
             }
         }
 
         private bool EsFilaIndiceValido(int rowIndex) => rowIndex >= 0;
 
-        private void MostrarDetallesSolicitudSeleccionada()
-        {
-            long solicitudId = ObtenerIdSolicitudDeFilaSeleccionada();
-            var solicitud = _controller.ObtenerSolicitudPorId(solicitudId);
-
-            if (solicitud != null)
-            {
-                MessageBox.Show($"ID de la solicitud seleccionada: {solicitudId}");
-            }
-            else
-            {
-                MessageBox.Show("No se encontró la solicitud.");
-            }
-        }
+        
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {

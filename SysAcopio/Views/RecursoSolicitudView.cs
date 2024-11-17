@@ -1,57 +1,56 @@
 ﻿using SysAcopio.Controllers;
 using SysAcopio.Models;
+using SysAcopio.Utils;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysAcopio.Views
 {
     public partial class RecursoSolicitudView : Form
     {
-        private readonly SolicitudController _controller;
+        private readonly SolicitudController _solicitudController;
         private readonly RecursoSolicitudController _recursoSolicitudController;
-        private Recurso recursoToAdd;
-        private DataTable recursos;
-        private bool primerLoading = true;
+        private Recurso _recursoToAdd;
+        private DataTable _recursos;
+        private bool _isFirstLoading = true;
 
         public RecursoSolicitudView()
         {
             InitializeComponent();
-            _controller= new SolicitudController();
+            _solicitudController = new SolicitudController();
             _recursoSolicitudController = new RecursoSolicitudController();
         }
 
         private void RecursoSolicitudView_Load(object sender, EventArgs e)
         {
+            LoadRecursos();
+        }
+
+        private void LoadRecursos()
+        {
             var recursos = _recursoSolicitudController.GetAllRecurso();
             SetRecursos(recursos);
         }
-        /// <summary>
-        /// Método para renderizar los recursos
-        /// </summary>
-        /// <param name="data"></param>
-        private void SetRecursos(DataTable data)
+
+        private void SetRecursos(DataTable recursos)
         {
-            dgvRecursos.DataSource = data;
-            dgvRecursos.Columns["id_recurso"].Visible = false;
-            dgvRecursos.Columns["id_tipo_recurso"].Visible = false;
-            primerLoading = false;
+            dgvRecursos.DataSource = recursos;
+            HideUnnecessaryColumns(dgvRecursos, "id_recurso", "id_tipo_recurso");
+            _isFirstLoading = false;
         }
 
-        /// <summary>
-        /// Método para setar los tipos de recursos
-        /// </summary>
+        private void HideUnnecessaryColumns(DataGridView dgv, params string[] columnNames)
+        {
+            foreach (var columnName in columnNames)
+            {
+                dgv.Columns[columnName].Visible = false;
+            }
+        }
+
         private void SetTipoRecursos()
         {
-            DataTable tipoData = _recursoSolicitudController.GetAllTipoRecurso();
+            var tipoData = _recursoSolicitudController.GetAllTipoRecurso();
             tipoData.Rows.Add(0, "Todos");
             cmbTipoRecurso.DataSource = tipoData;
             cmbTipoRecurso.DisplayMember = "nombre_tipo";
@@ -59,17 +58,65 @@ namespace SysAcopio.Views
             cmbTipoRecurso.SelectedValue = 0;
         }
 
-        private void btnCrear_Click(object sender, EventArgs e)
+        private void FilterRecursos()
         {
-            if (!EsUrgenciaSeleccionada()) return;
+            string idTipoRecurso = cmbTipoRecurso.SelectedValue.ToString();
+            string nombreRecurso = txtNombreRecurso.Text.Trim();
 
-            var nuevaSolicitud = CrearNuevaSolicitudDesdeInputs();
-            _controller.CrearSolicitud(nuevaSolicitud);
+            DataRow[] filteredRows = _recursoSolicitudController.FiltrarDatosRecursosGrid(_recursos, idTipoRecurso, nombreRecurso);
 
-            LimpiarInputs();
+            if (filteredRows.Length > 0)
+            {
+                SetRecursos(filteredRows.CopyToDataTable());
+            }
+            else
+            {
+                dgvRecursos.DataSource = null;
+            }
         }
 
-        private bool EsUrgenciaSeleccionada()
+        private void RefreshDetalleGrid()
+        {
+            dgvDetalle.DataSource = null;
+            RemoveDetailButtonColumn();
+            dgvDetalle.DataSource = _recursoSolicitudController.detalleRecursoSolicitud;
+            HideUnnecessaryColumns(dgvDetalle, "IdRecurso", "IdTipoRecurso");
+            AddDeleteButtonColumn();
+        }
+
+        private void RemoveDetailButtonColumn()
+        {
+            if (dgvDetalle.Columns.Contains("deletDetailButton")) 
+                dgvDetalle.Columns.Remove("deletDetailButton");
+        }
+
+        private void AddDeleteButtonColumn()
+        {
+            dgvDetalle.Columns.Add(new DataGridViewButtonColumn
+            {
+                Name = "deletDetailButton",
+                HeaderText = "Eliminar Recurso del Detalle",
+                Text = "Eliminar",
+                UseColumnTextForButtonValue = true,
+                Width = 100,
+                FlatStyle = FlatStyle.Flat,
+            });
+        }
+
+        private void btnCrear_Click(object sender, EventArgs e)
+        {
+            if (!IsUrgenciaSelected()) return;
+
+            var nuevaSolicitud = CreateSolicitudFromInputs();
+            long idSolicitud = _solicitudController.CrearSolicitud(nuevaSolicitud);
+
+            ClearInputs();
+            SaveRecursos(idSolicitud);
+            RefreshDetalleGrid();
+            Alerts.ShowAlertS("Recursos guardados exitosamente.", AlertsType.Info);
+        }
+
+        private bool IsUrgenciaSelected()
         {
             if (cmbUrgencia.SelectedIndex >= 0) return true;
 
@@ -77,7 +124,7 @@ namespace SysAcopio.Views
             return false;
         }
 
-        private Solicitud CrearNuevaSolicitudDesdeInputs()
+        private Solicitud CreateSolicitudFromInputs()
         {
             return new Solicitud(
                 txtDireccion.Text,
@@ -86,34 +133,31 @@ namespace SysAcopio.Views
                 txtMotivo.Text);
         }
 
-        private void LimpiarInputs()
+        private void ClearInputs()
         {
             txtDireccion.Clear();
             txtNombreSolicitante.Clear();
             cmbUrgencia.SelectedIndex = 0;
-            cmbEstado.Enabled = false;
-            cmbEstado.SelectedIndex = 0;
             txtMotivo.Clear();
         }
 
-        /// <summary>
-        /// Método para filtrar los datos de los recursos
-        /// </summary>
-        void FiltrarDatos()
+        private void SaveRecursos(long idSolicitud)
         {
-            string idTipoRecurso = cmbTipoRecurso.SelectedValue.ToString();
-            string nobreRecurso = txtNombreRecurso.Text.Trim();
+            foreach (DataGridViewRow row in dgvDetalle.Rows)
+            {
+                var recurso = new Recurso
+                {
+                    IdRecurso = Convert.ToInt64(row.Cells["IdRecurso"].Value),
+                    Cantidad = Convert.ToInt32(row.Cells["Cantidad"].Value)
+                };
 
-            // Filtrar los datos
-            DataRow[] filasFiltradas = _recursoSolicitudController.FiltrarDatosRecursosGrid(recursos, idTipoRecurso, nobreRecurso);
-
-            // Verificar si hay filas filtradas
-            if (!(filasFiltradas.Length > 0)) dgvRecursos.DataSource = null;
-            
-            // Crear un nuevo DataTable para almacenar las filas filtradas
-            DataTable dtFiltrado = filasFiltradas.CopyToDataTable();
-            SetRecursos(dtFiltrado);
-            
+                long result = _recursoSolicitudController.Create(recurso, idSolicitud);
+                if (result <= 0)
+                {
+                    Alerts.ShowAlertS("Error al guardar el recurso.", AlertsType.Error);
+                    return;
+                }
+            }
         }
 
         private void dgvRecursos_SelectionChanged(object sender, EventArgs e)
@@ -123,7 +167,7 @@ namespace SysAcopio.Views
                 var row = dgvRecursos.CurrentRow;
                 if (row != null)
                 {
-                    recursoToAdd = new Recurso()
+                    _recursoToAdd = new Recurso
                     {
                         IdRecurso = Convert.ToInt64(row.Cells["id_recurso"].Value),
                         NombreRecurso = row.Cells["NombreRecurso"].Value.ToString()
@@ -134,7 +178,73 @@ namespace SysAcopio.Views
 
         private void btnAgregarDetalle_Click(object sender, EventArgs e)
         {
+            if (!IsRecursoValid()) return;
 
+            if (_recursoSolicitudController.AddDetalle(_recursoToAdd, Convert.ToInt32(txtRecursoCantidad.Text)))
+            {
+                ResetRecursoSelection();
+                RefreshDetalleGrid();
+            }
         }
+
+        private void btnReiniciarDetalle_Click(object sender, EventArgs e)
+        {
+            _recursoSolicitudController.detalleRecursoSolicitud.Clear();
+            RefreshDetalleGrid();
+        }
+        private bool IsRecursoValid()
+        {
+            if (_recursoToAdd == null || string.IsNullOrWhiteSpace(txtRecursoCantidad.Text.Trim()))
+            {
+                Alerts.ShowAlertS("Debe seleccionar un recurso e indicar la cantidad para añadir", AlertsType.Info);
+                return false;
+            }
+
+            if (Convert.ToInt32(txtRecursoCantidad.Text) <= 0)
+            {
+                Alerts.ShowAlertS("La cantidad a donar debe ser mayor que 0", AlertsType.Info);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ResetRecursoSelection()
+        {
+            _recursoToAdd = null;
+            txtRecursoCantidad.Clear();
+            dgvRecursos.ClearSelection();
+            dgvRecursos.CurrentCell = null;
+        }
+
+        private void cmbTipoRecurso_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_isFirstLoading) return;
+            FilterRecursos();
+        }
+
+        private void txtRecursoCantidad_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private DataTable _detalleDataTable; // Add this field to hold the detail data
+
+
+        private void dgvDetalle_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dgvDetalle.Columns["deletDetailButton"].Index && e.RowIndex >= 0)
+            {
+                long idRecurso = Convert.ToInt64(dgvDetalle.Rows[e.RowIndex].Cells["idRecurso"].Value);
+
+                _recursoSolicitudController.RemoveFromDetail(idRecurso);
+                RefreshDetalleGrid();
+            }
+        }
+
+      
     }
 }

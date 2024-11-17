@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlFormulario = new System.Windows.Forms.Panel();
@@ -37,8 +37,6 @@
             this.txtDireccion = new System.Windows.Forms.TextBox();
             this.lblNombreSolicitante = new System.Windows.Forms.Label();
             this.txtNombreSolicitante = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
             this.btnReiniciar = new System.Windows.Forms.Button();
             this.btnCrear = new System.Windows.Forms.Button();
             this.txtMotivo = new System.Windows.Forms.TextBox();
@@ -99,8 +97,6 @@
             this.pnlFormulario.Controls.Add(this.txtDireccion);
             this.pnlFormulario.Controls.Add(this.lblNombreSolicitante);
             this.pnlFormulario.Controls.Add(this.txtNombreSolicitante);
-            this.pnlFormulario.Controls.Add(this.label4);
-            this.pnlFormulario.Controls.Add(this.cmbEstado);
             this.pnlFormulario.Controls.Add(this.btnReiniciar);
             this.pnlFormulario.Controls.Add(this.btnCrear);
             this.pnlFormulario.Controls.Add(this.txtMotivo);
@@ -119,7 +115,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(9, 91);
+            this.label5.Location = new System.Drawing.Point(9, 77);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(61, 13);
             this.label5.TabIndex = 31;
@@ -127,7 +123,7 @@
             // 
             // txtDireccion
             // 
-            this.txtDireccion.Location = new System.Drawing.Point(11, 111);
+            this.txtDireccion.Location = new System.Drawing.Point(11, 97);
             this.txtDireccion.Name = "txtDireccion";
             this.txtDireccion.Size = new System.Drawing.Size(198, 20);
             this.txtDireccion.TabIndex = 30;
@@ -136,7 +132,7 @@
             // 
             this.lblNombreSolicitante.AutoSize = true;
             this.lblNombreSolicitante.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNombreSolicitante.Location = new System.Drawing.Point(359, 30);
+            this.lblNombreSolicitante.Location = new System.Drawing.Point(247, 31);
             this.lblNombreSolicitante.Name = "lblNombreSolicitante";
             this.lblNombreSolicitante.Size = new System.Drawing.Size(67, 13);
             this.lblNombreSolicitante.TabIndex = 29;
@@ -144,30 +140,10 @@
             // 
             // txtNombreSolicitante
             // 
-            this.txtNombreSolicitante.Location = new System.Drawing.Point(361, 50);
+            this.txtNombreSolicitante.Location = new System.Drawing.Point(249, 51);
             this.txtNombreSolicitante.Name = "txtNombreSolicitante";
-            this.txtNombreSolicitante.Size = new System.Drawing.Size(198, 20);
+            this.txtNombreSolicitante.Size = new System.Drawing.Size(310, 20);
             this.txtNombreSolicitante.TabIndex = 28;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(181, 30);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(50, 13);
-            this.label4.TabIndex = 27;
-            this.label4.Text = "Estado:";
-            // 
-            // cmbEstado
-            // 
-            this.cmbEstado.FormattingEnabled = true;
-            this.cmbEstado.Location = new System.Drawing.Point(181, 50);
-            this.cmbEstado.Margin = new System.Windows.Forms.Padding(2);
-            this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(155, 21);
-            this.cmbEstado.TabIndex = 26;
             // 
             // btnReiniciar
             // 
@@ -200,18 +176,18 @@
             // 
             // txtMotivo
             // 
-            this.txtMotivo.Location = new System.Drawing.Point(249, 111);
+            this.txtMotivo.Location = new System.Drawing.Point(249, 97);
             this.txtMotivo.Margin = new System.Windows.Forms.Padding(2);
             this.txtMotivo.Multiline = true;
             this.txtMotivo.Name = "txtMotivo";
-            this.txtMotivo.Size = new System.Drawing.Size(310, 36);
+            this.txtMotivo.Size = new System.Drawing.Size(310, 51);
             this.txtMotivo.TabIndex = 23;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(247, 96);
+            this.label6.Location = new System.Drawing.Point(247, 82);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(49, 13);
@@ -245,10 +221,14 @@
             // cmbUrgencia
             // 
             this.cmbUrgencia.FormattingEnabled = true;
+            this.cmbUrgencia.Items.AddRange(new object[] {
+            "Necesario",
+            "Urgente",
+            "Super urgente"});
             this.cmbUrgencia.Location = new System.Drawing.Point(8, 51);
             this.cmbUrgencia.Margin = new System.Windows.Forms.Padding(2);
             this.cmbUrgencia.Name = "cmbUrgencia";
-            this.cmbUrgencia.Size = new System.Drawing.Size(155, 21);
+            this.cmbUrgencia.Size = new System.Drawing.Size(201, 21);
             this.cmbUrgencia.TabIndex = 14;
             // 
             // pnlDetalle
@@ -272,14 +252,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvDetalle.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvDetalle.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvDetalle.DefaultCellStyle = dataGridViewCellStyle1;
             this.dgvDetalle.Location = new System.Drawing.Point(13, 92);
             this.dgvDetalle.Margin = new System.Windows.Forms.Padding(2);
             this.dgvDetalle.MultiSelect = false;
@@ -290,6 +270,7 @@
             this.dgvDetalle.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvDetalle.Size = new System.Drawing.Size(478, 330);
             this.dgvDetalle.TabIndex = 32;
+            this.dgvDetalle.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDetalle_CellContentClick);
             // 
             // btnReiniciarDetalle
             // 
@@ -304,6 +285,7 @@
             this.btnReiniciarDetalle.TabIndex = 26;
             this.btnReiniciarDetalle.Text = "Reiniciar Detalle";
             this.btnReiniciarDetalle.UseVisualStyleBackColor = false;
+            this.btnReiniciarDetalle.Click += new System.EventHandler(this.btnReiniciarDetalle_Click);
             // 
             // label8
             // 
@@ -346,14 +328,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvRecursos.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvRecursos.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvRecursos.Location = new System.Drawing.Point(11, 131);
             this.dgvRecursos.Margin = new System.Windows.Forms.Padding(2);
             this.dgvRecursos.MultiSelect = false;
@@ -385,6 +367,7 @@
             this.cmbTipoRecurso.Name = "cmbTipoRecurso";
             this.cmbTipoRecurso.Size = new System.Drawing.Size(110, 21);
             this.cmbTipoRecurso.TabIndex = 29;
+            this.cmbTipoRecurso.SelectedIndexChanged += new System.EventHandler(this.cmbTipoRecurso_SelectedIndexChanged);
             // 
             // txtNombreRecurso
             // 
@@ -427,6 +410,7 @@
             this.txtRecursoCantidad.Name = "txtRecursoCantidad";
             this.txtRecursoCantidad.Size = new System.Drawing.Size(114, 20);
             this.txtRecursoCantidad.TabIndex = 22;
+            this.txtRecursoCantidad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtRecursoCantidad_KeyPress);
             // 
             // label10
             // 
@@ -491,8 +475,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cmbUrgencia;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox cmbEstado;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtDireccion;
         private System.Windows.Forms.Label lblNombreSolicitante;

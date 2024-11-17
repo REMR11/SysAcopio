@@ -41,10 +41,10 @@ namespace SysAcopio.Repositories
             string query = "SELECT rs.id_recurso_solicitud, rs.id_recurso, r.nombre_recurso, rs.id_solicitud, rs.cantidad " +
                 "FROM RECURSO_SOLICITUD as rs " +
                 "JOIN Recurso as r ON rs.id_recurso = r.id_recurso " +
-                "WHERE id_donacion = @idDonacion";
+                "WHERE id_Solicitud = @idSolicitud";
             SqlParameter[] parametros = new SqlParameter[]
             {
-                new SqlParameter("@idDonacion", idDonacion),
+                new SqlParameter("@idSolicitud", idDonacion),
             };
 
             return GenericFuncDB.GetRowsToTable(query, parametros);
