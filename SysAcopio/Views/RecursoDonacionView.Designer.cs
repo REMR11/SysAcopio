@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlFormulario = new System.Windows.Forms.Panel();
@@ -42,6 +42,8 @@
             this.cmbProveedores = new System.Windows.Forms.ComboBox();
             this.pnlGrids = new System.Windows.Forms.Panel();
             this.pnlDetalle = new System.Windows.Forms.Panel();
+            this.btnRegistrarRecurso = new System.Windows.Forms.Button();
+            this.btnRegistrarProveedor = new System.Windows.Forms.Button();
             this.dgvDetalle = new System.Windows.Forms.DataGridView();
             this.btnReiniciarDetalle = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -116,6 +118,7 @@
             this.btnReiniciar.TabIndex = 25;
             this.btnReiniciar.Text = "Reiniciar";
             this.btnReiniciar.UseVisualStyleBackColor = false;
+            this.btnReiniciar.Click += new System.EventHandler(this.btnReiniciar_Click);
             // 
             // btnCrear
             // 
@@ -193,6 +196,8 @@
             // 
             // pnlDetalle
             // 
+            this.pnlDetalle.Controls.Add(this.btnRegistrarRecurso);
+            this.pnlDetalle.Controls.Add(this.btnRegistrarProveedor);
             this.pnlDetalle.Controls.Add(this.dgvDetalle);
             this.pnlDetalle.Controls.Add(this.btnReiniciarDetalle);
             this.pnlDetalle.Controls.Add(this.label8);
@@ -201,6 +206,37 @@
             this.pnlDetalle.Name = "pnlDetalle";
             this.pnlDetalle.Size = new System.Drawing.Size(667, 616);
             this.pnlDetalle.TabIndex = 1;
+            // 
+            // btnRegistrarRecurso
+            // 
+            this.btnRegistrarRecurso.BackColor = System.Drawing.Color.MediumTurquoise;
+            this.btnRegistrarRecurso.FlatAppearance.BorderSize = 0;
+            this.btnRegistrarRecurso.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRegistrarRecurso.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegistrarRecurso.ForeColor = System.Drawing.Color.White;
+            this.btnRegistrarRecurso.Location = new System.Drawing.Point(149, 60);
+            this.btnRegistrarRecurso.Margin = new System.Windows.Forms.Padding(4);
+            this.btnRegistrarRecurso.Name = "btnRegistrarRecurso";
+            this.btnRegistrarRecurso.Size = new System.Drawing.Size(124, 48);
+            this.btnRegistrarRecurso.TabIndex = 34;
+            this.btnRegistrarRecurso.Text = "Registrar Recurso";
+            this.btnRegistrarRecurso.UseVisualStyleBackColor = false;
+            // 
+            // btnRegistrarProveedor
+            // 
+            this.btnRegistrarProveedor.BackColor = System.Drawing.Color.MediumTurquoise;
+            this.btnRegistrarProveedor.FlatAppearance.BorderSize = 0;
+            this.btnRegistrarProveedor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRegistrarProveedor.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegistrarProveedor.ForeColor = System.Drawing.Color.White;
+            this.btnRegistrarProveedor.Location = new System.Drawing.Point(17, 60);
+            this.btnRegistrarProveedor.Margin = new System.Windows.Forms.Padding(4);
+            this.btnRegistrarProveedor.Name = "btnRegistrarProveedor";
+            this.btnRegistrarProveedor.Size = new System.Drawing.Size(124, 48);
+            this.btnRegistrarProveedor.TabIndex = 33;
+            this.btnRegistrarProveedor.Text = "Registrar Proveedor";
+            this.btnRegistrarProveedor.UseVisualStyleBackColor = false;
+            this.btnRegistrarProveedor.Click += new System.EventHandler(this.btnRegistrarProveedor_Click);
             // 
             // dgvDetalle
             // 
@@ -211,14 +247,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvDetalle.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvDetalle.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvDetalle.DefaultCellStyle = dataGridViewCellStyle7;
             this.dgvDetalle.Location = new System.Drawing.Point(17, 113);
             this.dgvDetalle.MultiSelect = false;
             this.dgvDetalle.Name = "dgvDetalle";
@@ -286,14 +322,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvRecursos.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvRecursos.DefaultCellStyle = dataGridViewCellStyle8;
             this.dgvRecursos.Location = new System.Drawing.Point(15, 161);
             this.dgvRecursos.MultiSelect = false;
             this.dgvRecursos.Name = "dgvRecursos";
@@ -444,5 +480,7 @@
         private System.Windows.Forms.DataGridView dgvDetalle;
         private System.Windows.Forms.Button btnReiniciarDetalle;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btnRegistrarRecurso;
+        private System.Windows.Forms.Button btnRegistrarProveedor;
     }
 }

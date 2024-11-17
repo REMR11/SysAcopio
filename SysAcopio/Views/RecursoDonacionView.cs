@@ -222,7 +222,7 @@ namespace SysAcopio.Views
 
         private void btnCrear_Click(object sender, EventArgs e)
         {
-            long idProveedor = Convert.ToInt64(cmbProveedores.SelectedValue);
+             long idProveedor = Convert.ToInt64(cmbProveedores.SelectedValue);
 
             if (idProveedor == 0)
             {
@@ -255,6 +255,32 @@ namespace SysAcopio.Views
             {
                 Alerts.ShowAlertS("Ocurrio un error al realizar la donación", AlertsType.Error);
             }
+        }
+
+        private void btnReiniciar_Click(object sender, EventArgs e)
+        {
+            primerLoading = true;
+            cmbProveedores.DataSource = null;
+            //Cargando los proveedores
+            SetProveedores();
+
+            txtUbicación.Clear();
+            txtRecursoCantidad.Clear();
+
+            dgvRecursos.DataSource = null;
+            recursos = donacionesController.GetAllRecursos();
+            SetRecursos(recursos);
+        }
+
+        private void btnRegistrarProveedor_Click(object sender, EventArgs e)
+        {
+            //Mostramos el formulario de Proveedor
+            ProveedorView proveedorView = new ProveedorView();
+            proveedorView.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            proveedorView.TopLevel = true;
+            proveedorView.StartPosition = FormStartPosition.CenterScreen;
+            proveedorView.Show();
+            Alerts.ShowAlertS("Una vez creado el proveedor, por favor cerrar la venta y presionar el boton de reiniciar en el apartado de formulario para que sus datos aparezcan de nuevo.", AlertsType.Info);
         }
     }
 }
