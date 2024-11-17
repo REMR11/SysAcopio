@@ -25,14 +25,23 @@ namespace SysAcopio.Views
         private void RecursoSolicitudView_Load(object sender, EventArgs e)
         {
             LoadRecursos();
+            SetTipoRecursos();
         }
 
         private void LoadRecursos()
         {
-            var recursos = _recursoSolicitudController.GetAllRecurso();
-            SetRecursos(recursos);
+            _recursos= _recursoSolicitudController.GetAllRecurso();
+            SetRecursos(_recursos);
         }
 
+        private void RefreshDetalleGrid()
+        {
+            dgvDetalle.DataSource = null;
+            RemoveDetailButtonColumn();
+            dgvDetalle.DataSource = _recursoSolicitudController.detalleRecursoSolicitud;
+            HideUnnecessaryColumns(dgvDetalle, "IdRecurso", "IdTipoRecurso");
+            AddDeleteButtonColumn();
+        }
         private void SetRecursos(DataTable recursos)
         {
             dgvRecursos.DataSource = recursos;
@@ -48,9 +57,9 @@ namespace SysAcopio.Views
             }
         }
 
-        private void SetTipoRecursos()
+        public void SetTipoRecursos()
         {
-            var tipoData = _recursoSolicitudController.GetAllTipoRecurso();
+            DataTable tipoData = _recursoSolicitudController.GetAllTipoRecurso();
             tipoData.Rows.Add(0, "Todos");
             cmbTipoRecurso.DataSource = tipoData;
             cmbTipoRecurso.DisplayMember = "nombre_tipo";
@@ -67,7 +76,8 @@ namespace SysAcopio.Views
 
             if (filteredRows.Length > 0)
             {
-                SetRecursos(filteredRows.CopyToDataTable());
+                DataTable dtFiltrado = filteredRows.CopyToDataTable();
+                SetRecursos(dtFiltrado);
             }
             else
             {
@@ -75,18 +85,10 @@ namespace SysAcopio.Views
             }
         }
 
-        private void RefreshDetalleGrid()
-        {
-            dgvDetalle.DataSource = null;
-            RemoveDetailButtonColumn();
-            dgvDetalle.DataSource = _recursoSolicitudController.detalleRecursoSolicitud;
-            HideUnnecessaryColumns(dgvDetalle, "IdRecurso", "IdTipoRecurso");
-            AddDeleteButtonColumn();
-        }
 
         private void RemoveDetailButtonColumn()
         {
-            if (dgvDetalle.Columns.Contains("deletDetailButton")) 
+            if (dgvDetalle.Columns.Contains("deletDetailButton"))
                 dgvDetalle.Columns.Remove("deletDetailButton");
         }
 
@@ -176,6 +178,8 @@ namespace SysAcopio.Views
             }
         }
 
+
+     
         private void btnAgregarDetalle_Click(object sender, EventArgs e)
         {
             if (!IsRecursoValid()) return;
@@ -186,7 +190,10 @@ namespace SysAcopio.Views
                 RefreshDetalleGrid();
             }
         }
-
+        private void txtNombreRecurso_TextChanged(object sender, EventArgs e)
+        {
+            FilterRecursos();
+        }
         private void btnReiniciarDetalle_Click(object sender, EventArgs e)
         {
             _recursoSolicitudController.detalleRecursoSolicitud.Clear();
@@ -245,6 +252,6 @@ namespace SysAcopio.Views
             }
         }
 
-      
+
     }
 }

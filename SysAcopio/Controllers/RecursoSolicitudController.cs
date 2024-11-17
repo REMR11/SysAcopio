@@ -81,13 +81,19 @@ namespace SysAcopio.Controllers
 
         private void AgregarFiltroPorIdTipo(string idTipo, List<string> filtros)
         {
-            if (!string.IsNullOrWhiteSpace(idTipo) && idTipo != "0" && long.TryParse(idTipo, out long id))
+            // Filtrar por id_proveedor
+            if (!string.IsNullOrWhiteSpace(idTipo) && idTipo != "0")
             {
-                filtros.Add($"id_tipo_recurso = {id}");
-            }
-            else if (!string.IsNullOrWhiteSpace(idTipo))
-            {
-                throw new ArgumentException("El idTipo no es un número válido.", nameof(idTipo));
+                // Asegúrate de que idProveedor se convierte a long
+                if (long.TryParse(idTipo, out long id))
+                {
+                    filtros.Add($"id_tipo_recurso = {id}");
+                }
+                //else
+                //{
+                //    // Manejar el caso donde la conversión falla (opcional)
+                //    throw new ArgumentException("El idProveedor no es un número válido.");
+                //}
             }
         }
 
