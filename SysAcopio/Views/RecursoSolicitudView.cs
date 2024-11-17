@@ -51,10 +51,7 @@ namespace SysAcopio.Views
 
         private void HideUnnecessaryColumns(DataGridView dgv, params string[] columnNames)
         {
-            foreach (var columnName in columnNames)
-            {
-                dgv.Columns[columnName].Visible = false;
-            }
+            foreach ( var columnName in columnNames ) dgv.Columns[columnName].Visible = false;
         }
 
         public void SetTipoRecursos()
@@ -79,10 +76,7 @@ namespace SysAcopio.Views
                 DataTable dtFiltrado = filteredRows.CopyToDataTable();
                 SetRecursos(dtFiltrado);
             }
-            else
-            {
-                dgvRecursos.DataSource = null;
-            }
+            else { dgvRecursos.DataSource = null; }
         }
 
 
@@ -189,6 +183,7 @@ namespace SysAcopio.Views
                 ResetRecursoSelection();
                 RefreshDetalleGrid();
             }
+            DashBoardManager.LoadForm(new SolicitudView());
         }
         private void txtNombreRecurso_TextChanged(object sender, EventArgs e)
         {
@@ -252,6 +247,15 @@ namespace SysAcopio.Views
             }
         }
 
+        private void btnReiniciar_Click(object sender, EventArgs e)
+        {
+            ClearInputs();
+            ResetRecursoSelection();
+        }
 
+        private void btn_Cancelar_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new SolicitudView());
+        }
     }
 }
