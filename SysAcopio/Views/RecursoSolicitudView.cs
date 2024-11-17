@@ -44,7 +44,7 @@ namespace SysAcopio.Views
         /// </summary>
         private void LoadRecursos()
         {
-            _recursos= _recursoSolicitudController.GetAllRecurso();
+            _recursos = _recursoSolicitudController.GetAllRecurso();
             SetRecursos(_recursos);
         }
 
@@ -80,7 +80,7 @@ namespace SysAcopio.Views
         private void HideUnnecessaryColumns(DataGridView dgv, params string[] columnNames)
         {
             // Oculta la columna
-            foreach ( var columnName in columnNames ) dgv.Columns[columnName].Visible = false;
+            foreach (var columnName in columnNames) dgv.Columns[columnName].Visible = false;
         }
 
         /// <summary>
