@@ -27,18 +27,21 @@ namespace SysAcopio.Views
                     this.lblTitulo.Text = "¡Error!";
                     this.picIcono.Image = Properties.Resources.iconoError;
                     this.txtMensaje.BackColor = Color.LightCoral;
+                    this.lblTitulo.BackColor = Color.LightCoral;
                     this.BackColor = Color.LightCoral;
                     break;
                 case AlertsType.Info:
                     this.lblTitulo.Text = "¡Advertencia!";
                     this.picIcono.Image = Properties.Resources.advertenciaIcono;
                     this.BackColor = Color.LightYellow;
+                    this.lblTitulo.BackColor = Color.LightYellow;
                     this.txtMensaje.BackColor = Color.LightYellow;
                     break;
                 case AlertsType.Confirm:
                     this.lblTitulo.Text = "¡Exito!";
                     this.picIcono.Image = Properties.Resources.iconoExito;
                     this.BackColor = Color.LightGreen;
+                    this.lblTitulo.BackColor = Color.LightGreen;
                     this.txtMensaje.BackColor = Color.LightGreen;
                     break;
             }
