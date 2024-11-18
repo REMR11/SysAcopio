@@ -117,6 +117,12 @@
     <Compile Include="Views\DonacionView.Designer.cs">
       <DependentUpon>DonacionView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\inventarioView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\inventarioView.Designer.cs">
+      <DependentUpon>inventarioView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProveedorView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,12 +135,6 @@
     </Compile>
     <Compile Include="Views\InicioView.Designer.cs">
       <DependentUpon>InicioView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\InventarioView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\InventarioView.Designer.cs">
-      <DependentUpon>InventarioView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Login.cs">
       <SubType>Form</SubType>
@@ -173,6 +173,9 @@
     <EmbeddedResource Include="Views\DonacionView.resx">
       <DependentUpon>DonacionView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\inventarioView.resx">
+      <DependentUpon>inventarioView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\ProveedorView.resx">
       <DependentUpon>ProveedorView.cs</DependentUpon>
     </EmbeddedResource>
@@ -181,9 +184,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InicioView.resx">
       <DependentUpon>InicioView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\InventarioView.resx">
-      <DependentUpon>InventarioView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
