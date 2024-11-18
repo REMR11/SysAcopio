@@ -45,10 +45,16 @@ namespace SysAcopio.Repositories
         {
             SysAcopioDbContext dbContext = new SysAcopioDbContext();
             SqlConnection conn = dbContext.ConnectionServer();
-            string updateSql = " update d.id_donacion=@id_donaciones,rd.id_recurso_donacion=@idrecursos,r.nombre_recurso, rd.id_recurso, rd.cantidad ";
+            string updateSql = " update d.id_donacion=@id_donaciones,rd.id_recurso_donacion=@id_recursos,r.nombre_recurso=@id_nombre_recurso, rd.id_recurso=@id_recurso, rd.cantidad=@cantidad,rd.solicitud=@solicitud, fecha=@fecha, estado=@estado, nombre_solicitante=@ombre_solicitante, urgencia=@urgencia, motivo=@motivo ";
             SqlCommand cmd = new SqlCommand(updateSql, conn);
-            cmd.Parameters.AddWithValue("@id_donaciones",dbContext);
-            cmd.Parameters.AddWithValue("@id_provedores",dbContext);
+            cmd.Parameters.AddWithValue("@id_donaciones", dbContext);
+            cmd.Parameters.AddWithValue("@id_provedores", dbContext);
+            cmd.Parameters.AddWithValue("@solicitud", dbContext);
+            cmd.Parameters.AddWithValue("@recurso", dbContext);
+            cmd.Parameters.AddWithValue("@id_recurso_donacion", dbContext); 
+            cmd.Parameters.AddWithValue("@id_nombre_recursos",dbContext);
+            cmd.Parameters.AddWithValue("@cantidad",dbContext);
+            
              
 
             try

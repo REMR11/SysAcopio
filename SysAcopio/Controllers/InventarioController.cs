@@ -36,6 +36,7 @@ namespace SysAcopio.Controllers
             foreach (var item in recursodonaciones)
             {
                 donaciones.Add(donacion);
+               
             }return GetInventario();
         }
         public DataTable DeleteInventario(Donacion donacion)

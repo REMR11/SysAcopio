@@ -32,11 +32,17 @@ namespace SysAcopio.Views
             
         }
 
-        
+
 
         private void agregar_Click(object sender, EventArgs e)
         {
-           
+            if (!string.IsNullOrEmpty(txtsolicitud.Text) && !string.IsNullOrEmpty(txtDonaciones.Text))
+
+            {
+                inventarioRepository.solicitud = textsolicitud.Text.Trim());
+                inventarioRepository.donaciones=tex
+
+                }
 
             
         }
@@ -61,6 +67,21 @@ namespace SysAcopio.Views
                 
 
             }
+
+        }
+
+        private void Solicitud_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Solicitud_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textsolicitud_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }
