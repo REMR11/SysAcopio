@@ -12,6 +12,7 @@ namespace SysAcopio.Controllers
 {
     internal class RecursoDonacionController
     {
+        //Atributos
         private readonly RecursoDonacionRepository repository;
 
         /// <summary>

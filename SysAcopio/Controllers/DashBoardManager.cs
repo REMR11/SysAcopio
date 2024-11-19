@@ -9,7 +9,12 @@ namespace SysAcopio.Controllers
 {
     public static class DashBoardManager
     {
+        //Propiedades
         public static Panel MainPanel { get; set; }
+        /// <summary>
+        /// Método para cargar un formulario en el panel dashboard
+        /// </summary>
+        /// <param name="form"></param>
         public static void LoadForm(Form form)
         {
             if (MainPanel.Controls.Count > 0)

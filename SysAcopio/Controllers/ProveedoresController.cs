@@ -7,6 +7,7 @@ namespace SysAcopio.Controllers
 {
     internal class ProveedoresController
     {
+        //Atributos
         private readonly ProveedorRepository repository;
         private readonly Alerts alerts;
 
@@ -102,6 +103,11 @@ namespace SysAcopio.Controllers
             }
         }
 
+        /// <summary>
+        /// Método para buscar los proveedores basado en una string de busqueda
+        /// </summary>
+        /// <param name="searchQuery"></param>
+        /// <returns></returns>
         public DataTable Search(string searchQuery)
         {
             return repository.SearchProveedores(searchQuery);
