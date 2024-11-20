@@ -79,7 +79,7 @@ namespace SysAcopio.Views
                     string consulta = @"SELECT u.id_usuario, u.id_rol, u.nombre_usuario, r.nombre_rol, u.contrasenia
                             FROM Usuario as u 
                             JOIN Rol as r ON u.id_rol = r.id_rol
-                            WHERE u.alias_usuario = @alias_usuario AND u.contrasenia = @contrasenia AND u.estado = 1;";
+                            WHERE u.alias_usuario = @alias_usuario AND u.estado = 1;";
                     SqlCommand cmd = new SqlCommand(consulta, connection);
                     cmd.Parameters.AddWithValue("@alias_usuario", txtUser.Text);
 
@@ -92,7 +92,7 @@ namespace SysAcopio.Views
                         // Obtener el hash almacenado y otros datos del usuario
                         string contraseniaEncriptada = lector["contrasenia"].ToString();
                         string nombreUsuario = lector["nombre_usuario"].ToString();
-                        string rolUsuario = lector["id_rol"].ToString();
+                        string rolUsuario = lector["nombre_rol"].ToString();
 
                         // Verificar la contraseña ingresada contra el hash
                         if (BCrypt.Net.BCrypt.Verify(txtPass.Text, contraseniaEncriptada))
