@@ -125,5 +125,10 @@ namespace SysAcopio
         {
             this.WindowState = FormWindowState.Minimized;
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new TipoRecursoView());
+        }
     }
 }

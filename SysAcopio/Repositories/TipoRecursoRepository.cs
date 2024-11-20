@@ -18,7 +18,7 @@ namespace SysAcopio.Repositories
         /// <returns></returns>
         public DataTable GetAll()
         {
-            string query = "SELECT id_tipo_recurso, nombre_tipo as 'Tipo Recurso' FROM TipoRecurso;";
+            string query = "SELECT id_tipo_recurso, nombre_tipo as 'Tipo Recurso' FROM Tipo_Recurso;";
 
             return GenericFuncDB.GetRowsToTable(query, null);
         }
@@ -50,7 +50,7 @@ namespace SysAcopio.Repositories
             SysAcopioDbContext dbContext = new SysAcopioDbContext();
             using (SqlConnection conn = dbContext.ConnectionServer())
             {
-                string query = "SELECT id_tipo_recurso, nombre_tipo FROM Tipo_Recurso WHERE id_tipo_recurso= @id AND estado = 1";
+                string query = "SELECT id_tipo_recurso, nombre_tipo FROM Tipo_Recurso WHERE id_tipo_recurso= @id";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
@@ -79,7 +79,7 @@ namespace SysAcopio.Repositories
         /// <returns>Un valor booleano que confirma si se actualizo o no se actualizo</returns>
         public bool Update(TipoRecurso tipoRecurso)
         {
-            string query = "UPDATE Proveedor SET nombre_proveedor = @nombre, estado = @estado WHERE id_proveedor = @id";
+            string query = "UPDATE Tipo_Recurso SET nombre_tipo = @nombre WHERE id_tipo_recurso= @id";
 
             SqlParameter[] parametros = new SqlParameter[]
             {
@@ -97,7 +97,7 @@ namespace SysAcopio.Repositories
         /// <returns></returns>
         public DataTable SearchTiposRecurso(string searchQuery)
         {
-            string query = "SELECT id_tipo_recurso, nombre_tipo as 'Tipo Recurso' FROM TipoRecurso WHERE nombre_tipo LIKE @searchQuery;";
+            string query = "SELECT id_tipo_recurso, nombre_tipo as 'Tipo Recurso' FROM Tipo_Recurso WHERE nombre_tipo LIKE @searchQuery;";
 
             SqlParameter[] parametros = new SqlParameter[]
             {

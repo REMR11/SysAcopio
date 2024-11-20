@@ -148,6 +148,21 @@
         P+bJOjzS8LWAJGeIISWlOSernsnIugmJcdiact/f7PZ3yCoZQfgBLPF3+wXe5d8AAAAASUVORK5CYII=
 </value>
   </data>
+  <data name="button2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHjSURBVDhPjVM9
+        S1xBFH3GQgKBWKltrEwRP4gWgkHQnyALaaKzL0vUgBDTRQxoKcEusbLVQtDOgF9v5mkU476ZZcGtFlNY
+        pEmRVOqim5dz3t4Iy6p44bB3zjl33p07s95dMWx32wlZ3j9eZ8OutDUBEAt2yIl8e6icblSRXkRBubJB
+        OFBBslmZ2pto67HYq0PlTI+KzA9lzU/8poS+DnLUsNEJvUJXwnfBEIQSDBuv8vtNQtcEtbQzm/BesEZo
+        zwMxB/z1rX7nxXGd0LUBjR56WSMsgkJkPoK8AlZv6iJzuN0MbS3xOD1d9SHf6W4MqC3tgn4YToHfwGTq
+        4OAhoZx5j/WfRIMnY8OnIzZ4LuXYwJovEM/TkRl/W9CPMPlPWJ8BvwTM5xINHuTnyurPUu55qZWVegxn
+        FgLaM+uZfPhEHekWDHUqAXI/u9cK/Ss9mMMMa6QcQ0RbPIYf6T4YCsAFu2KrBDZdIIevH9OTXLk1L6Qc
+        R4jMPAyXMHyYKBYbsNkY1ifA/5eIPBylxo4SL44p5QhMFOQkUPJd+E1F4bOZOH4w4oJBgjn/E9QSz23X
+        jafciYl/h4mzWPKd6SXQ2TI4PO/wEA+oQ+w3B7+mnH6JohyKKkdATo6a2O4XvOuq+64Jz/sH4Mt9dsS5
+        krsAAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="btnInventario.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
@@ -236,7 +251,7 @@
   <data name="btnMinimizar.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vwAADr8BOAVTJAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAABISURBVEhLYxgF
+        vAAADrwBlbxySQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAABISURBVEhLYxgF
         o2AUjAISgYOvr4izr+8mFx+f3eRgkF5PT09RqHGYwN3dXcjZz28dNs3EYJAFzoGBwlDjRsEoGAWjgDjA
         wAAAt1E2fNVvM+YAAAAASUVORK5CYII=
 </value>
