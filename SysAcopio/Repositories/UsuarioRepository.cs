@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using SysAcopio.Controllers;
 using BCrypt.Net;
 using System.Runtime.Remoting.Contexts;
+using System.Data;
 
 
 namespace SysAcopio.Repositories
@@ -33,16 +34,22 @@ namespace SysAcopio.Repositories
                 using (SqlConnection conn = dbContext.ConnectionServer())
                 {
                     string query = @"INSERT INTO Usuario (alias_usuario, nombre_usuario, contrasenia, id_rol, estado) 
-                                     VALUES (@AliasUsuario, @NombreUsuario, @Contrasenia, @IdRol, @Estado);
-                                     SELECT SCOPE_IDENTITY();";
+                             VALUES (@AliasUsuario, @NombreUsuario, @Contrasenia, @IdRol, @Estado);
+                             SELECT SCOPE_IDENTITY();";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@AliasUsuario", usuario.AliasUsuario);
                         cmd.Parameters.AddWithValue("@NombreUsuario", usuario.NombreUsuario);
-                        cmd.Parameters.AddWithValue("@Contrasenia", BCrypt.Net.BCrypt.HashPassword(usuario.Contrasenia)); 
+                        cmd.Parameters.AddWithValue("@Contrasenia", BCrypt.Net.BCrypt.HashPassword(usuario.Contrasenia));
                         cmd.Parameters.AddWithValue("@IdRol", usuario.IdRol);
                         cmd.Parameters.AddWithValue("@Estado", usuario.Estado);
+
+                        // Verifica el estado de la conexión antes de abrirla
+                        if (conn.State == ConnectionState.Closed)
+                        {
+                            conn.Open();
+                        }
 
                         object result = cmd.ExecuteScalar();
                         if (result != null && result != DBNull.Value)
@@ -53,9 +60,10 @@ namespace SysAcopio.Repositories
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return -1;
+              
+                throw new Exception("Error al guardar el usuario: " + ex.Message, ex);
             }
         }
 
@@ -67,7 +75,7 @@ namespace SysAcopio.Repositories
             var usuarios = new List<Usuario>();
             using (SqlConnection conn = dbContext.ConnectionServer())
             {
-                string query = "SELECT * FROM Usuario WHERE estado = 1";
+                string query = "SELECT id_Usuario, alias_usuario, nombre_usuario, contrasenia, id_rol, estado FROM Usuario WHERE estado = 1";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -101,7 +109,7 @@ namespace SysAcopio.Repositories
         {
             using (SqlConnection conn = dbContext.ConnectionServer())
             {
-                string query = "SELECT * FROM Usuario WHERE id_Usuario = @IdUsuario";
+                string query = "SELECT id_Usuario, alias_usuario, nombre_usuario, contrasenia, id_rol, estado FROM Usuario WHERE id_Usuario = @IdUsuario";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@IdUsuario", id);
@@ -185,33 +193,74 @@ namespace SysAcopio.Repositories
             }
         }
 
-        /// <summary>
-        /// Método para eliminar un usuario de la base de datos.
-        /// </summary>
-        public bool Delete(long id)
+     
+
+        public IEnumerable<Usuario> Search(string searchTerm)
         {
-            try
+            var usuarios = new List<Usuario>(); // Definir la lista de usuarios
+
+            using (SqlConnection conn = dbContext.ConnectionServer())
             {
-                using (SqlConnection conn = dbContext.ConnectionServer())
+                string query = "SELECT id_Usuario, alias_usuario, nombre_usuario, contrasenia, id_rol, estado FROM Usuario " +
+                               "WHERE alias_usuario LIKE @SearchTerm " +
+                               "OR nombre_usuario LIKE @SearchTerm " +
+                               "OR id_Usuario LIKE @SearchTerm " +
+                               "OR estado LIKE @SearchTerm " +
+                               "OR id_rol LIKE @SearchTerm";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    string query = "DELETE FROM Usuario WHERE id_Usuario = @IdUsuario";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    cmd.Parameters.AddWithValue("@SearchTerm", "%" + searchTerm + "%");
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.AddWithValue("@IdUsuario", id);
-                        return cmd.ExecuteNonQuery() > 0;
+                        while (reader.Read())
+                        {
+                            var usuario = new Usuario
+                            {
+                                IdUsuario = reader.GetInt64(0),
+                                AliasUsuario = reader.GetString(1),
+                                NombreUsuario = reader.GetString(2),
+                                Contrasenia = reader.GetString(3),
+                                IdRol = reader.GetInt64(4),
+                                Estado = reader.GetBoolean(5)
+                            };
+
+                            // Obtener detalles del rol asociado
+                            usuario.Rol = rolRepository.GetById(usuario.IdRol);
+                            usuarios.Add(usuario);
+                        }
                     }
                 }
             }
-            catch (Exception)
+            return usuarios;
+        }
+
+
+
+        public DataTable ObtenerUsuariosDataTable()
+        {
+            string query = "SELECT id_Usuario, alias_usuario, nombre_usuario, contrasenia, id_rol, estado FROM Usuario";
+
+            using (SqlConnection connection = dbContext.ConnectionServer())
             {
-                return false;
+                try
+                {
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(query, connection);
+                    DataTable dataTable = new DataTable();
+                    dataAdapter.Fill(dataTable);
+                    return dataTable;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al cargar los datos de usuarios: " + ex.Message);
+                }
             }
         }
 
-      
+
+
 
     }
 
-    
-    
+
+
 }
