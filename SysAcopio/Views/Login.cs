@@ -68,39 +68,47 @@ namespace SysAcopio.Views
         {
             Application.Exit();
         }
-
         private void btnAcceder_Click(object sender, EventArgs e)
         {
-            // Usamos el método ConnectionServer de SysAcopioDbContext para obtener la conexión
             using (SqlConnection connection = dbContext.ConnectionServer())
             {
                 try
                 {
-                    // Consulta SQL con parámetros para evitar inyección SQL
-                    string consulta = "SELECT * FROM Usuario WHERE alias_usuario = @alias_usuario AND contrasenia = @contrasenia";
+                    // Consulta para obtener  la contraseña basado en el alias del usuario
+                    string consulta = "SELECT contrasenia, nombre_usuario, id_rol FROM Usuario WHERE alias_usuario = @alias_usuario";
                     SqlCommand cmd = new SqlCommand(consulta, connection);
                     cmd.Parameters.AddWithValue("@alias_usuario", txtUser.Text);
-                    cmd.Parameters.AddWithValue("@contrasenia", txtPass.Text);
 
                     SqlDataReader lector = cmd.ExecuteReader();
-                    
+
                     if (lector.HasRows)
-                    { // Si el usuario es válido, leer los datos
+                    {
                         lector.Read();
+
+                        // Obtener el hash almacenado y otros datos del usuario
+                        string contraseniaEncriptada = lector["contrasenia"].ToString();
                         string nombreUsuario = lector["nombre_usuario"].ToString();
-                        string rolUsuario = lector["id_rol"].ToString();  // Suponiendo que 'id_rol' es el rol como string
+                        string rolUsuario = lector["id_rol"].ToString();
 
-                        // Guardar los datos del usuario en la clase estática Sesion
-                        Sesion.GuardarDatosUsuario(nombreUsuario, rolUsuario);
+                        // Verificar la contraseña ingresada contra el hash
+                        if (BCrypt.Net.BCrypt.Verify(txtPass.Text, contraseniaEncriptada))
+                        {
+                            // Guardar datos del usuario en la sesión
+                            Sesion.GuardarDatosUsuario(nombreUsuario, rolUsuario);
 
-                        // Mostrar el formulario principal
-                        Form1 form1 = new Form1();
-                        this.Hide();
-                        form1.Show();
+                            // Mostrar el formulario principal
+                            Form1 form1 = new Form1();
+                            this.Hide();
+                            form1.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Usuario o contraseña incorrectos.");
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Usuario o contraseña incorrectos");
+                        MessageBox.Show("Usuario no encontrado.");
                     }
                 }
                 catch (Exception ex)
@@ -109,11 +117,7 @@ namespace SysAcopio.Views
                 }
             }
         }
-        private void msgError(string msg)
-        {
-            lblError.Text = " " + msg;
-            lblError.Visible = true;
 
-        }
+      
     }
 }
