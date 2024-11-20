@@ -222,7 +222,7 @@ namespace SysAcopio.Views
 
         private void btnCrear_Click(object sender, EventArgs e)
         {
-            long idProveedor = Convert.ToInt64(cmbProveedores.SelectedValue);
+             long idProveedor = Convert.ToInt64(cmbProveedores.SelectedValue);
 
             if (idProveedor == 0)
             {

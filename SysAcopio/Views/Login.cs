@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using SysAcopio.Controllers;
 using SysAcopio.Models;
 using SysAcopio.Repositories;
+using SysAcopio.Utils;
 
 namespace SysAcopio.Views
 {
@@ -77,21 +78,24 @@ namespace SysAcopio.Views
                 try
                 {
                     // Consulta SQL con parámetros para evitar inyección SQL
-                    string consulta = "SELECT * FROM Usuario WHERE alias_usuario = @alias_usuario AND contrasenia = @contrasenia";
+                    string consulta = @"SELECT u.id_usuario, u.id_rol, u.nombre_usuario, r.nombre_rol
+                            FROM Usuario as u 
+                            JOIN Rol as r ON u.id_rol = r.id_rol
+                            WHERE u.alias_usuario = @alias_usuario AND u.contrasenia = @contrasenia AND u.estado = 1;";
                     SqlCommand cmd = new SqlCommand(consulta, connection);
                     cmd.Parameters.AddWithValue("@alias_usuario", txtUser.Text);
                     cmd.Parameters.AddWithValue("@contrasenia", txtPass.Text);
 
                     SqlDataReader lector = cmd.ExecuteReader();
-                    
+
                     if (lector.HasRows)
                     { // Si el usuario es válido, leer los datos
                         lector.Read();
                         string nombreUsuario = lector["nombre_usuario"].ToString();
-                        string rolUsuario = lector["id_rol"].ToString();  // Suponiendo que 'id_rol' es el rol como string
-
+                        string rolUsuario = lector["nombre_rol"].ToString();  // Suponiendo que 'id_rol' es el rol como string
+                        long idRol = Convert.ToInt64(lector["id_rol"]);
                         // Guardar los datos del usuario en la clase estática Sesion
-                        Sesion.GuardarDatosUsuario(nombreUsuario, rolUsuario);
+                        Sesion.GuardarDatosUsuario(nombreUsuario, rolUsuario, idRol);
 
                         // Mostrar el formulario principal
                         Form1 form1 = new Form1();
@@ -100,7 +104,7 @@ namespace SysAcopio.Views
                     }
                     else
                     {
-                        MessageBox.Show("Usuario o contraseña incorrectos");
+                        Alerts.ShowAlertS("Contraseña o usuario incorrectos", AlertsType.Error);
                     }
                 }
                 catch (Exception ex)
