@@ -44,13 +44,13 @@ namespace SysAcopio.Repositories
         /// Método para Obtener un Tipo de recurso en base a su ID
         /// </summary>
         /// <param name="id">Id a buscar</param>
-        /// <returns>Objeto de clase Proveedor</returns>
-        public Proveedor GetById(long id)
+        /// <returns>Objeto de clase TipoRecurso</returns>
+        public TipoRecurso GetById(long id)
         {
             SysAcopioDbContext dbContext = new SysAcopioDbContext();
             using (SqlConnection conn = dbContext.ConnectionServer())
             {
-                string query = "SELECT id_proveedor, nombre_proveedor, estado FROM Proveedor WHERE id_proveedor = @id AND estado = 1";
+                string query = "SELECT id_tipo_recurso, nombre_tipo FROM Tipo_Recurso WHERE id_tipo_recurso= @id AND estado = 1";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
@@ -59,17 +59,52 @@ namespace SysAcopio.Repositories
                     {
                         if (reader.Read())
                         {
-                            return new Proveedor
+                            return new TipoRecurso
                             {
-                                IdProveedor = reader.GetInt64(0),
-                                NombreProveedor = reader.GetString(1),
-                                Estado = !reader.IsDBNull(2) && reader.GetBoolean(2), // Manejo de nulos
+                                IdTipoRecurso = reader.GetInt64(0),
+                                NombreTipo = reader.GetString(1),
                             };
                         }
                     }
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Método para actualizar un TipoRecurso
+        /// </summary>
+        /// <param name="tipoRecurso"></param>
+        /// <param name="id"></param>
+        /// <returns>Un valor booleano que confirma si se actualizo o no se actualizo</returns>
+        public bool Update(TipoRecurso tipoRecurso)
+        {
+            string query = "UPDATE Proveedor SET nombre_proveedor = @nombre, estado = @estado WHERE id_proveedor = @id";
+
+            SqlParameter[] parametros = new SqlParameter[]
+            {
+                new SqlParameter("@nombre", tipoRecurso.NombreTipo),
+                new SqlParameter("@id", tipoRecurso.IdTipoRecurso)
+            };
+
+            return GenericFuncDB.AffectRow(query, parametros);
+        }
+
+        /// <summary>
+        /// Método para buscar TipoRecurso basado en un string de busqueda
+        /// </summary>
+        /// <param name="searchQuery"></param>
+        /// <returns></returns>
+        public DataTable SearchTiposRecurso(string searchQuery)
+        {
+            string query = "SELECT id_tipo_recurso, nombre_tipo as 'Tipo Recurso' FROM TipoRecurso WHERE nombre_tipo LIKE @searchQuery;";
+
+            SqlParameter[] parametros = new SqlParameter[]
+            {
+                new SqlParameter("@searchQuery", "%"+ searchQuery + "%"),
+            };
+
+            return GenericFuncDB.GetRowsToTable(query, parametros);
         }
     }
 }

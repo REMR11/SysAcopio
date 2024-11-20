@@ -90,6 +90,11 @@ namespace SysAcopio.Repositories
             return GenericFuncDB.AffectRow(query, parametros);
         }
 
+        /// <summary>
+        /// Método para buscar proveedores basado en un string de busqueda
+        /// </summary>
+        /// <param name="searchQuery"></param>
+        /// <returns></returns>
         public DataTable SearchProveedores(string searchQuery)
         {
             string query = "SELECT id_proveedor, nombre_proveedor as NombreProveedor, estado FROM Proveedor WHERE estado = 1 AND nombre_proveedor LIKE @searchQuery;";
