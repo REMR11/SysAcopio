@@ -59,7 +59,7 @@ namespace SysAcopio.Controllers
             }
             return true;
         }
-        public bool estado(string nombestadore)
+        public bool Validarestado(string estado)
         {
             if (!string.IsNullOrEmpty(estado))
             {
