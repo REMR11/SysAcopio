@@ -13,7 +13,7 @@ namespace SysAcopio.Controllers
 {
     public class InventarioController
     {
-        //metodo para validar
+        //metodos para validar la informacion
       public bool ValidarIdproveedores(string idproveedores)
         {
             if (string.IsNullOrEmpty(idproveedores))
