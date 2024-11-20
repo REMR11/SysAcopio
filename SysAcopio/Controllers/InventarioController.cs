@@ -11,39 +11,61 @@ using System.Windows.Forms;
 
 namespace SysAcopio.Controllers
 {
-    internal class InventarioController
+    public class InventarioController
     {
-        public readonly InventarioRepository inventariorepository;
-        public readonly Alerts alerts;
-        public List<RecursoDonacion> recursodonaciones { get; set; }
-        public List<Solicitud> solicituds { get; set; }
-        public List<Donacion> donaciones { get; set; }
-
-        public InventarioController()
+        //metodo para validar
+      public bool ValidarIdproveedores(string idproveedores)
         {
-            recursodonaciones = new List<RecursoDonacion>();
-            solicituds = new List<Solicitud>();
-            donaciones = new List<Donacion>();
-            alerts = new Alerts();
-        }
-        public DataTable GetInventario()
-        {
-            return inventariorepository.GetInventario();
-        }
-
-        public DataTable AddInventario(Donacion donacion)
-        {
-            foreach (var item in recursodonaciones)
+            if (string.IsNullOrEmpty(idproveedores))
             {
-                donaciones.Add(donacion);
-               
-            }return GetInventario();
+                return false;
+            }
+            return true;
         }
-        public DataTable DeleteInventario(Donacion donacion)
+
+        public bool ValidarFecha(string fecha)
         {
-            return inventariorepository.GetInventario();
-
+            if (string.IsNullOrEmpty(fecha))
+            {
+                return false;
+            }
+            return true;
         }
 
+        public bool ValidarNombre(string nombre)
+        {
+            if (!string.IsNullOrEmpty(nombre))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool ValidarRecursos(string recursos) {
+            {
+                if (!string.IsNullOrEmpty(recursos))
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        private  bool ValidarUbicacion(string ubicacion)
+        {
+            if (!string.IsNullOrEmpty(ubicacion))
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool estado(string nombestadore)
+        {
+            if (!string.IsNullOrEmpty(estado))
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

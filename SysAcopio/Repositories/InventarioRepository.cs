@@ -6,142 +6,134 @@ using System.Data;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Contexts;
 using System.Windows.Forms;
+using System.Runtime.CompilerServices;
 
 namespace SysAcopio.Repositories
 {
+
     public class InventarioRepository
-    {
-        public event EventHandler NotificarModificacionEnInventario;
+    {//atributos
+        private long idproveedores;
+        private string nombres;
+        private string recursos;
+        private string categoria;
+        private string estado;
+        private string ubicacion;
+        private string fecha;
+        //metodo para tener una tabla
+       
+        
         public DataTable GetInventario()
         {
-            String query = "d.id_donacion,d.id_proveedor,rd.id_recurso_donacion,r.nombre_recurso, rd.id_recurso, rd.cantidad ";
+
+            string query = "SELECT id_proveedor,nombre_proveedor,r.nombre_recurso,categoria,estado,d.ubicacion, d.fecha FROM Proveedor,Donacion,Solicitud WHERE estado = 1;";
+
             SqlParameter[] parameters = null;
+
             return GenericFuncDB.GetRowsToTable(query, parameters);
+        }
+        //metodo para crear 
+        public string Nombres { get { return nombres; } set { nombres = value; } }
+        public string Recursos { get { return recursos; } set { recursos = value; } }
+        public string Categoria { get { return categoria; } set { categoria = value; } }
+        public string Ubicacion { get { return ubicacion; } set { ubicacion = value; } }
+        public string Fecha { get { return fecha; } set { fecha = value; } }
+        public string Estado {  get { return estado; } set { estado = value; } }
+        public long IdRecursos { get { return IdRecursos; } set { IdRecursos = value; } }
+        public long AgregarInventario()
+        {
+            long id = 0;
+            
+            SysAcopioDbContext conectar=new SysAcopioDbContext();
+            SqlConnection conn = conectar.ConnectionServer();
+            string insertsql = "insert into Inventario (id_proveedor,nombre_proveedor,r.nombre_recurso,categoria,estado,d.ubicacion, d.fecha) values(@id_proveedor,@nombre_proveedor,@r.nombre_recurso,@categoria,@estado,@d.ubicacion, @d.fecha) FROM Proveedor,Donacion,Solicitud WHERE estado = 1";
+            SqlCommand cmd = new SqlCommand(insertsql, conn);
+            cmd.Parameters.AddWithValue("@id_proveedor",this.idproveedores);
+            cmd.Parameters.AddWithValue("@nombre", this.nombres);
+            cmd.Parameters.AddWithValue("@recursos",this.recursos);
+            cmd.Parameters.AddWithValue("@categoria", this.categoria);
+            cmd.Parameters.AddWithValue("@estado", this.estado);
+            cmd.Parameters.AddWithValue("@ubicacion",this.ubicacion);
+            cmd.Parameters.AddWithValue("@fecha",this.fecha);
+            try
+            {
+
+                conn.Open();
+                id=Convert.ToInt64(cmd.ExecuteScalar());
+               
+            }
+            finally
+            {
+                cmd.Dispose();
+                conn.Close();
+            }
+            return id;
+            
 
         }
-       public DataTable Inventario()
-        { 
-            DataTable mydt = new DataTable();
+        //metodo que edite una tabla
+        public int EditarInventario()
+        {
+            int affected = 0;
             SysAcopioDbContext conectar = new SysAcopioDbContext();
             SqlConnection conn = conectar.ConnectionServer();
-            String query = "";
-            SqlCommand cmd = new SqlCommand(query, conn);
-            SqlDataReader mydr = null;
+            string updatertsql = "update Inventario (id_proveedor,nombre_proveedor,r.nombre_recurso,categoria,estado,d.ubicacion, d.fecha) values(@id_proveedor,@nombre_proveedor,@r.nombre_recurso,@categoria,@estado,@d.ubicacion, @d.fecha) FROM Proveedor,Donacion,Solicitud WHERE estado = 1";
+            SqlCommand cmd = new SqlCommand(updatertsql, conn);
+            cmd.Parameters.AddWithValue("@id_proveedor", this.idproveedores);
+            cmd.Parameters.AddWithValue("@nombre", this.nombres);
+            cmd.Parameters.AddWithValue("@recursos", this.recursos);
+            cmd.Parameters.AddWithValue("@categoria", this.categoria);
+            cmd.Parameters.AddWithValue("@estado", this.estado);
+            cmd.Parameters.AddWithValue("@ubicacion", this.ubicacion);
+            cmd.Parameters.AddWithValue("@fecha", this.fecha);
             try
             {
-                conn.Open();
-                mydr = cmd.ExecuteReader();
-                mydt.Load(mydr);
-            }
-            finally
-            {
-                cmd.Dispose();
-                conn.Close();
-            }
-            return mydt;
-
-        }
-        public void EditarInventario()
-        {
-            SysAcopioDbContext dbContext = new SysAcopioDbContext();
-            SqlConnection conn = dbContext.ConnectionServer();
-            string updateSql = " update d.id_donacion=@id_donaciones,rd.id_recurso_donacion=@id_recursos,r.nombre_recurso=@id_nombre_recurso, rd.id_recurso=@id_recurso, rd.cantidad=@cantidad,rd.solicitud=@solicitud, fecha=@fecha, estado=@estado, nombre_solicitante=@ombre_solicitante, urgencia=@urgencia, motivo=@motivo ";
-            SqlCommand cmd = new SqlCommand(updateSql, conn);
-            cmd.Parameters.AddWithValue("@id_donaciones", dbContext);
-            cmd.Parameters.AddWithValue("@id_provedores", dbContext);
-            cmd.Parameters.AddWithValue("@solicitud", dbContext);
-            cmd.Parameters.AddWithValue("@recurso", dbContext);
-            cmd.Parameters.AddWithValue("@id_recurso_donacion", dbContext); 
-            cmd.Parameters.AddWithValue("@id_nombre_recursos",dbContext);
-            cmd.Parameters.AddWithValue("@cantidad",dbContext);
-            
-             
-
-            try
-            {
-                int affect = 0;
-                conn.Open();
-                affect = cmd.ExecuteNonQuery();
-                if (affect > 0)
-                {
-                    if (NotificarModificacionEnInventario != null)
-                    {
-                        NotificarModificacionEnInventario(this, EventArgs.Empty);
-                    }
-
-                }
-
-            }
-            finally
-            {
-                cmd.Dispose();
-                conn.Close();
-            }
-            //metodo agregar inventario
-
-
-
-        }
-
-
-        public void AgregarInventario()
-        {
-            SysAcopioDbContext dbContext = new SysAcopioDbContext();
-            SqlConnection conn = dbContext.ConnectionServer();
-            string insertSql = "insert into d.id_donacion=@id_donaciones,rd.id_recurso_donacion=@idrecursos,r.nombre_recurso, rd.id_recurso, rd.cantidad ";
-            SqlCommand cmd = new SqlCommand(insertSql, conn);
-            cmd.Parameters.AddWithValue("@id_donaciones", this);
-            cmd.Parameters.AddWithValue("@id_provedores", this);
-            //cmd.Parameters.AddWithValue("", this.recursodonaciones);
-
-            try
-            {
-                long id = 0;
-                conn.Open();
-                Convert.ToInt64(cmd.ExecuteScalar());
-                if (id > 0)
-                {
-                    if (NotificarModificacionEnInventario != null)
-                    {
-                        NotificarModificacionEnInventario(this, EventArgs.Empty);
-                    }
-
-                }
-
-            }
-            finally
-            {
-                cmd.Dispose();
-                conn.Close();
-            }
-
-        }
-        public void EliminarInventario()
-        {
-            SysAcopioDbContext dbContext = new SysAcopioDbContext();
-            SqlConnection conn = dbContext.ConnectionServer();
-            string deletedateSql = " delete from d.id_donacion=@id_donaciones,rd.id_recurso_donacion=@idrecursos,r.nombre_recurso, rd.id_recurso, rd.cantidad ";
-            SqlCommand cmd = new SqlCommand(deletedateSql, conn);
-            try
-            {
-                int affected = 0;
                 conn.Open();
                 affected = cmd.ExecuteNonQuery();
-                if (NotificarModificacionEnInventario != null)
-                {
-                    NotificarModificacionEnInventario(this, EventArgs.Empty);
 
-                }
             }
             finally
             {
                 cmd.Dispose();
                 conn.Close();
-
             }
+            return affected;
 
         }
+        public int ElminarInventario()
+        {
+            int affected = 0;
+            SysAcopioDbContext conectar = new SysAcopioDbContext();
+            SqlConnection conn = conectar.ConnectionServer();
+            string deletertsql = "update Inventario (id_proveedor,nombre_proveedor,r.nombre_recurso,categoria,estado,d.ubicacion, d.fecha) values(@id_proveedor,@nombre_proveedor,@r.nombre_recurso,@categoria,@estado,@d.ubicacion, @d.fecha) FROM Proveedor,Donacion,Solicitud WHERE estado = 1";
+            SqlCommand cmd = new SqlCommand(deletertsql, conn);
+            cmd.Parameters.AddWithValue("@id_proveedor", this.idproveedores);
+            cmd.Parameters.AddWithValue("@nombre", this.nombres);
+            cmd.Parameters.AddWithValue("@recursos", this.recursos);
+            cmd.Parameters.AddWithValue("@categoria", this.categoria);
+            cmd.Parameters.AddWithValue("@estado", this.estado);
+            cmd.Parameters.AddWithValue("@ubicacion", this.ubicacion);
+            cmd.Parameters.AddWithValue("@fecha", this.fecha);
+
+            try
+            {
+                conn.Open();
+                affected = cmd.ExecuteNonQuery();
+            }
+            finally
+            {
+                cmd.Dispose();
+                conn.Close();
+            }
+            return affected;
+        }
+
+
+
+
 
     }
+
+
 
 }

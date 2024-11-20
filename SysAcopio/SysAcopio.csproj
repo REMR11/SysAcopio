@@ -117,11 +117,11 @@
     <Compile Include="Views\DonacionView.Designer.cs">
       <DependentUpon>DonacionView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\inventarioView.cs">
+    <Compile Include="Views\FormularioView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\inventarioView.Designer.cs">
-      <DependentUpon>inventarioView.cs</DependentUpon>
+    <Compile Include="Views\FormularioView.Designer.cs">
+      <DependentUpon>FormularioView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ProveedorView.cs">
       <SubType>Form</SubType>
@@ -173,8 +173,8 @@
     <EmbeddedResource Include="Views\DonacionView.resx">
       <DependentUpon>DonacionView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\inventarioView.resx">
-      <DependentUpon>inventarioView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\FormularioView.resx">
+      <DependentUpon>FormularioView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ProveedorView.resx">
       <DependentUpon>ProveedorView.cs</DependentUpon>
