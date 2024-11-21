@@ -176,6 +176,12 @@ namespace SysAcopio.Views
         /// </summary>
         void EliminarRecurso()
         {
+            if (!Sesion.isAdmin)
+            {
+                Alerts.ShowAlertS("¡Solo un administrador puede eliminar recursos!", AlertsType.Error);
+                return;
+            }
+
             long idRecurso = Convert.ToInt64(txtId.Text);
             if (idRecurso == 0)
             {
