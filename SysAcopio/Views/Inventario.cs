@@ -276,11 +276,6 @@ namespace SysAcopio.Views
             MostrarTabPage1();
         }
 
-        private void dgvRecursos_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
         private void txtCantidad_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Validar que solo se ingresen números
