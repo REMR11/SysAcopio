@@ -146,7 +146,7 @@ namespace SysAcopio.Views
                 // Asegúrate de que la celda no sea nula antes de acceder a su valor
                 if (row != null)
                 {
-                    txtNombre.Text = row.Cells["Tipo Recurso"].Value.ToString();
+                    txtNombre.Text = row.Cells["TipoRecurso"].Value.ToString();
                     idTipoRecursoProveedor = Convert.ToInt64(row.Cells["id_tipo_recurso"].Value.ToString());
                 }
             }

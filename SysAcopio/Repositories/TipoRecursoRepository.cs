@@ -18,7 +18,7 @@ namespace SysAcopio.Repositories
         /// <returns></returns>
         public DataTable GetAll()
         {
-            string query = "SELECT id_tipo_recurso, nombre_tipo as 'Tipo Recurso' FROM Tipo_Recurso;";
+            string query = "SELECT id_tipo_recurso, nombre_tipo as 'TipoRecurso' FROM Tipo_Recurso;";
 
             return GenericFuncDB.GetRowsToTable(query, null);
         }
@@ -97,7 +97,7 @@ namespace SysAcopio.Repositories
         /// <returns></returns>
         public DataTable SearchTiposRecurso(string searchQuery)
         {
-            string query = "SELECT id_tipo_recurso, nombre_tipo as 'Tipo Recurso' FROM Tipo_Recurso WHERE nombre_tipo LIKE @searchQuery;";
+            string query = "SELECT id_tipo_recurso, nombre_tipo as 'TipoRecurso' FROM Tipo_Recurso WHERE nombre_tipo LIKE @searchQuery;";
 
             SqlParameter[] parametros = new SqlParameter[]
             {
