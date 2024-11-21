@@ -114,6 +114,12 @@
     <Compile Include="Views\AlertForm.Designer.cs">
       <DependentUpon>AlertForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\ConfirmActionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ConfirmActionForm.Designer.cs">
+      <DependentUpon>ConfirmActionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\DetailsGridForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -202,6 +208,9 @@
     </Compile>
     <EmbeddedResource Include="Views\AlertForm.resx">
       <DependentUpon>AlertForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ConfirmActionForm.resx">
+      <DependentUpon>ConfirmActionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\DetailsGridForm.resx">
       <DependentUpon>DetailsGridForm.cs</DependentUpon>

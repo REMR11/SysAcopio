@@ -35,6 +35,11 @@ namespace SysAcopio.Controllers
         /// <param name="tiporecurso"></param>
         public bool Create(TipoRecurso tipoRecurso)
         {
+            if (repository.ExistByName(tipoRecurso.NombreTipo))
+            {
+                Alerts.ShowAlertS("Lo sentimos, ya existe un tipo con ese nombre", AlertsType.Info);
+                return false;
+            }
             long id = repository.Create(tipoRecurso);
 
             if (id > 0)

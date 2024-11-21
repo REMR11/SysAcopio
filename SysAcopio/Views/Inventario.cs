@@ -19,14 +19,18 @@ namespace SysAcopio.Views
         //Atributos
         private readonly InventarioController inventarioController = new InventarioController();
         private readonly TipoRecursoController tipoRecursoController = new TipoRecursoController();
-        private long idRecurso = 0;
         public Inventario()
         {
             InitializeComponent();
+            // Suscribirse al evento
+            inventarioController.ResourceChanged += InventarioController_ResourceChanged;
         }
 
         private void Inventario_Load(object sender, EventArgs e)
         {
+            //Ocultando y mostrando el tab 1
+            MostrarTabPage1();
+
             //Cargando los tipos de recurso en los combobox
             SetTipoRecurso();
 
@@ -58,7 +62,14 @@ namespace SysAcopio.Views
         //Método para inicializar el combobox de tipoRecurso
         void SetTipoRecurso()
         {
+            //Obteniendo todos los tipos de recurso
             DataTable tiposData = tipoRecursoController.GetAll();
+            //Agregandolo al combobox del formulario
+            cmbTipoRecurso.DataSource = tiposData.Copy();
+            cmbTipoRecurso.DisplayMember = "TipoRecurso";
+            cmbTipoRecurso.ValueMember = "id_tipo_recurso";
+
+            //Preparandolo para el filtro
             tiposData.Rows.Add(0, "Todos");
             cmbTipoRecursoFiltro.DataSource = tiposData;
             cmbTipoRecursoFiltro.DisplayMember = "TipoRecurso";
@@ -107,10 +118,108 @@ namespace SysAcopio.Views
         {
             txtNombreRecursoFiltro.Clear();
             cmbTipoRecursoFiltro.SelectedValue = 0;
+            cmbEstadoFiltro.SelectedValue = 0;
             ReiniciarGrid();
             // Limpiar la selección y la celda actual
             dgvRecursos.ClearSelection();
             dgvRecursos.CurrentCell = null; // Esto quita la selección visual de la celda
+        }
+
+        /// <summary>
+        /// Método para limpiar el formulario
+        /// </summary>
+        void LimpiarFormulario()
+        {
+            txtNombreRecurso.Clear();
+            txtCantidad.Clear();
+            txtId.Text = 0.ToString();
+        }
+
+        /// <summary>
+        /// Mostrar Pagina 1 y ocultar la segunda
+        /// </summary>
+        private void MostrarTabPage1()
+        {
+            if (!tabControl1.TabPages.Contains(tabPage1))
+            {
+                tabControl1.TabPages.Add(tabPage1); // Agregar tabPage1
+            }
+
+            if (tabControl1.TabPages.Contains(tabPage2))
+            {
+                tabControl1.TabPages.Remove(tabPage2); // Quitar tabPage2
+            }
+
+            tabControl1.SelectedTab = tabPage1; // Seleccionar tabPage1
+        }
+
+        /// <summary>
+        /// Mostrar Pagina 2 y ocultar la segunda
+        /// </summary>
+        private void MostrarTabPage2()
+        {
+            if (!tabControl1.TabPages.Contains(tabPage2))
+            {
+                tabControl1.TabPages.Add(tabPage2); // Agregar tabPage2
+            }
+
+            if (tabControl1.TabPages.Contains(tabPage1))
+            {
+                tabControl1.TabPages.Remove(tabPage1); // Quitar tabPage1
+            }
+
+            tabControl1.SelectedTab = tabPage2; // Seleccionar tabPage2
+        }
+
+        /// <summary>
+        /// Método para eliminar recurso
+        /// </summary>
+        void EliminarRecurso()
+        {
+            long idRecurso = Convert.ToInt64(txtId.Text);
+            if (idRecurso == 0)
+            {
+                Alerts.ShowAlertS("Primero debe seleccionar un recurso", AlertsType.Info);
+                return;
+            }
+
+            inventarioController.Delete(idRecurso);
+        }
+
+        /// <summary>
+        /// Método para guardar un recurso
+        /// </summary>
+        void Guardar()
+        {
+            //Mandamos a llamar el método de Agregar
+            inventarioController.Create(new Recurso
+            {
+                NombreRecurso = txtNombreRecurso.Text,
+                Cantidad = Convert.ToInt32(txtCantidad.Text),
+                IdTipoRecurso = Convert.ToInt64(cmbTipoRecurso.SelectedValue)
+            });
+        }
+
+        /// <summary>
+        /// Método para actualizar un recurso
+        /// </summary>
+        void Modificar()
+        {
+            long idRecurso = Convert.ToInt64(txtId.Text);
+            if (idRecurso == 0)
+            {
+                Alerts.ShowAlertS("¡Seleccione un recurso a modificar!", AlertsType.Info);
+                return;
+            }
+
+            //Mandamos a llamar el método de Agregar
+            inventarioController.Modify(new Recurso
+            {
+                IdRecurso = idRecurso,
+                NombreRecurso = txtNombreRecurso.Text,
+                Cantidad = Convert.ToInt32(txtCantidad.Text),
+                IdTipoRecurso = Convert.ToInt64(cmbTipoRecurso.SelectedValue)
+            });
         }
 
         private void dgvRecursos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -139,8 +248,6 @@ namespace SysAcopio.Views
             // Limpiar la selección y la celda actual
             dgvRecursos.ClearSelection();
             dgvRecursos.CurrentCell = null; // Esto quita la selección visual de la celda
-            txtNombreRecursoFiltro.Clear();
-            idRecurso = 0;
         }
 
 
@@ -157,6 +264,91 @@ namespace SysAcopio.Views
 
             var data = inventarioController.Search(busqueda, estadoFiltro, tipo);
             RenderGrid(data);
+        }
+
+        // Manejador del evento
+        private void InventarioController_ResourceChanged(string message, AlertsType tipo)
+        {
+            // Mostrar la alerta 
+            Alerts.ShowAlertS(message, tipo);
+            LimpiarFormulario();
+            ReiniciarGrid();
+            MostrarTabPage1();
+        }
+
+        private void dgvRecursos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void txtCantidad_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Validar que solo se ingresen números
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Cancelar el evento
+            }
+        }
+
+        private void btnCrear_Click(object sender, EventArgs e)
+        {
+            MostrarTabPage2();
+            LimpiarFormulario();//Limpiar formulario
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            MostrarTabPage1();
+            LimpiarFormulario();
+            ReiniciarGrid();
+        }
+
+        private void btnModificar_Click(object sender, EventArgs e)
+        {
+            MostrarTabPage2();
+        }
+
+        private void dgvRecursos_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvRecursos.SelectedRows.Count > 0)
+            {
+                var row = dgvRecursos.CurrentRow;
+
+                // Asegúrate de que la celda no sea nula antes de acceder a su valor
+                if (row != null)
+                {
+                    txtId.Text = row.Cells["id_recurso"].Value.ToString();
+                    txtNombreRecurso.Text = row.Cells["NombreRecurso"].Value.ToString();
+                    txtCantidad.Text = row.Cells["cantidad"].Value.ToString();
+                    cmbTipoRecurso.SelectedValue = Convert.ToInt64(row.Cells["id_tipo_recurso"].Value.ToString());
+                }
+            }
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            ConfirmActionForm confirmacion = new ConfirmActionForm("¿Estas seguro que deseas elimianr permanentemente el recurso?", EliminarRecurso);
+            confirmacion.ShowDialog();
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            //Validando el formulario
+            if (txtNombreRecurso.Text.Trim() == string.Empty || txtCantidad.Text.Trim() == string.Empty)
+            {
+                Alerts.ShowAlertS("Revise el formulario, todo debe estar lleno", AlertsType.Info);
+                return;
+            }
+
+            if (Convert.ToInt32(txtCantidad.Text) < 0)
+            {
+                Alerts.ShowAlertS("No se permiten cantidades negativas", AlertsType.Info);
+                return;
+            }
+
+            long idRecurso = Convert.ToInt64(txtId.Text);
+
+            (idRecurso == 0 ? (Action)Guardar : Modificar)();
         }
     }
 }

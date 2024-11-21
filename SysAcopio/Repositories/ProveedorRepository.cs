@@ -127,5 +127,32 @@ namespace SysAcopio.Repositories
                 return 0;
             }
         }
+
+        /// <summary>
+        /// Método que valida que exista un recurso por el nombre
+        /// </summary>
+        /// <param name="nombreRecurso"></param>
+        /// <returns></returns>
+        public bool ExistByName(string nombreRecurso)
+        {
+            SysAcopioDbContext dbContext = new SysAcopioDbContext();
+            using (SqlConnection conn = dbContext.ConnectionServer())
+            {
+                string query = " SELECT nombre_proveedor FROM Proveedor WHERE nombre_proveedor = @nombre";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", nombreRecurso);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

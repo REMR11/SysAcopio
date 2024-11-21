@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label10 = new System.Windows.Forms.Label();
+            this.cmbEstadoFiltro = new System.Windows.Forms.ComboBox();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.btnModificar = new System.Windows.Forms.Button();
             this.btnCrear = new System.Windows.Forms.Button();
@@ -45,20 +47,15 @@
             this.cmbTipoRecursoFiltro = new System.Windows.Forms.ComboBox();
             this.dgvRecursos = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
-            this.cmbTipoUsuario = new System.Windows.Forms.ComboBox();
+            this.cmbTipoRecurso = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.txtContrasenia = new System.Windows.Forms.TextBox();
-            this.txtAliasUsuario = new System.Windows.Forms.TextBox();
-            this.txtNombreUsuario = new System.Windows.Forms.TextBox();
-            this.btnCancelar = new System.Windows.Forms.Button();
-            this.btnGuardar = new System.Windows.Forms.Button();
+            this.txtCantidad = new System.Windows.Forms.TextBox();
+            this.txtNombreRecurso = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.cmbEstadoFiltro = new System.Windows.Forms.ComboBox();
+            this.txtId = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.btnCancelar = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -121,6 +118,24 @@
             this.tabPage1.Size = new System.Drawing.Size(993, 703);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Gestion de Inventario";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(328, 37);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(50, 16);
+            this.label10.TabIndex = 30;
+            this.label10.Text = "Estado";
+            // 
+            // cmbEstadoFiltro
+            // 
+            this.cmbEstadoFiltro.FormattingEnabled = true;
+            this.cmbEstadoFiltro.Location = new System.Drawing.Point(331, 57);
+            this.cmbEstadoFiltro.Name = "cmbEstadoFiltro";
+            this.cmbEstadoFiltro.Size = new System.Drawing.Size(126, 24);
+            this.cmbEstadoFiltro.TabIndex = 29;
             // 
             // btnBuscar
             // 
@@ -253,14 +268,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvRecursos.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvRecursos.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvRecursos.Location = new System.Drawing.Point(19, 87);
             this.dgvRecursos.MultiSelect = false;
             this.dgvRecursos.Name = "dgvRecursos";
@@ -274,17 +289,14 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.cmbEstado);
-            this.tabPage2.Controls.Add(this.cmbTipoUsuario);
-            this.tabPage2.Controls.Add(this.label7);
-            this.tabPage2.Controls.Add(this.txtContrasenia);
-            this.tabPage2.Controls.Add(this.txtAliasUsuario);
-            this.tabPage2.Controls.Add(this.txtNombreUsuario);
             this.tabPage2.Controls.Add(this.btnCancelar);
-            this.tabPage2.Controls.Add(this.btnGuardar);
+            this.tabPage2.Controls.Add(this.button2);
+            this.tabPage2.Controls.Add(this.txtId);
+            this.tabPage2.Controls.Add(this.cmbTipoRecurso);
+            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Controls.Add(this.txtCantidad);
+            this.tabPage2.Controls.Add(this.txtNombreRecurso);
             this.tabPage2.Controls.Add(this.label6);
-            this.tabPage2.Controls.Add(this.label5);
-            this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.label3);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
@@ -294,102 +306,49 @@
             this.tabPage2.Text = "Formulario Recurso";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // cmbEstado
+            // cmbTipoRecurso
             // 
-            this.cmbEstado.FormattingEnabled = true;
-            this.cmbEstado.Items.AddRange(new object[] {
+            this.cmbTipoRecurso.FormattingEnabled = true;
+            this.cmbTipoRecurso.Items.AddRange(new object[] {
             "Activo",
             "Inactivo"});
-            this.cmbEstado.Location = new System.Drawing.Point(443, 324);
-            this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(223, 24);
-            this.cmbEstado.TabIndex = 15;
-            // 
-            // cmbTipoUsuario
-            // 
-            this.cmbTipoUsuario.FormattingEnabled = true;
-            this.cmbTipoUsuario.Items.AddRange(new object[] {
-            "Administrador",
-            "Operador"});
-            this.cmbTipoUsuario.Location = new System.Drawing.Point(84, 324);
-            this.cmbTipoUsuario.Name = "cmbTipoUsuario";
-            this.cmbTipoUsuario.Size = new System.Drawing.Size(223, 24);
-            this.cmbTipoUsuario.TabIndex = 14;
+            this.cmbTipoRecurso.Location = new System.Drawing.Point(701, 88);
+            this.cmbTipoRecurso.Name = "cmbTipoRecurso";
+            this.cmbTipoRecurso.Size = new System.Drawing.Size(223, 24);
+            this.cmbTipoRecurso.TabIndex = 15;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(72, 165);
+            this.label7.Location = new System.Drawing.Point(384, 43);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(76, 16);
+            this.label7.Size = new System.Drawing.Size(61, 16);
             this.label7.TabIndex = 13;
-            this.label7.Text = "Contraseña";
+            this.label7.Text = "Cantidad";
             // 
-            // txtContrasenia
+            // txtCantidad
             // 
-            this.txtContrasenia.Location = new System.Drawing.Point(75, 197);
-            this.txtContrasenia.Name = "txtContrasenia";
-            this.txtContrasenia.Size = new System.Drawing.Size(227, 22);
-            this.txtContrasenia.TabIndex = 12;
+            this.txtCantidad.Location = new System.Drawing.Point(388, 90);
+            this.txtCantidad.Name = "txtCantidad";
+            this.txtCantidad.Size = new System.Drawing.Size(227, 22);
+            this.txtCantidad.TabIndex = 12;
+            this.txtCantidad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCantidad_KeyPress);
             // 
-            // txtAliasUsuario
+            // txtNombreRecurso
             // 
-            this.txtAliasUsuario.Location = new System.Drawing.Point(375, 90);
-            this.txtAliasUsuario.Name = "txtAliasUsuario";
-            this.txtAliasUsuario.Size = new System.Drawing.Size(227, 22);
-            this.txtAliasUsuario.TabIndex = 9;
-            // 
-            // txtNombreUsuario
-            // 
-            this.txtNombreUsuario.Location = new System.Drawing.Point(75, 90);
-            this.txtNombreUsuario.Name = "txtNombreUsuario";
-            this.txtNombreUsuario.Size = new System.Drawing.Size(227, 22);
-            this.txtNombreUsuario.TabIndex = 8;
-            // 
-            // btnCancelar
-            // 
-            this.btnCancelar.Location = new System.Drawing.Point(412, 428);
-            this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(124, 50);
-            this.btnCancelar.TabIndex = 7;
-            this.btnCancelar.Text = "Cancelar";
-            this.btnCancelar.UseVisualStyleBackColor = true;
-            // 
-            // btnGuardar
-            // 
-            this.btnGuardar.Location = new System.Drawing.Point(84, 419);
-            this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(124, 50);
-            this.btnGuardar.TabIndex = 6;
-            this.btnGuardar.Text = "Guardar";
-            this.btnGuardar.UseVisualStyleBackColor = true;
+            this.txtNombreRecurso.Location = new System.Drawing.Point(75, 90);
+            this.txtNombreRecurso.Name = "txtNombreRecurso";
+            this.txtNombreRecurso.Size = new System.Drawing.Size(227, 22);
+            this.txtNombreRecurso.TabIndex = 8;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(440, 285);
+            this.label6.Location = new System.Drawing.Point(698, 41);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(50, 16);
+            this.label6.Size = new System.Drawing.Size(108, 16);
             this.label6.TabIndex = 5;
-            this.label6.Text = "Estado";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(81, 285);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(101, 16);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Tipo de usuario";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(372, 43);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(37, 16);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Alias";
+            this.label6.Text = "Tipo de Recurso";
             // 
             // label3
             // 
@@ -400,23 +359,46 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "Nombre ";
             // 
-            // label10
+            // txtId
             // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(328, 37);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(50, 16);
-            this.label10.TabIndex = 30;
-            this.label10.Text = "Estado";
+            this.txtId.Location = new System.Drawing.Point(85, 351);
+            this.txtId.Name = "txtId";
+            this.txtId.ReadOnly = true;
+            this.txtId.Size = new System.Drawing.Size(227, 22);
+            this.txtId.TabIndex = 16;
+            this.txtId.Visible = false;
             // 
-            // cmbEstadoFiltro
+            // button2
             // 
-            this.cmbEstadoFiltro.FormattingEnabled = true;
-            this.cmbEstadoFiltro.Location = new System.Drawing.Point(331, 57);
-            this.cmbEstadoFiltro.Name = "cmbEstadoFiltro";
-            this.cmbEstadoFiltro.Size = new System.Drawing.Size(126, 24);
-            this.cmbEstadoFiltro.TabIndex = 29;
+            this.button2.BackColor = System.Drawing.Color.ForestGreen;
+            this.button2.FlatAppearance.BorderSize = 0;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.ForeColor = System.Drawing.Color.White;
+            this.button2.Location = new System.Drawing.Point(272, 225);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(214, 89);
+            this.button2.TabIndex = 27;
+            this.button2.Text = "Guardar";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.btnGuardar_Click);
+            // 
+            // btnCancelar
+            // 
+            this.btnCancelar.BackColor = System.Drawing.Color.LightGray;
+            this.btnCancelar.FlatAppearance.BorderSize = 0;
+            this.btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancelar.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancelar.ForeColor = System.Drawing.Color.Black;
+            this.btnCancelar.Location = new System.Drawing.Point(601, 225);
+            this.btnCancelar.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCancelar.Name = "btnCancelar";
+            this.btnCancelar.Size = new System.Drawing.Size(214, 89);
+            this.btnCancelar.TabIndex = 28;
+            this.btnCancelar.Text = "Cancelar";
+            this.btnCancelar.UseVisualStyleBackColor = false;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
             // 
             // Inventario
             // 
@@ -448,17 +430,11 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.ComboBox cmbEstado;
-        private System.Windows.Forms.ComboBox cmbTipoUsuario;
+        private System.Windows.Forms.ComboBox cmbTipoRecurso;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox txtContrasenia;
-        private System.Windows.Forms.TextBox txtAliasUsuario;
-        private System.Windows.Forms.TextBox txtNombreUsuario;
-        private System.Windows.Forms.Button btnCancelar;
-        private System.Windows.Forms.Button btnGuardar;
+        private System.Windows.Forms.TextBox txtCantidad;
+        private System.Windows.Forms.TextBox txtNombreRecurso;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DataGridView dgvRecursos;
         private System.Windows.Forms.Label label2;
@@ -473,5 +449,8 @@
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox cmbEstadoFiltro;
+        private System.Windows.Forms.TextBox txtId;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnCancelar;
     }
 }

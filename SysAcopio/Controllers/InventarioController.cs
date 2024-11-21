@@ -13,7 +13,11 @@ namespace SysAcopio.Controllers
     {
         //Atributos
         private readonly InventarioRepository repository;
+        //Delegado para cumplir especificaciones
+        public delegate void ResourceChangedEventHandler(string mensaje, AlertsType alertsType);
 
+        // Evento que se disparará cuando un recurso sea creado, modificado o eliminado
+        public event ResourceChangedEventHandler ResourceChanged;
         //Constructor de clase
         public InventarioController()
         {
@@ -30,16 +34,31 @@ namespace SysAcopio.Controllers
         }
 
         /// <summary>
+        /// Método par disparar el evento
+        /// </summary>
+        /// <param name="message"></param>
+        protected virtual void OnResourceChanged(string message, AlertsType tipo)
+        {
+            ResourceChanged?.Invoke(message, tipo);
+        }
+
+        /// <summary>
         /// Método para crear un Recurso
         /// </summary>
         /// <param name="recurso"></param>
         public bool Create(Recurso recurso)
         {
+            if (repository.ExistByName(recurso.NombreRecurso))
+            {
+                Alerts.ShowAlertS("Lo sentimos, ya existe un recurso con ese nombre", AlertsType.Info);
+                return false;
+            }
+
             long id = repository.Create(recurso);
 
             if (id > 0)
             {
-                Alerts.ShowAlertS("Recurso añadido al inventario", AlertsType.Confirm);
+                OnResourceChanged("Recurso añadido al inventario", AlertsType.Confirm);
                 return true;
             }
             else
@@ -67,7 +86,7 @@ namespace SysAcopio.Controllers
 
             if (result)
             {
-                Alerts.ShowAlertS("Recurso modificado", AlertsType.Confirm);
+                OnResourceChanged("Recurso modificado", AlertsType.Confirm);
             }
             else
             {
@@ -98,7 +117,7 @@ namespace SysAcopio.Controllers
             }
             else
             {
-                Alerts.ShowAlertS("Recurso borrado con exito, aun existarán los registros que se registraron con este recurso, se recomienda que se actualicen", AlertsType.Confirm);
+                OnResourceChanged("Recurso borrado con exito, aun existarán los registros que se registraron con este recurso, se recomienda que se actualicen", AlertsType.Confirm);
                 return true;
             }
         }

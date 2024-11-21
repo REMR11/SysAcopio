@@ -159,5 +159,35 @@ namespace SysAcopio.Controllers
                 return 0;
             }
         }
+
+        /// <summary>
+        /// Método que valida que exista un recurso por el nombre
+        /// </summary>
+        /// <param name="nombreRecurso"></param>
+        /// <returns></returns>
+        public bool ExistByName(string nombreRecurso)
+        {
+            SysAcopioDbContext dbContext = new SysAcopioDbContext();
+            using (SqlConnection conn = dbContext.ConnectionServer())
+            {
+                string query = " SELECT r.id_recurso, r.nombre_recurso AS NombreRecurso, r.id_tipo_recurso, tr.nombre_tipo AS 'TipoRecurso', r.cantidad" +
+                " FROM Recurso AS r" +
+                " JOIN Tipo_Recurso AS tr on r.id_tipo_recurso = tr.id_tipo_recurso" +
+                " WHERE r.cantidad >= 0 AND r.nombre_recurso = @nombre";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", nombreRecurso);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

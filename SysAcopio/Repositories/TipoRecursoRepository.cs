@@ -106,5 +106,32 @@ namespace SysAcopio.Repositories
 
             return GenericFuncDB.GetRowsToTable(query, parametros);
         }
+
+        /// <summary>
+        /// Método que valida que exista un tipo recurso por nombre del tipo
+        /// </summary>
+        /// <param name="nombreRecurso"></param>
+        /// <returns></returns>
+        public bool ExistByName(string nombreRecurso)
+        {
+            SysAcopioDbContext dbContext = new SysAcopioDbContext();
+            using (SqlConnection conn = dbContext.ConnectionServer())
+            {
+                string query = " SELECT nombre_tipo FROM Tipo_Recurso WHERE nombre_tipo = @nombre";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", nombreRecurso);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
     }
 }
