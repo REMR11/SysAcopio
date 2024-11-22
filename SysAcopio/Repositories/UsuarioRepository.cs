@@ -181,10 +181,10 @@ namespace SysAcopio.Repositories
         {
             try
             {
-                Usuario usuario = GetById(id);
+                Usuario usuario = GetById(id); // Obtiene el usuario por su ID
                 if (usuario == null) return false;
 
-                usuario.Estado = false;
+                usuario.Estado = false;  // Desactiva el usuario
                 return Update(usuario);
             }
             catch (Exception)
@@ -193,7 +193,9 @@ namespace SysAcopio.Repositories
             }
         }
 
-     
+        /// <summary>
+        /// Método para buscar usuarios basados en un término de búsqueda.
+        /// </summary>
 
         public IEnumerable<Usuario> Search(string searchTerm)
         {
@@ -234,7 +236,9 @@ namespace SysAcopio.Repositories
             return usuarios;
         }
 
-
+        /// <summary>
+        /// Método para obtener los usuarios en un DataTable.
+        /// </summary>
 
         public DataTable ObtenerUsuariosDataTable()
         {
