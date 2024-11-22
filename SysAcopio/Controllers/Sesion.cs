@@ -8,14 +8,18 @@ namespace SysAcopio.Controllers
 {
     public class Sesion
     {
+        //Propiedades
         public static string NombreUsuario { get; set; }
         public static string RolUsuario { get; set; }
-       
+        public static bool isAdmin { get; set; }
+
         // Método para guardar la información del usuario
-        public static void GuardarDatosUsuario(string nombreUsuario, string rolUsuario)
+        public static void GuardarDatosUsuario(string nombreUsuario, string rolUsuario, long idRol)
         {
             NombreUsuario = nombreUsuario;
             RolUsuario = rolUsuario;
+
+            isAdmin = (idRol == 1);
         }
         // Método para limpiar los datos del usuario
         public static void LimpiarDatosUsuario()
@@ -26,25 +30,12 @@ namespace SysAcopio.Controllers
         //Metodo para asignar permios a los usarios 
         public static void Permisos(Form1 form)
         {
-            // si el rol del usuario es 1 permisos de admin
-            if (RolUsuario == "1")
+            // si el rol no es el de un admin se ocultan los usuarios
+            if (!isAdmin)
             {
-                form.BtnUsuario.Enabled = true;
-                form.BtnInventario.Enabled = true;
-                form.BtnReporte.Enabled = true;
-                form.BtnSolicitus.Enabled = true;
-                form.BtnDonacion.Enabled = true;
-                form.Button1.Enabled = true;
-            } // si el rol del usuario es 2 permisos de operador 
-            else if (RolUsuario == "2")
-            {
-                form.BtnUsuario.Enabled = false;
-                form.BtnInventario.Enabled = false;
-                form.BtnReporte.Enabled = false;
-                form.BtnSolicitus.Enabled = true;
-                form.BtnDonacion.Enabled = true;
-                form.Button1.Enabled = false;
+                form.BtnUsuario.Visible = false;
             }
+
         }
 
 

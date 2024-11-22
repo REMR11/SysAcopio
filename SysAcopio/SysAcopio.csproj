@@ -65,12 +65,15 @@
   <ItemGroup>
     <Compile Include="Controllers\DashBoardManager.cs" />
     <Compile Include="Controllers\DonacionesController.cs" />
+    <Compile Include="Controllers\InventarioController.cs" />
+    <Compile Include="Repositories\InventarioRepository.cs" />
     <Compile Include="Controllers\ProveedoresController.cs" />
     <Compile Include="Controllers\RecursoDonacionController.cs" />
     <Compile Include="Controllers\RecursoSolicitudController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\Sesion.cs" />
     <Compile Include="Controllers\SolicitudController.cs" />
+    <Compile Include="Controllers\TipoRecursoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Prueba.cs">
       <SubType>Form</SubType>
@@ -102,6 +105,7 @@
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\TipoRecursoRepository.cs" />
     <Compile Include="Services\Alerts.cs" />
     <Compile Include="Services\GenericFuncDB.cs" />
     <Compile Include="Views\AlertForm.cs">
@@ -109,6 +113,12 @@
     </Compile>
     <Compile Include="Views\AlertForm.Designer.cs">
       <DependentUpon>AlertForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConfirmActionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ConfirmActionForm.Designer.cs">
+      <DependentUpon>ConfirmActionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\DetailsGridForm.cs">
       <SubType>Form</SubType>
@@ -121,6 +131,12 @@
     </Compile>
     <Compile Include="Views\DonacionView.Designer.cs">
       <DependentUpon>DonacionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Inventario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Inventario.Designer.cs">
+      <DependentUpon>Inventario.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ProveedorView.cs">
       <SubType>Form</SubType>
@@ -165,6 +181,12 @@
     <Compile Include="Views\SolicitudView.Designer.cs">
       <DependentUpon>SolicitudView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\TipoRecursoView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\TipoRecursoView.Designer.cs">
+      <DependentUpon>TipoRecursoView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\UsuarioView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -187,11 +209,17 @@
     <EmbeddedResource Include="Views\AlertForm.resx">
       <DependentUpon>AlertForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\ConfirmActionForm.resx">
+      <DependentUpon>ConfirmActionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\DetailsGridForm.resx">
       <DependentUpon>DetailsGridForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\DonacionView.resx">
       <DependentUpon>DonacionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Inventario.resx">
+      <DependentUpon>Inventario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ProveedorView.resx">
       <DependentUpon>ProveedorView.cs</DependentUpon>
@@ -216,6 +244,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\SolicitudView.resx">
       <DependentUpon>SolicitudView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TipoRecursoView.resx">
+      <DependentUpon>TipoRecursoView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\UsuarioView.resx">
       <DependentUpon>UsuarioView.cs</DependentUpon>

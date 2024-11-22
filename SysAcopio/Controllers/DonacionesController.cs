@@ -11,9 +11,10 @@ namespace SysAcopio.Controllers
 {
     public class DonacionesController
     {
+        //Atributos
         private readonly DonacionRepository donacionRepository;
         private readonly Alerts alerts;
-        public List<Recurso> detalleRecursoDonacion = new List<Recurso>();
+        public List<Recurso> detalleRecursoDonacion = new List<Recurso>();//Usado para guardar los recursos a añadir
 
         /// <summary>
         /// Contructor parametrizado

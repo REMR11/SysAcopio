@@ -133,7 +133,7 @@ namespace SysAcopio.Repositories
         /// <returns>Objeto de tipo DataTable con todos los recursos</returns>
         public DataTable GetAllTipoRecurso()
         {
-            string query = "SELECT * FROM Tipo_Recurso";
+            string query = "SELECT id_tipo_recurso, nombre_tipo FROM Tipo_Recurso";
 
             return GenericFuncDB.GetRowsToTable(query, null);
         }
