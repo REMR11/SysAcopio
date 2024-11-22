@@ -45,6 +45,8 @@ namespace SysAcopio.Views
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(6, 135);
             this.dataGridView1.Name = "dataGridView1";
@@ -105,6 +107,7 @@ namespace SysAcopio.Views
             // 
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Items.AddRange(new object[] {
+            "Todas",
             "Necesario",
             "Urgente",
             "Super urgente"});

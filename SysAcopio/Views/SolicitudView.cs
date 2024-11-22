@@ -21,6 +21,13 @@ namespace SysAcopio.Views
         private BindingSource _solicitudBindingSource; // Fuente de datos para enlazar al DataGridView
         private DataSet _solicitudDataSet; // Conjunto de datos para las solicitudes
 
+        // variables utilizadas en filtros de urgencia en solicitud
+        //--------------------------------------------------------------------------------------------
+        private const int EstadoTodasLasSolicitudes = 0;
+        private const int EstadoSolicitudesNecesarias = 1;
+        private const int EstadoSolicitudesUrgentes = 2;
+        private const int EstadoSolicitudesSuperUrgentes = 3;
+        //--------------------------------------------------------------------------------------------
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="SolicitudView"/>.
         /// </summary>
@@ -107,6 +114,7 @@ namespace SysAcopio.Views
             ActualizarDataGrid(solicitudes); // Actualiza el DataGridView con las solicitudes filtradas
         }
 
+
         /// <summary>
         /// Obtiene las solicitudes según el filtro seleccionado.
         /// </summary>
@@ -129,15 +137,54 @@ namespace SysAcopio.Views
 
         /// <summary>
         /// Evento que se ejecuta al cambiar la selección en el combo box de urgencias.
-        /// Filtra las solicitudes según la urgencia seleccionada.
+        /// Filtra las solicitudes según la urgencia seleccionada y actualiza el DataGridView.
         /// </summary>
+        /// <param name="sender">El origen del evento.</param>
+        /// <param name="e">Los datos del evento.</param>
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            byte urgenciaSeleccionada = (byte)(comboBox2.SelectedIndex + 1); // Obtiene la urgencia seleccionada
-            var solicitudes = _controller.ObtenerSolicitudesPorUrgencia(urgenciaSeleccionada); // Obtiene las solicitudes filtradas por urgencia
-            ActualizarDataGrid(solicitudes); // Actualiza el DataGridView con las solicitudes filtradas
+            byte urgenciaSeleccionada = ObtenerUrgenciaSeleccionada();
+            var solicitudesFiltradas = ObtenerSolicitudesFiltradasPorUrgencia(urgenciaSeleccionada); // Obtenemos IEnumerable con las solicitudes filtradas.
+            ActualizarDataGrid(solicitudesFiltradas); // Actualiza el dataGrid
         }
 
+        /// <summary>
+        /// Obtiene el valor de la urgencia seleccionada en el combo box.
+        /// </summary>
+        /// <returns>Un byte que representa la urgencia seleccionada (1 basado en el índice).</returns>
+        private byte ObtenerUrgenciaSeleccionada()
+        {
+            return (byte)(comboBox2.SelectedIndex + 1); // Convierte el indice seleccionado a byte para su posterios uso.
+        }
+
+        /// <summary>
+        /// Obtiene las solicitudes filtradas por urgencia.
+        /// </summary>
+        /// <param name="urgencia">El valor de la urgencia para filtrar las solicitudes.</param>
+        /// <returns>Una colección de solicitudes que cumplen con el criterio de urgencia.</returns>
+        private IEnumerable<Solicitud> ObtenerSolicitudesFiltradasPorUrgencia(byte urgencia)
+        {
+            return _controller.ObtenerSolicitudesPorUrgencia(urgencia);
+        }
+
+        /// <summary>
+        /// Obtiene las solicitudes según el estado seleccionado en el combo box.
+        /// </summary>
+        /// <param name="selectIndex">El índice seleccionado en el combo box que determina el estado.</param>
+        /// <returns>Una colección de solicitudes que corresponden al estado seleccionado.</returns>
+        private IEnumerable<Solicitud> ObtenerSolicitudesPorEstado(int selectIndex)
+        {
+            switch (selectIndex)
+            {
+                case EstadoTodasLasSolicitudes: return _controller.ObtenerTodasLasSolicitudes();
+                case EstadoSolicitudesNecesarias:
+                case EstadoSolicitudesUrgentes:
+                case EstadoSolicitudesSuperUrgentes:
+                    byte urgencia = ObtenerUrgenciaSeleccionada();
+                    return ObtenerSolicitudesFiltradasPorUrgencia(urgencia);
+                default: return Enumerable.Empty<Solicitud>();
+            }
+        }
         /// <summary>
         /// Evento que se ejecuta al hacer clic en una celda del DataGridView.
         /// Guarda el índice de la fila seleccionada.
