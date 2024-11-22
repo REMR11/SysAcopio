@@ -13,59 +13,17 @@ namespace SysAcopio.Controllers
 {
     public class InventarioController
     {
+        private readonly Recurso recurso;
+        private readonly Alerts alerts;
         //metodos para validar la informacion
-      public bool ValidarIdproveedores(string idproveedores)
+      public List< Recurso> recursoList;
+
+        public InventarioController(Recurso recurso, Alerts alerts, List<Recurso> recursoList)
         {
-            if (string.IsNullOrEmpty(idproveedores))
-            {
-                return false;
-            }
-            return true;
+            this.recurso = recurso;
+            this.alerts = alerts;
+            this.recursoList = recursoList;
         }
 
-        public bool ValidarFecha(string fecha)
-        {
-            if (string.IsNullOrEmpty(fecha))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public bool ValidarNombre(string nombre)
-        {
-            if (!string.IsNullOrEmpty(nombre))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public bool ValidarRecursos(string recursos) {
-            {
-                if (!string.IsNullOrEmpty(recursos))
-                {
-                    return false;
-                }
-                return true;
-            }
-        }
-
-        private  bool ValidarUbicacion(string ubicacion)
-        {
-            if (!string.IsNullOrEmpty(ubicacion))
-            {
-                return false;
-            }
-            return true;
-        }
-        public bool Validarestado(string estado)
-        {
-            if (!string.IsNullOrEmpty(estado))
-            {
-                return false;
-            }
-            return true;
-        }
     }
 }

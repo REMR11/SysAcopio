@@ -1,6 +1,6 @@
 ﻿namespace SysAcopio.Views
 {
-    partial class FormularioView
+    partial class InventarioView
     {
         /// <summary>
         /// Required designer variable.
@@ -28,236 +28,172 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textRecurso = new System.Windows.Forms.TextBox();
-            this.textCategoria = new System.Windows.Forms.TextBox();
-            this.textNombre = new System.Windows.Forms.TextBox();
-            this.textEstado = new System.Windows.Forms.TextBox();
-            this.Recursos = new System.Windows.Forms.Label();
-            this.Nombre = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.Categorias = new System.Windows.Forms.Label();
-            this.Agregar = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.textUbicacion = new System.Windows.Forms.TextBox();
-            this.textFecha = new System.Windows.Forms.TextBox();
-            this.Eliminar = new System.Windows.Forms.Button();
-            this.Actualizar = new System.Windows.Forms.Button();
             this.Salir = new System.Windows.Forms.Button();
+            this.Actualizar = new System.Windows.Forms.Button();
             this.Limpiar = new System.Windows.Forms.Button();
-            this.Ubicacion = new System.Windows.Forms.Label();
-            this.Fecha = new System.Windows.Forms.Label();
-            this.textId = new System.Windows.Forms.TextBox();
-            this.id = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Eliminar = new System.Windows.Forms.Button();
+            this.Agregar = new System.Windows.Forms.Button();
+            this.textNombre = new System.Windows.Forms.TextBox();
+            this.NombreRecurso = new System.Windows.Forms.Label();
+            this.textIdRecurso = new System.Windows.Forms.TextBox();
+            this.IdRecurso = new System.Windows.Forms.Label();
+            this.textCantidad = new System.Windows.Forms.TextBox();
+            this.Cantidad = new System.Windows.Forms.Label();
+            this.textTipoRecurso = new System.Windows.Forms.TextBox();
+            this.tiporecurso = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
-            // textRecurso
+            // Salir
             // 
-            this.textRecurso.Location = new System.Drawing.Point(135, 74);
-            this.textRecurso.Name = "textRecurso";
-            this.textRecurso.Size = new System.Drawing.Size(201, 22);
-            this.textRecurso.TabIndex = 0;
-            this.textRecurso.TextChanged += new System.EventHandler(this.textSolicitud_TextChanged);
+            this.Salir.Location = new System.Drawing.Point(797, 511);
+            this.Salir.Name = "Salir";
+            this.Salir.Size = new System.Drawing.Size(80, 25);
+            this.Salir.TabIndex = 0;
+            this.Salir.Text = "Salir";
+            this.Salir.UseVisualStyleBackColor = true;
+            this.Salir.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textCategoria
+            // Actualizar
             // 
-            this.textCategoria.Location = new System.Drawing.Point(421, 113);
-            this.textCategoria.Name = "textCategoria";
-            this.textCategoria.Size = new System.Drawing.Size(201, 22);
-            this.textCategoria.TabIndex = 1;
+            this.Actualizar.Location = new System.Drawing.Point(797, 464);
+            this.Actualizar.Name = "Actualizar";
+            this.Actualizar.Size = new System.Drawing.Size(75, 23);
+            this.Actualizar.TabIndex = 1;
+            this.Actualizar.Text = "Actualizar";
+            this.Actualizar.UseVisualStyleBackColor = true;
+            this.Actualizar.Click += new System.EventHandler(this.Actualizar_Click_1);
             // 
-            // textNombre
+            // Limpiar
             // 
-            this.textNombre.Location = new System.Drawing.Point(135, 110);
-            this.textNombre.Name = "textNombre";
-            this.textNombre.Size = new System.Drawing.Size(201, 22);
-            this.textNombre.TabIndex = 2;
-            this.textNombre.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // textEstado
-            // 
-            this.textEstado.Location = new System.Drawing.Point(421, 74);
-            this.textEstado.Name = "textEstado";
-            this.textEstado.Size = new System.Drawing.Size(201, 22);
-            this.textEstado.TabIndex = 3;
-            // 
-            // Recursos
-            // 
-            this.Recursos.AutoSize = true;
-            this.Recursos.Location = new System.Drawing.Point(50, 74);
-            this.Recursos.Name = "Recursos";
-            this.Recursos.Size = new System.Drawing.Size(65, 16);
-            this.Recursos.TabIndex = 4;
-            this.Recursos.Text = "Recursos";
-            // 
-            // Nombre
-            // 
-            this.Nombre.AutoSize = true;
-            this.Nombre.Location = new System.Drawing.Point(59, 110);
-            this.Nombre.Name = "Nombre";
-            this.Nombre.Size = new System.Drawing.Size(56, 16);
-            this.Nombre.TabIndex = 5;
-            this.Nombre.Text = "Nombre";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(365, 80);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 16);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Estado";
-            // 
-            // Categorias
-            // 
-            this.Categorias.AutoSize = true;
-            this.Categorias.Location = new System.Drawing.Point(349, 113);
-            this.Categorias.Name = "Categorias";
-            this.Categorias.Size = new System.Drawing.Size(66, 16);
-            this.Categorias.TabIndex = 7;
-            this.Categorias.Text = "Categoria";
-            // 
-            // Agregar
-            // 
-            this.Agregar.Location = new System.Drawing.Point(976, 43);
-            this.Agregar.Name = "Agregar";
-            this.Agregar.Size = new System.Drawing.Size(113, 39);
-            this.Agregar.TabIndex = 8;
-            this.Agregar.Text = "Agregar";
-            this.Agregar.UseVisualStyleBackColor = true;
-            this.Agregar.Click += new System.EventHandler(this.Agregar_Click);
+            this.Limpiar.Location = new System.Drawing.Point(787, 377);
+            this.Limpiar.Name = "Limpiar";
+            this.Limpiar.Size = new System.Drawing.Size(89, 28);
+            this.Limpiar.TabIndex = 2;
+            this.Limpiar.Text = "Limpiar";
+            this.Limpiar.UseVisualStyleBackColor = true;
+            this.Limpiar.Click += new System.EventHandler(this.Limpiar_Click_1);
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(38, 243);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 249);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(924, 342);
-            this.dataGridView1.TabIndex = 9;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
-            // 
-            // textUbicacion
-            // 
-            this.textUbicacion.Location = new System.Drawing.Point(726, 74);
-            this.textUbicacion.Name = "textUbicacion";
-            this.textUbicacion.Size = new System.Drawing.Size(236, 22);
-            this.textUbicacion.TabIndex = 10;
-            // 
-            // textFecha
-            // 
-            this.textFecha.Location = new System.Drawing.Point(416, 151);
-            this.textFecha.Name = "textFecha";
-            this.textFecha.Size = new System.Drawing.Size(201, 22);
-            this.textFecha.TabIndex = 11;
+            this.dataGridView1.Size = new System.Drawing.Size(739, 296);
+            this.dataGridView1.TabIndex = 3;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             // 
             // Eliminar
             // 
-            this.Eliminar.Location = new System.Drawing.Point(978, 243);
+            this.Eliminar.Location = new System.Drawing.Point(797, 327);
             this.Eliminar.Name = "Eliminar";
-            this.Eliminar.Size = new System.Drawing.Size(111, 41);
-            this.Eliminar.TabIndex = 13;
+            this.Eliminar.Size = new System.Drawing.Size(75, 23);
+            this.Eliminar.TabIndex = 4;
             this.Eliminar.Text = "Eliminar";
             this.Eliminar.UseVisualStyleBackColor = true;
-            this.Eliminar.Click += new System.EventHandler(this.Eliminar_Click);
+            this.Eliminar.Click += new System.EventHandler(this.Eliminar_Click_1);
             // 
-            // Actualizar
+            // Agregar
             // 
-            this.Actualizar.Location = new System.Drawing.Point(978, 116);
-            this.Actualizar.Name = "Actualizar";
-            this.Actualizar.Size = new System.Drawing.Size(113, 41);
-            this.Actualizar.TabIndex = 14;
-            this.Actualizar.Text = "Actualizar";
-            this.Actualizar.UseVisualStyleBackColor = true;
-            this.Actualizar.Click += new System.EventHandler(this.Actualizar_Click);
+            this.Agregar.Location = new System.Drawing.Point(792, 273);
+            this.Agregar.Name = "Agregar";
+            this.Agregar.Size = new System.Drawing.Size(75, 23);
+            this.Agregar.TabIndex = 5;
+            this.Agregar.Text = "Agregar";
+            this.Agregar.UseVisualStyleBackColor = true;
+            this.Agregar.Click += new System.EventHandler(this.Agregar_Click_1);
             // 
-            // Salir
+            // textNombre
             // 
-            this.Salir.Location = new System.Drawing.Point(978, 508);
-            this.Salir.Name = "Salir";
-            this.Salir.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.Salir.Size = new System.Drawing.Size(113, 40);
-            this.Salir.TabIndex = 15;
-            this.Salir.Text = "Salir";
-            this.Salir.UseVisualStyleBackColor = true;
-            this.Salir.Click += new System.EventHandler(this.Salir_Click);
+            this.textNombre.Location = new System.Drawing.Point(163, 55);
+            this.textNombre.Name = "textNombre";
+            this.textNombre.Size = new System.Drawing.Size(100, 22);
+            this.textNombre.TabIndex = 6;
             // 
-            // Limpiar
+            // NombreRecurso
             // 
-            this.Limpiar.Location = new System.Drawing.Point(982, 318);
-            this.Limpiar.Name = "Limpiar";
-            this.Limpiar.Size = new System.Drawing.Size(111, 40);
-            this.Limpiar.TabIndex = 16;
-            this.Limpiar.Text = "Limpiar";
-            this.Limpiar.UseVisualStyleBackColor = true;
-            this.Limpiar.Click += new System.EventHandler(this.Limpiar_Click);
+            this.NombreRecurso.AutoSize = true;
+            this.NombreRecurso.Location = new System.Drawing.Point(29, 61);
+            this.NombreRecurso.Name = "NombreRecurso";
+            this.NombreRecurso.Size = new System.Drawing.Size(110, 16);
+            this.NombreRecurso.TabIndex = 7;
+            this.NombreRecurso.Text = "Nombre Recurso";
             // 
-            // Ubicacion
+            // textIdRecurso
             // 
-            this.Ubicacion.AutoSize = true;
-            this.Ubicacion.Location = new System.Drawing.Point(643, 80);
-            this.Ubicacion.Name = "Ubicacion";
-            this.Ubicacion.Size = new System.Drawing.Size(68, 16);
-            this.Ubicacion.TabIndex = 17;
-            this.Ubicacion.Text = "Ubicacion";
+            this.textIdRecurso.Location = new System.Drawing.Point(163, 104);
+            this.textIdRecurso.Name = "textIdRecurso";
+            this.textIdRecurso.Size = new System.Drawing.Size(100, 22);
+            this.textIdRecurso.TabIndex = 8;
             // 
-            // Fecha
+            // IdRecurso
             // 
-            this.Fecha.AutoSize = true;
-            this.Fecha.Location = new System.Drawing.Point(365, 151);
-            this.Fecha.Name = "Fecha";
-            this.Fecha.Size = new System.Drawing.Size(45, 16);
-            this.Fecha.TabIndex = 18;
-            this.Fecha.Text = "Fecha";
-            this.Fecha.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.IdRecurso.AutoSize = true;
+            this.IdRecurso.Location = new System.Drawing.Point(73, 104);
+            this.IdRecurso.Name = "IdRecurso";
+            this.IdRecurso.Size = new System.Drawing.Size(66, 16);
+            this.IdRecurso.TabIndex = 9;
+            this.IdRecurso.Text = "Id recurso";
             // 
-            // textId
+            // textCantidad
             // 
-            this.textId.Location = new System.Drawing.Point(135, 145);
-            this.textId.Name = "textId";
-            this.textId.Size = new System.Drawing.Size(201, 22);
-            this.textId.TabIndex = 12;
+            this.textCantidad.Location = new System.Drawing.Point(383, 55);
+            this.textCantidad.Name = "textCantidad";
+            this.textCantidad.Size = new System.Drawing.Size(100, 22);
+            this.textCantidad.TabIndex = 10;
             // 
-            // id
+            // Cantidad
             // 
-            this.id.AutoSize = true;
-            this.id.Location = new System.Drawing.Point(81, 156);
-            this.id.Name = "id";
-            this.id.Size = new System.Drawing.Size(18, 16);
-            this.id.TabIndex = 20;
-            this.id.Text = "id";
+            this.Cantidad.AutoSize = true;
+            this.Cantidad.Location = new System.Drawing.Point(316, 58);
+            this.Cantidad.Name = "Cantidad";
+            this.Cantidad.Size = new System.Drawing.Size(61, 16);
+            this.Cantidad.TabIndex = 11;
+            this.Cantidad.Text = "Cantidad";
             // 
-            // FormularioView
+            // textTipoRecurso
+            // 
+            this.textTipoRecurso.Location = new System.Drawing.Point(163, 162);
+            this.textTipoRecurso.Name = "textTipoRecurso";
+            this.textTipoRecurso.Size = new System.Drawing.Size(100, 22);
+            this.textTipoRecurso.TabIndex = 12;
+            this.textTipoRecurso.TextChanged += new System.EventHandler(this.textTipoRecurso_TextChanged);
+            // 
+            // tiporecurso
+            // 
+            this.tiporecurso.AutoSize = true;
+            this.tiporecurso.Location = new System.Drawing.Point(31, 162);
+            this.tiporecurso.Name = "tiporecurso";
+            this.tiporecurso.Size = new System.Drawing.Size(108, 16);
+            this.tiporecurso.TabIndex = 13;
+            this.tiporecurso.Text = "Tipo de Recurso";
+            // 
+            // InventarioViews
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1105, 597);
-            this.Controls.Add(this.id);
-            this.Controls.Add(this.Fecha);
-            this.Controls.Add(this.Ubicacion);
-            this.Controls.Add(this.Limpiar);
-            this.Controls.Add(this.Salir);
-            this.Controls.Add(this.Actualizar);
-            this.Controls.Add(this.Eliminar);
-            this.Controls.Add(this.textId);
-            this.Controls.Add(this.textFecha);
-            this.Controls.Add(this.textUbicacion);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.Agregar);
-            this.Controls.Add(this.Categorias);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.Nombre);
-            this.Controls.Add(this.Recursos);
-            this.Controls.Add(this.textEstado);
+            this.ClientSize = new System.Drawing.Size(911, 557);
+            this.Controls.Add(this.tiporecurso);
+            this.Controls.Add(this.textTipoRecurso);
+            this.Controls.Add(this.Cantidad);
+            this.Controls.Add(this.textCantidad);
+            this.Controls.Add(this.IdRecurso);
+            this.Controls.Add(this.textIdRecurso);
+            this.Controls.Add(this.NombreRecurso);
             this.Controls.Add(this.textNombre);
-            this.Controls.Add(this.textCategoria);
-            this.Controls.Add(this.textRecurso);
+            this.Controls.Add(this.Agregar);
+            this.Controls.Add(this.Eliminar);
+            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.Limpiar);
+            this.Controls.Add(this.Actualizar);
+            this.Controls.Add(this.Salir);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "FormularioView";
-            this.Text = "FormularioView";
-            this.Load += new System.EventHandler(this.FormularioView_Load);
+            this.Name = "InventarioViews";
+            this.Text = "InventarioViews";
+            this.Load += new System.EventHandler(this.InventarioViews_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -266,25 +202,19 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textRecurso;
-        private System.Windows.Forms.TextBox textCategoria;
-        private System.Windows.Forms.TextBox textNombre;
-        private System.Windows.Forms.TextBox textEstado;
-        private System.Windows.Forms.Label Recursos;
-        private System.Windows.Forms.Label Nombre;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label Categorias;
-        private System.Windows.Forms.Button Agregar;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.TextBox textUbicacion;
-        private System.Windows.Forms.TextBox textFecha;
-        private System.Windows.Forms.Button Eliminar;
-        private System.Windows.Forms.Button Actualizar;
         private System.Windows.Forms.Button Salir;
+        private System.Windows.Forms.Button Actualizar;
         private System.Windows.Forms.Button Limpiar;
-        private System.Windows.Forms.Label Ubicacion;
-        private System.Windows.Forms.Label Fecha;
-        private System.Windows.Forms.TextBox textId;
-        private System.Windows.Forms.Label id;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button Eliminar;
+        private System.Windows.Forms.Button Agregar;
+        private System.Windows.Forms.TextBox textNombre;
+        private System.Windows.Forms.Label NombreRecurso;
+        private System.Windows.Forms.TextBox textIdRecurso;
+        private System.Windows.Forms.Label IdRecurso;
+        private System.Windows.Forms.TextBox textCantidad;
+        private System.Windows.Forms.Label Cantidad;
+        private System.Windows.Forms.TextBox textTipoRecurso;
+        private System.Windows.Forms.Label tiporecurso;
     }
 }
