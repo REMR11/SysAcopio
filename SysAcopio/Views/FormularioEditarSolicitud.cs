@@ -1,32 +1,35 @@
 ﻿using SysAcopio.Controllers;
 using SysAcopio.Models;
+using SysAcopio.Utils;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysAcopio.Views
 {
     public partial class FormularioEditarSolicitud : Form
     {
+        // Delegado para manejar el evento de datos guardados
         public delegate void DatosGuardadosHandler(bool result, string nombreSolicitante);
 
-        private readonly RecursoSolicitudController _recursoSolicitudController;
-        private readonly SolicitudController _solicitudController;
-        private DataTable recursos;
-        private long idSolicitud;
-        private bool isFirstLoading;
+        private readonly RecursoSolicitudController _recursoSolicitudController; // Controlador para manejar recursos solicitados
+        private readonly SolicitudController _solicitudController; // Controlador para manejar solicitudes
+        private DataTable recursos; // Tabla para almacenar recursos
+        private Recurso recursoToAdd; // Recurso seleccionado para añadir
+        private long idSolicitud; // ID de la solicitud actual
+        private bool isFirstLoading; // Indica si es la primera carga de datos
+
+        /// <summary>
+        /// Constructor de la clase. Inicializa los controladores y la ID de la solicitud.
+        /// </summary>
+        /// <param name="idSolicitud">ID de la solicitud a editar.</param>
         public FormularioEditarSolicitud(long idSolicitud)
         {
             InitializeComponent();
             _recursoSolicitudController = new RecursoSolicitudController();
             _solicitudController = new SolicitudController();
             this.idSolicitud = idSolicitud;
+            InitializeNuevosRecursosGrid();
         }
 
         /// <summary>
@@ -34,16 +37,36 @@ namespace SysAcopio.Views
         /// </summary>
         private void FormularioEditarSolicitud_Load(object sender, EventArgs e)
         {
-            LoadRecursos();
-            SetTipoRecursos();
+            loadSolicitud(); // Carga los datos de la solicitud
+            LoadRecursos(); // Carga los recursos disponibles
+            setRecursosSolicitud(); // Carga los recursos específicos de la solicitud
+            SetTipoRecursos(); // Establece los tipos de recursos en el combo box
         }
+
         /// <summary>
         /// Carga todos los recursos disponibles y los establece en el control de datos.
         /// </summary>
         private void LoadRecursos()
         {
-            recursos = _recursoSolicitudController.GetAllRecurso();
-            SetRecursos(recursos);
+            recursos = _recursoSolicitudController.GetAllRecurso(); // Obtiene todos los recursos
+            SetRecursos(recursos); // Establece los recursos en el DataGridView
+        }
+
+        /// <summary>
+        /// Carga los recursos específicos de la solicitud actual.
+        /// </summary>
+        private void setRecursosSolicitud()
+        {
+            DataTable recursos = GetRecursosBySolicitudId(this.idSolicitud); // Obtiene los recursos por ID de solicitud
+
+            if (HasRecursos(recursos)) // Verifica si hay recursos
+            {
+                BindRecursosToGrid(recursos); // Vincula los recursos al DataGridView
+            }
+            else
+            {
+                ShowNoRecursosFoundMessage(); // Muestra un mensaje si no se encuentran recursos
+            }
         }
 
         /// <summary>
@@ -56,14 +79,24 @@ namespace SysAcopio.Views
             dgvDetalle.DataSource = _recursoSolicitudController.detalleRecursoSolicitud; // Establece la nueva fuente de datos
             HideUnnecessaryColumns(dgvDetalle, "IdRecurso", "IdTipoRecurso"); // Oculta columnas innecesarias
             AddDeleteButtonColumn(); // Añade la columna de botón para eliminar recursos
+
         }
 
+        private void RefreshNewRecurso()
+        {
+            dgvNuevosRecursos.DataSource = null;
+            dgvNuevosRecursos.DataSource = _recursoSolicitudController.nuevosRecursoSolicitud;
+            HideUnnecessaryColumns(dgvNuevosRecursos, "IdRecurso", "IdTipoRecurso"); // Oculta columnas innecesarias
+
+        }
         /// <summary>
         /// Elimina la columna de botón de detalle del control de datos.
         /// </summary>
         private void RemoveDetailButtonColumn()
-        {   // Elimina la columna si existe
-            if (dgvDetalle.Columns.Contains("deletDetailButton")) dgvDetalle.Columns.Remove("deletDetailButton");
+        {
+            // Elimina la columna si existe
+            if (dgvDetalle.Columns.Contains("deletDetailButton"))
+                dgvDetalle.Columns.Remove("deletDetailButton");
         }
 
         /// <summary>
@@ -81,6 +114,7 @@ namespace SysAcopio.Views
                 FlatStyle = FlatStyle.Flat,
             });
         }
+
         /// <summary>
         /// Establece los recursos en el control de datos.
         /// </summary>
@@ -97,11 +131,11 @@ namespace SysAcopio.Views
         /// </summary>
         /// <param name="dgv">Control de datos en el que se ocultan las columnas.</param>
         /// <param name="columnNames">Nombres de las columnas a ocultar.</param>
-
         private void HideUnnecessaryColumns(DataGridView dgv, params string[] columnNames)
         {
             // Oculta la columna
-            foreach (var columnName in columnNames) dgv.Columns[columnName].Visible = false;
+            foreach (var columnName in columnNames)
+                dgv.Columns[columnName].Visible = false;
         }
 
         /// <summary>
@@ -113,13 +147,195 @@ namespace SysAcopio.Views
             tipoData.Rows.Add(0, "Todos"); // Añade la opción "Todos"
             cmbTipoRecurso.DataSource = tipoData; // Establece la fuente de datos del combo box
             cmbTipoRecurso.DisplayMember = "nombre_tipo"; // Establece el campo a mostrar
-            cmbTipoRecurso.ValueMember = "id_tipo_recurso"; // Establece el campo del val
+            cmbTipoRecurso.ValueMember = "id_tipo_recurso"; // Establece el campo del valor
             cmbTipoRecurso.SelectedValue = 0; // Selecciona "Todos" por defecto
+            AddDeleteButtonColumn(); // Añade la columna de botón para eliminar recursos
         }
 
-        private void btnCrear_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Obtiene los recursos asociados a una solicitud específica.
+        /// </summary>
+        /// <param name="solicitudId">ID de la solicitud.</param>
+        /// <returns>Tabla de recursos asociados a la solicitud.</returns>
+        private DataTable GetRecursosBySolicitudId(long solicitudId)
+        {
+            return _recursoSolicitudController.GetDetailSolicitud(solicitudId); // Llama al controlador para obtener los detalles
+        }
+
+        /// <summary>
+        /// Verifica si hay recursos disponibles.
+        /// </summary>
+        /// <param name="recursos">Tabla de recursos a verificar.</param>
+        /// <returns>True si hay recursos, de lo contrario false.</returns>
+        private bool HasRecursos(DataTable recursos)
+        {
+            return recursos != null && recursos.Rows.Count > 0; // Verifica si la tabla no es nula y tiene filas
+        }
+
+        /// <summary>
+        /// Vincula los recursos al control de datos.
+        /// </summary>
+        /// <param name="recursos">Tabla de recursos a vincular.</param>
+        private void BindRecursosToGrid(DataTable recursos)
+        {
+            dgvDetalle.DataSource = recursos; // Establece la fuente de datos
+            ConfigureGridColumns(); // Configura las columnas del DataGridView
+        }
+
+        /// <summary>
+        /// Configura las columnas del DataGridView para mostrar los recursos.
+        /// </summary>
+        private void ConfigureGridColumns()
         {
 
+            dgvDetalle.Columns["id_recurso_solicitud"].Visible = false; // Ocultar columna ID si no es necesaria
+            dgvDetalle.Columns["id_solicitud"].Visible = false; // Ocultar columna ID de solicitud si no es necesaria  
+            dgvDetalle.Columns["nombre_recurso"].HeaderText = "Nombre del Producto"; // Cambia el encabezado de la columna
+            dgvDetalle.Columns["cantidad"].HeaderText = "Cantidad"; // Cambia el encabezado de la columna
+        }
+
+        private void InitializeNuevosRecursosGrid()
+        {
+            dgvNuevosRecursos.Columns.Clear(); // Limpia columnas existentes
+
+            // Agrega las columnas necesarias
+            dgvNuevosRecursos.Columns.Add("id_recurso", "ID Recurso");
+            dgvNuevosRecursos.Columns.Add("nombre_recurso", "Nombre del Recurso");
+            dgvNuevosRecursos.Columns.Add("cantidad", "Cantidad");
+        }
+        /// <summary>
+        /// Muestra un mensaje si no se encuentran recursos para la solicitud.
+        /// </summary>
+        private void ShowNoRecursosFoundMessage()
+        {
+            MessageBox.Show("No se encontraron recursos para la solicitud.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information); // Muestra un mensaje informativo
+        }
+
+        /// <summary>
+        /// Carga los datos de la solicitud actual.
+        /// </summary>
+        private void loadSolicitud()
+        {
+            Solicitud solicitud = _solicitudController.ObtenerSolicitudPorId(this.idSolicitud); // Obtiene la solicitud por ID
+            cmbUrgencia.SelectedIndex = solicitud.Urgencia; // Establece la urgencia en el combo box
+            cmbEstado.SelectedIndex = Convert.ToInt16(solicitud.Estado); // Establece el estado en el combo box
+            txtMotivo.Text = solicitud.Motivo; // Establece el motivo en el campo de texto
+        }
+
+        /// <summary>
+        /// Evento que se ejecuta al hacer clic en el botón para agregar un recurso al detalle.
+        /// Valida el recurso y lo añade al detalle.
+        /// </summary>
+        /// <summary>
+        /// Evento que se ejecuta al hacer clic en el botón para agregar un recurso al detalle.
+        /// Valida el recurso y lo añade al detalle.
+        /// </summary>
+        private void btnAgregarDetalle_Click(object sender, EventArgs e)
+        {
+            if (!IsRecursoValid()) return; // Verifica si el recurso es válido
+
+            bool exists = false;
+
+            // Verifica si el recurso ya existe en dgvDetalle
+            foreach (DataGridViewRow row in dgvDetalle.Rows)
+            {
+                if (row.Cells["id_recurso"].Value != null &&
+                    Convert.ToInt64(row.Cells["id_recurso"].Value) == recursoToAdd.IdRecurso)
+                {
+                    // Si el recurso ya existe, actualiza la cantidad
+                    int cantidadActual = Convert.ToInt32(row.Cells["cantidad"].Value);
+                    int nuevaCantidad = cantidadActual + Convert.ToInt32(txtRecursoCantidad.Text);
+                    row.Cells["cantidad"].Value = nuevaCantidad;
+
+                    exists = true;
+                    break;
+                }
+            }
+
+            // Si el recurso no existe, lo agrega a dgvNuevosRecursos
+            if (!exists)
+            {
+                int cantidadRecursos = Convert.ToInt32(txtRecursoCantidad.Text);
+                _recursoSolicitudController.AddNuevoDetalle(recursoToAdd, cantidadRecursos); // Agrega la nueva fila al dgvNuevosRecursos
+                RefreshNewRecurso();
+            }
+
+            ResetRecursoSelection(); // Resetea la selección del recurso
+        }
+
+
+        /// <summary>
+        /// Verifica si el recurso seleccionado y la cantidad son válidos.
+        /// </summary>
+        /// <returns>True si el recurso es válido, de lo contrario false.</returns>
+        private bool IsRecursoValid()
+        {
+            if (recursoToAdd == null || string.IsNullOrWhiteSpace(txtRecursoCantidad.Text.Trim()))
+            {
+                Alerts.ShowAlertS("Debe seleccionar un recurso e indicar la cantidad para añadir", AlertsType.Info); // Muestra un mensaje de error
+                return false;
+            }
+
+            if (Convert.ToInt32(txtRecursoCantidad.Text) <= 0)
+            {
+                Alerts.ShowAlertS("La cantidad a donar debe ser mayor que 0", AlertsType.Info); // Muestra un mensaje de error
+                return false;
+            }
+
+            return true; // Retorna true si es válido
+        }
+
+
+        /// <summary>
+        /// Evento que se ejecuta al cambiar la selección en el control de datos de recursos.
+        /// Establece el recurso seleccionado para añadir al detalle.
+        /// </summary>
+        private void dgvRecursos_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvRecursos.SelectedRows.Count > 0)
+            {
+                var row = dgvRecursos.CurrentRow;
+                if (row != null)
+                {
+                    recursoToAdd = new Recurso
+                    {
+                        IdRecurso = Convert.ToInt64(row.Cells["id_recurso"].Value),
+                        NombreRecurso = row.Cells["NombreRecurso"].Value.ToString()
+                    };
+                }
+            }
+        }
+
+        /// <summary>
+        /// Resetea la selección del recurso y limpia el campo de cantidad.
+        /// </summary>
+        private void ResetRecursoSelection()
+        {
+            recursoToAdd = null; // Resetea el recurso a añadir
+            txtRecursoCantidad.Clear(); // Limpia el campo de cantidad
+            dgvRecursos.ClearSelection(); // Limpia la selección en el control de datos
+            dgvRecursos.CurrentCell = null; // Resetea la celda actual
+        }
+
+        private void btnActualizar_Click(object sender, EventArgs e)
+        {
+            // Lógica para actualizar la solicitud
+        }
+
+        /// <summary>
+        /// Evento que se ejecuta al presionar una tecla en el campo de cantidad de recurso.
+        /// Permite solo la entrada de dígitos.
+        /// </summary>
+        private void txtNombreRecurso_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Evita la entrada de caracteres no numéricos
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                e.Handled = true;
+        }
+
+        private void btn_Cancelar_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new SolicitudView());
         }
     }
 }

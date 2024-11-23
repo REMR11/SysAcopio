@@ -208,6 +208,7 @@ namespace SysAcopio.Views
 
         private void btnEditarSolicitud_Click_1(object sender, EventArgs e)
         {
+
             if (dbgSolicitudes.SelectedRows.Count > 0) {
                 var row = dbgSolicitudes.CurrentRow;
                 if (row != null)
@@ -219,7 +220,7 @@ namespace SysAcopio.Views
 
                 }
             }
-                    }
+        }
 
         // Método que maneja el evento
         private void FormularioEditar_DatosGuardados(string campo1, string campo2)

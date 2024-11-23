@@ -1,4 +1,5 @@
 ﻿using SysAcopio.Models;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -96,6 +97,20 @@ namespace SysAcopio.Repositories
             };
 
             // Ejecuta la consulta de actualización y devuelve booleano si afecto o no al registro
+            return GenericFuncDB.AffectRow(query, parametros);
+        }
+
+        public bool RemoveRecursoFromSolicitud(RecursoSolicitud recursoSolicitud)
+        {
+            // Aquí implementas la lógica para eliminar el recurso de la solicitud en la base de datos
+
+            string query = @"DELETE FROM RecursosSolicitudes 
+                            WHERE id_solicitud = @idSolicitud AND id_recurso = @idRecurso";
+            SqlParameter[] parametros = new SqlParameter[]
+            {
+                new SqlParameter("@idSolicitud", recursoSolicitud.IdSolicitud),
+                new SqlParameter("@idRecurso", recursoSolicitud.IdRecurso)
+            };
             return GenericFuncDB.AffectRow(query, parametros);
         }
     }
