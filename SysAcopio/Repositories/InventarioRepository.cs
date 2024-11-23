@@ -12,6 +12,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Linq.Expressions;
 using MySqlX.XDevAPI;
 using System.Data.Common;
+using Org.BouncyCastle.Utilities;
+using System.Linq;
 
 namespace SysAcopio.Repositories
 {
@@ -29,12 +31,13 @@ namespace SysAcopio.Repositories
         //metodo para obtener los registros
         public DataTable GetInventario()
         {
-
             DataTable mydt = new DataTable();
             SysAcopioDbContext conectar = new SysAcopioDbContext();
+
+            // Usar la conexión a la base de datos
             using (SqlConnection conn = conectar.ConnectionServer())
             {
-                string sql = "SELECT idrecursos, nombre_recursos, cantidad, tipo_recursos FROM Recurso"; // Corregido
+                string sql = "SELECT idrecursos, nombre_recursos, cantidad, tipo_recursos FROM Recurso"; // Consulta SQL
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     try
@@ -52,38 +55,50 @@ namespace SysAcopio.Repositories
                     catch (SqlException ex)
                     {
                         // Manejo de la excepción (puedes registrar el error o mostrar un mensaje)
-                       MessageBox.Show("Error en la consulta: " + ex.Message);
+                        MessageBox.Show("Error en la consulta: " + ex.Message);
                     }
                     // La conexión se cierra automáticamente al salir del bloque using
                 }
             }
             return mydt;
         }
-    
 
-    public long AgregarInventario()
+
+
+        public long AgregarInventario()
         {
             long id = 0;
             SysAcopioDbContext conectar = new SysAcopioDbContext();
-            SqlConnection conn = conectar.ConnectionServer();
-            string insertsql = "INSERT INTO Recurso(id_recursos,nombre_recursos,cantidad,tipo_recursos)  VALUES (@id_recursos,@nombre_recursos,@cantidad,@tipo_recursos";
-            SqlCommand cmd = new SqlCommand(insertsql, conn);
-            cmd.Parameters.AddWithValue("@id_recursos", this.IdRecurso);
-            cmd.Parameters.AddWithValue("@nombre_recurso", this.NombreRecurso);
-            cmd.Parameters.AddWithValue("@cantidad", this.Cantidad);
-            cmd.Parameters.AddWithValue("@tipo_recurso", this.IdTipoRecurso);
-            try
+
+            // Usar 'using' para asegurar que los recursos se liberen correctamente
+            using (SqlConnection conn = conectar.ConnectionServer())
             {
-                //abrir la conexion
-                conn.Open();
-                //capturar los datos
-                id = Convert.ToInt64(cmd.ExecuteScalar());
+                string insertsql = "INSERT INTO Recurso(nombre_recursos, cantidad, tipo_recursos) VALUES (@nombre_recursos, @cantidad, @tipo_recursos); SELECT SCOPE_IDENTITY();";
+
+                using (SqlCommand cmd = new SqlCommand(insertsql, conn))
+                {
+                    // Agregar parámetros
+                    cmd.Parameters.Add("@nombre_recursos", SqlDbType.VarChar).Value = this.NombreRecurso;
+                    cmd.Parameters.Add("@cantidad", SqlDbType.Int).Value = this.Cantidad; // Ajusta el tipo según sea necesario
+                    cmd.Parameters.Add("@tipo_recursos", SqlDbType.Int).Value = this.IdTipoRecurso; // Ajusta el tipo según sea necesario
+
+                    try
+                    {
+                        // Abrir la conexión
+                        conn.Open();
+
+                        // Ejecutar la consulta y obtener el ID insertado
+                        id = Convert.ToInt64(cmd.ExecuteScalar());
+                    }
+                    catch (SqlException ex)
+                    {
+                        // Manejo de excepciones
+                        // Aquí puedes registrar el error o lanzar una excepción
+                        throw new Exception("Error al agregar inventario: " + ex.Message, ex);
+                    }
+                }
             }
-            finally
-            {
-                cmd.Dispose();
-                conn.Close();
-            }
+
             return id;
 
         }
@@ -93,26 +108,37 @@ namespace SysAcopio.Repositories
         {
             int affected = 0;
             SysAcopioDbContext conectar = new SysAcopioDbContext();
-            SqlConnection conn = conectar.ConnectionServer();
-            string updatesql = "UPDATE Recurso(nombre_recursos=@nombre_recursos,cantidad=@cantidad,tipo_recursos=@tipo_recursos) WHERE  id_recursos=@id_recursos;";
-            SqlCommand cmd = new SqlCommand(updatesql, conn);
-            cmd.Parameters.AddWithValue("@id_recursos", this.IdRecurso);
-            cmd.Parameters.AddWithValue("@nombre_recurso", this.NombreRecurso);
-            cmd.Parameters.AddWithValue("@cantidad", this.Cantidad);
-            cmd.Parameters.AddWithValue("@tipo_recurso", this.IdTipoRecurso);
 
-            try
+            using (SqlConnection conn = conectar.ConnectionServer())
             {
-                //abrir la conexion
-                conn.Open();
-                //capturar los datos
-                affected = cmd.ExecuteNonQuery();
+                // Corrección de la consulta SQL
+                string updatesql = "UPDATE Recurso SET nombre_recursos = @nombre_recursos, cantidad = @cantidad, tipo_recursos = @tipo_recursos WHERE id_recursos = @id_recursos;";
+
+                using (SqlCommand cmd = new SqlCommand(updatesql, conn))
+                {
+                    // Agregar parámetros con tipos explícitos
+                    cmd.Parameters.Add("@id_recursos", SqlDbType.Int).Value = this.IdRecurso; // Ajusta el tipo según sea necesario
+                    cmd.Parameters.Add("@nombre_recursos", SqlDbType.VarChar).Value = this.NombreRecurso; // Ajusta el tipo según sea necesario
+                    cmd.Parameters.Add("@cantidad", SqlDbType.Int).Value = this.Cantidad; // Ajusta el tipo según sea necesario
+                    cmd.Parameters.Add("@tipo_recursos", SqlDbType.Int).Value = this.IdTipoRecurso; // Ajusta el tipo según sea necesario
+
+                    try
+                    {
+                        // Abrir la conexión
+                        conn.Open();
+
+                        // Ejecutar la consulta y capturar el número de filas afectadas
+                        affected = cmd.ExecuteNonQuery();
+                    }
+                    catch (SqlException ex)
+                    {
+                        // Manejo de excepciones
+                        // Aquí puedes registrar el error o lanzar una excepción
+                        throw new Exception("Error al editar inventario: " + ex.Message, ex);
+                    }
+                }
             }
-            finally
-            {
-                cmd.Dispose();
-                conn.Close();
-            }
+
             return affected;
 
         }
@@ -137,15 +163,21 @@ namespace SysAcopio.Repositories
             }
             return affected;
         }
-        public void EliminarInventarioLogico(List<Inventario> inventario, int id)
+        public void EliminarInventario(List<Inventario> inventario, int id)
         {
-            foreach (var item in inventario)
+            // Buscar el elemento que se desea eliminar
+            var item = inventario.FirstOrDefault(i => i.IdRecurso == id);
+
+            // Si se encuentra el elemento, marcarlo como eliminado
+            if (item != null)
             {
-                if (item.IdRecurso == id)
-                { item.IsDelete = true; }
-
+                item.IsDelete = true;
             }
-
+            else
+            {
+                // Manejo de errores: puedes lanzar una excepción o registrar un mensaje
+                Console.WriteLine($"No se encontró el recurso con ID: {id}");
+            }
 
         }
 
