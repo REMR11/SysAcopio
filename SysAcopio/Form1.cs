@@ -68,7 +68,7 @@ namespace SysAcopio
 
         private void btnInventario_Click(object sender, EventArgs e)
         {
-            DashBoardManager.LoadForm(new InventarioView());
+            DashBoardManager.LoadForm(new Inventario());
         }
         //btnproveedor
         private void button1_Click(object sender, EventArgs e)
@@ -124,6 +124,11 @@ namespace SysAcopio
         private void btnMinimizar_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new TipoRecursoView());
         }
     }
 }

@@ -37,6 +37,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.flpButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.button2 = new System.Windows.Forms.Button();
             this.btnInventario = new System.Windows.Forms.Button();
             this.btnDonacion = new System.Windows.Forms.Button();
             this.btnSolicitud = new System.Windows.Forms.Button();
@@ -136,16 +137,34 @@
             // 
             // flpButtonsPanel
             // 
+            this.flpButtonsPanel.Controls.Add(this.button2);
             this.flpButtonsPanel.Controls.Add(this.btnInventario);
             this.flpButtonsPanel.Controls.Add(this.btnDonacion);
             this.flpButtonsPanel.Controls.Add(this.btnSolicitud);
             this.flpButtonsPanel.Controls.Add(this.button1);
             this.flpButtonsPanel.Controls.Add(this.btnUsuario);
             this.flpButtonsPanel.Controls.Add(this.btnReporte);
-            this.flpButtonsPanel.Location = new System.Drawing.Point(0, 165);
+            this.flpButtonsPanel.Location = new System.Drawing.Point(0, 140);
             this.flpButtonsPanel.Name = "flpButtonsPanel";
-            this.flpButtonsPanel.Size = new System.Drawing.Size(244, 284);
+            this.flpButtonsPanel.Size = new System.Drawing.Size(244, 328);
             this.flpButtonsPanel.TabIndex = 6;
+            // 
+            // button2
+            // 
+            this.button2.FlatAppearance.BorderSize = 0;
+            this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
+            this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button2.Location = new System.Drawing.Point(3, 2);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(244, 43);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "Tipos Recurso";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // btnInventario
             // 
@@ -155,7 +174,7 @@
             this.btnInventario.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnInventario.Image = ((System.Drawing.Image)(resources.GetObject("btnInventario.Image")));
             this.btnInventario.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnInventario.Location = new System.Drawing.Point(3, 2);
+            this.btnInventario.Location = new System.Drawing.Point(3, 49);
             this.btnInventario.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnInventario.Name = "btnInventario";
             this.btnInventario.Size = new System.Drawing.Size(244, 43);
@@ -172,7 +191,7 @@
             this.btnDonacion.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDonacion.Image = ((System.Drawing.Image)(resources.GetObject("btnDonacion.Image")));
             this.btnDonacion.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDonacion.Location = new System.Drawing.Point(3, 49);
+            this.btnDonacion.Location = new System.Drawing.Point(3, 96);
             this.btnDonacion.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnDonacion.Name = "btnDonacion";
             this.btnDonacion.Size = new System.Drawing.Size(244, 43);
@@ -189,7 +208,7 @@
             this.btnSolicitud.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSolicitud.Image = ((System.Drawing.Image)(resources.GetObject("btnSolicitud.Image")));
             this.btnSolicitud.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSolicitud.Location = new System.Drawing.Point(3, 96);
+            this.btnSolicitud.Location = new System.Drawing.Point(3, 143);
             this.btnSolicitud.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnSolicitud.Name = "btnSolicitud";
             this.btnSolicitud.Size = new System.Drawing.Size(244, 43);
@@ -206,7 +225,7 @@
             this.button1.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(3, 143);
+            this.button1.Location = new System.Drawing.Point(3, 190);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(241, 43);
@@ -223,7 +242,7 @@
             this.btnUsuario.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnUsuario.Image = ((System.Drawing.Image)(resources.GetObject("btnUsuario.Image")));
             this.btnUsuario.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnUsuario.Location = new System.Drawing.Point(3, 190);
+            this.btnUsuario.Location = new System.Drawing.Point(3, 237);
             this.btnUsuario.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnUsuario.Name = "btnUsuario";
             this.btnUsuario.Size = new System.Drawing.Size(244, 43);
@@ -240,7 +259,7 @@
             this.btnReporte.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReporte.Image = ((System.Drawing.Image)(resources.GetObject("btnReporte.Image")));
             this.btnReporte.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReporte.Location = new System.Drawing.Point(3, 237);
+            this.btnReporte.Location = new System.Drawing.Point(3, 284);
             this.btnReporte.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnReporte.Name = "btnReporte";
             this.btnReporte.Size = new System.Drawing.Size(244, 43);
@@ -342,6 +361,7 @@
         private System.Windows.Forms.Label lblRol;
         private System.Windows.Forms.Button btnMinimizar;
         private System.Windows.Forms.FlowLayoutPanel flpButtonsPanel;
+        private System.Windows.Forms.Button button2;
     }
 }
 

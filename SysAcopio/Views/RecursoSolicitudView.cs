@@ -156,6 +156,7 @@ namespace SysAcopio.Views
             SaveRecursos(idSolicitud); // Guarda los recursos asociados a la solicitud
             RefreshDetalleGrid(); // Actualiza la vista del detalle
             Alerts.ShowAlertS("Recursos guardados exitosamente.", AlertsType.Info); // Muestra un mensaje de éxito
+            DashBoardManager.LoadForm(new SolicitudView()); // Carga la vista de solicitud
         }
 
 
@@ -253,7 +254,7 @@ namespace SysAcopio.Views
                 ResetRecursoSelection(); // Resetea la selección del recurso
                 RefreshDetalleGrid(); // Actualiza la vista del detalle
             }
-            DashBoardManager.LoadForm(new SolicitudView()); // Carga la vista de solicitud
+            
         }
 
 

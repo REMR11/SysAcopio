@@ -30,7 +30,9 @@ namespace SysAcopio.Views
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.dbgSolicitudes = new System.Windows.Forms.DataGridView();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -39,18 +41,38 @@ namespace SysAcopio.Views
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.btnEditarSolicitud = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dbgSolicitudes)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dbgSolicitudes
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 135);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(733, 504);
-            this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            this.dbgSolicitudes.AllowUserToAddRows = false;
+            this.dbgSolicitudes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dbgSolicitudes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dbgSolicitudes.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dbgSolicitudes.Location = new System.Drawing.Point(6, 135);
+            this.dbgSolicitudes.Name = "dbgSolicitudes";
+            this.dbgSolicitudes.ReadOnly = true;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dbgSolicitudes.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dbgSolicitudes.Size = new System.Drawing.Size(733, 504);
+            this.dbgSolicitudes.TabIndex = 0;
+            this.dbgSolicitudes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // btnGuardar
             // 
@@ -87,9 +109,9 @@ namespace SysAcopio.Views
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(173, 81);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 13);
+            this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 17;
-            this.label1.Text = "por estado";
+            this.label1.Text = "Estado";
             // 
             // label2
             // 
@@ -97,14 +119,15 @@ namespace SysAcopio.Views
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(3, 81);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 13);
+            this.label2.Size = new System.Drawing.Size(58, 13);
             this.label2.TabIndex = 19;
-            this.label2.Text = "por urgencia";
+            this.label2.Text = "Urgencia";
             // 
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Items.AddRange(new object[] {
+            "Todas las urgencias",
             "Necesario",
             "Urgente",
             "Super urgente"});
@@ -148,11 +171,28 @@ namespace SysAcopio.Views
             this.label4.Text = "Solicitudes";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // btnEditarSolicitud
+            // 
+            this.btnEditarSolicitud.BackColor = System.Drawing.Color.LightGray;
+            this.btnEditarSolicitud.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btnEditarSolicitud.FlatAppearance.BorderSize = 0;
+            this.btnEditarSolicitud.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEditarSolicitud.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEditarSolicitud.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnEditarSolicitud.Location = new System.Drawing.Point(533, 81);
+            this.btnEditarSolicitud.Name = "btnEditarSolicitud";
+            this.btnEditarSolicitud.Size = new System.Drawing.Size(93, 39);
+            this.btnEditarSolicitud.TabIndex = 22;
+            this.btnEditarSolicitud.Text = "Editar solicitud";
+            this.btnEditarSolicitud.UseVisualStyleBackColor = false;
+            this.btnEditarSolicitud.Click += new System.EventHandler(this.btnEditarSolicitud_Click_1);
+            // 
             // SolicitudView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(751, 650);
+            this.Controls.Add(this.btnEditarSolicitud);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -160,12 +200,12 @@ namespace SysAcopio.Views
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.btnGuardar);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dbgSolicitudes);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SolicitudView";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.SolicitudView_Load_1);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dbgSolicitudes)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -177,7 +217,7 @@ namespace SysAcopio.Views
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dbgSolicitudes;
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label1;
@@ -186,5 +226,6 @@ namespace SysAcopio.Views
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnEditarSolicitud;
     }
 }

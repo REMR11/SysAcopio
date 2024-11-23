@@ -15,7 +15,8 @@ namespace SysAcopio.Controllers
     {
         private readonly RecursoSolicitudRepository repoRecurso; // Repositorio para acceder a los datos de recursos
         public List<Recurso> detalleRecursoSolicitud = new List<Recurso>(); // Lista que contiene los detalles de los recursos solicitados
-
+        public List<Recurso> nuevosRecursoSolicitud = new List<Recurso>(); // Lista que contiene los detalles de los recursos solicitados
+        
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="RecursoSolicitudController"/>.
         /// </summary>
@@ -96,6 +97,35 @@ namespace SysAcopio.Controllers
             return true; // Retorna true indicando que se añadió o actualizó correctamente
         }
 
+        /// <summary>
+        /// Agrega un recurso al detalle de la solicitud.
+        /// Si el recurso ya existe, actualiza la cantidad.
+        /// </summary>
+        /// <param name="recurso">Recurso a añadir.</param>
+        /// <param name="cantidad">Cantidad del recurso a añadir.</param>
+        /// <returns>True si se añade o actualiza correctamente, de lo contrario false.</returns>
+        public bool AddNuevoDetalle(Recurso recurso, int cantidad)
+        {
+            // Validar que no esté añadido el recurso
+            var recursoDonacion = nuevosRecursoSolicitud.FirstOrDefault(detalle => detalle.IdRecurso == recurso.IdRecurso);
+
+            if (recursoDonacion == null)
+            {
+                nuevosRecursoSolicitud.Add(new Recurso()
+                {
+                    IdRecurso = recurso.IdRecurso,
+                    Cantidad = cantidad,
+                    NombreRecurso = recurso.NombreRecurso,
+                });
+            }
+            else // Ya que no está añadido, actualizamos el recurso
+            {
+                recursoDonacion.Cantidad += cantidad; // Aumenta la cantidad del recurso existente
+            }
+            return true; // Retorna true indicando que se añadió o actualizó correctamente
+        }
+
+       
         /// <summary>
         /// Método para obtener los detalles de una solicitud.
         /// </summary>

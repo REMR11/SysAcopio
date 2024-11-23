@@ -2,6 +2,7 @@
 using SysAcopio.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,24 +67,29 @@ namespace SysAcopio.Controllers
         {
             return usuarioRepository.DeleteLogic(id);
         }
-
         /// <summary>
-        /// Método para eliminar físicamente un usuario de la base de datos.
+        /// Método que busca usuarios en la base de datos utilizando un término de búsqueda.
+        /// Llama al método `Search` del repositorio `UsuarioRepository` para realizar la búsqueda.
         /// </summary>
-        /// <param name="id">ID del usuario a eliminar.</param>
-        /// <returns>True si se eliminó exitosamente; de lo contrario, false.</returns>
-        public bool EliminarUsuario(long id)
+        /// <param name="searchTerm">El término de búsqueda que se utilizará para filtrar los usuarios.</param>
+        /// <returns>Una lista de objetos `Usuario` que coinciden con el término de búsqueda.</returns>
+
+        public List<Usuario> BuscarUsuarios(string searchTerm)
         {
-            return usuarioRepository.Delete(id);
+            return usuarioRepository.Search(searchTerm).ToList();
         }
-
-
         /// <summary>
-        /// Método para encriptar las contraseñas existentes en la base de datos.
+        /// Método que obtiene todos los usuarios de la base de datos en formato `DataTable`.
+        /// Llama al método `ObtenerUsuariosDataTable` del repositorio `UsuarioRepository` para obtener los datos en formato tabular.
         /// </summary>
-        public void EncriptarContrasenasExistentes()
+        /// <returns>Un objeto `DataTable` que contiene los usuarios en formato de tabla.</returns>
+
+        public DataTable ObtenerUsuariosDataTable()
         {
-            //usuarioRepository.EncryptExistingPasswords();
+            return usuarioRepository.ObtenerUsuariosDataTable();
         }
+        
+
+
     }
 }
