@@ -35,6 +35,7 @@ namespace SysAcopio.Views
         {
             InitializeComponent();
             _controller = new SolicitudController(); // Inicializa el controlador de solicitudes
+            dbgSolicitudes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace SysAcopio.Views
         {
             _solicitudDataSet = new DataSet(); // Crea un nuevo conjunto de datos
             _solicitudBindingSource = new BindingSource(); // Crea una nueva fuente de datos
-            dataGridView1.DataSource = _solicitudBindingSource; // Establece la fuente de datos del DataGridView
+            dbgSolicitudes.DataSource = _solicitudBindingSource; // Establece la fuente de datos del DataGridView
         }
 
         /// <summary>
@@ -65,8 +66,8 @@ namespace SysAcopio.Views
             ActualizarDataGrid(solicitudes); // Actualiza el DataGridView con las solicitudes
 
             // Oculta columnas innecesarias en el DataGridView
-            dataGridView1.Columns["Id"].Visible = false;
-            dataGridView1.Columns["cancelado"].Visible = false;
+            dbgSolicitudes.Columns["Id"].Visible = false;
+            dbgSolicitudes.Columns["cancelado"].Visible = false;
         }
 
         /// <summary>
@@ -110,6 +111,7 @@ namespace SysAcopio.Views
         /// </summary>
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            comboBox2.SelectedIndex = 0;
             var solicitudes = ObtenerSolicitudesPorFiltro(comboBox1.SelectedIndex); // Obtiene las solicitudes filtradas
             ActualizarDataGrid(solicitudes); // Actualiza el DataGridView con las solicitudes filtradas
         }
@@ -143,8 +145,9 @@ namespace SysAcopio.Views
         /// <param name="e">Los datos del evento.</param>
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
+            comboBox1.SelectedIndex = 0;
             byte urgenciaSeleccionada = ObtenerUrgenciaSeleccionada();
-            var solicitudesFiltradas = ObtenerSolicitudesFiltradasPorUrgencia(urgenciaSeleccionada); // Obtenemos IEnumerable con las solicitudes filtradas.
+            var solicitudesFiltradas = ObtenerSolicitudesPorEstado(urgenciaSeleccionada); // Obtenemos IEnumerable con las solicitudes filtradas.
             ActualizarDataGrid(solicitudesFiltradas); // Actualiza el dataGrid
         }
 
@@ -154,7 +157,7 @@ namespace SysAcopio.Views
         /// <returns>Un byte que representa la urgencia seleccionada (1 basado en el índice).</returns>
         private byte ObtenerUrgenciaSeleccionada()
         {
-            return (byte)(comboBox2.SelectedIndex + 1); // Convierte el indice seleccionado a byte para su posterios uso.
+            return (byte)(comboBox2.SelectedIndex); // Convierte el indice seleccionado a byte para su posterios uso.
         }
 
         /// <summary>
@@ -176,7 +179,7 @@ namespace SysAcopio.Views
         {
             switch (selectIndex)
             {
-                case EstadoTodasLasSolicitudes: return _controller.ObtenerTodasLasSolicitudes();
+                case EstadoTodasLasSolicitudes: return _controller.ObtenerTodasLasSolicitudes(); ;
                 case EstadoSolicitudesNecesarias:
                 case EstadoSolicitudesUrgentes:
                 case EstadoSolicitudesSuperUrgentes:
@@ -201,6 +204,29 @@ namespace SysAcopio.Views
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             DashBoardManager.LoadForm(new RecursoSolicitudView()); // Carga la vista de solicitud de recursos
+        }
+
+        private void btnEditarSolicitud_Click_1(object sender, EventArgs e)
+        {
+            if (dbgSolicitudes.SelectedRows.Count > 0) {
+                var row = dbgSolicitudes.CurrentRow;
+                if (row != null)
+                {
+                    long idSolicitud = Convert.ToInt32(row.Cells["Id"].Value);
+                    DashBoardManager.LoadForm(new FormularioEditarSolicitud(idSolicitud));
+
+                   //FormularioEditarSolicitud.DatosGuardadosHandler += FormularioEditar_DatosGuardados;
+
+                }
+            }
+                    }
+
+        // Método que maneja el evento
+        private void FormularioEditar_DatosGuardados(string campo1, string campo2)
+        {
+            // Aquí puedes actualizar el DataGridView o realizar otras acciones
+            MessageBox.Show($"Datos guardados: {campo1}, {campo2}");
+            // Actualiza el DataGridView según sea necesario
         }
     }
 }
