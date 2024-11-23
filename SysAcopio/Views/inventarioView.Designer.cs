@@ -47,9 +47,9 @@
             // 
             // Salir
             // 
-            this.Salir.Location = new System.Drawing.Point(797, 511);
+            this.Salir.Location = new System.Drawing.Point(815, 464);
             this.Salir.Name = "Salir";
-            this.Salir.Size = new System.Drawing.Size(80, 25);
+            this.Salir.Size = new System.Drawing.Size(89, 42);
             this.Salir.TabIndex = 0;
             this.Salir.Text = "Salir";
             this.Salir.UseVisualStyleBackColor = true;
@@ -57,9 +57,9 @@
             // 
             // Actualizar
             // 
-            this.Actualizar.Location = new System.Drawing.Point(797, 464);
+            this.Actualizar.Location = new System.Drawing.Point(814, 410);
             this.Actualizar.Name = "Actualizar";
-            this.Actualizar.Size = new System.Drawing.Size(75, 23);
+            this.Actualizar.Size = new System.Drawing.Size(90, 38);
             this.Actualizar.TabIndex = 1;
             this.Actualizar.Text = "Actualizar";
             this.Actualizar.UseVisualStyleBackColor = true;
@@ -67,9 +67,9 @@
             // 
             // Limpiar
             // 
-            this.Limpiar.Location = new System.Drawing.Point(787, 377);
+            this.Limpiar.Location = new System.Drawing.Point(815, 348);
             this.Limpiar.Name = "Limpiar";
-            this.Limpiar.Size = new System.Drawing.Size(89, 28);
+            this.Limpiar.Size = new System.Drawing.Size(89, 44);
             this.Limpiar.TabIndex = 2;
             this.Limpiar.Text = "Limpiar";
             this.Limpiar.UseVisualStyleBackColor = true;
@@ -78,19 +78,19 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 249);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 216);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(739, 296);
+            this.dataGridView1.Size = new System.Drawing.Size(779, 329);
             this.dataGridView1.TabIndex = 3;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             // 
             // Eliminar
             // 
-            this.Eliminar.Location = new System.Drawing.Point(797, 327);
+            this.Eliminar.Location = new System.Drawing.Point(814, 289);
             this.Eliminar.Name = "Eliminar";
-            this.Eliminar.Size = new System.Drawing.Size(75, 23);
+            this.Eliminar.Size = new System.Drawing.Size(90, 27);
             this.Eliminar.TabIndex = 4;
             this.Eliminar.Text = "Eliminar";
             this.Eliminar.UseVisualStyleBackColor = true;
@@ -98,9 +98,9 @@
             // 
             // Agregar
             // 
-            this.Agregar.Location = new System.Drawing.Point(792, 273);
+            this.Agregar.Location = new System.Drawing.Point(814, 216);
             this.Agregar.Name = "Agregar";
-            this.Agregar.Size = new System.Drawing.Size(75, 23);
+            this.Agregar.Size = new System.Drawing.Size(90, 37);
             this.Agregar.TabIndex = 5;
             this.Agregar.Text = "Agregar";
             this.Agregar.UseVisualStyleBackColor = true;
@@ -110,7 +110,7 @@
             // 
             this.textNombre.Location = new System.Drawing.Point(163, 55);
             this.textNombre.Name = "textNombre";
-            this.textNombre.Size = new System.Drawing.Size(100, 22);
+            this.textNombre.Size = new System.Drawing.Size(147, 22);
             this.textNombre.TabIndex = 6;
             // 
             // NombreRecurso
@@ -140,15 +140,15 @@
             // 
             // textCantidad
             // 
-            this.textCantidad.Location = new System.Drawing.Point(383, 55);
+            this.textCantidad.Location = new System.Drawing.Point(594, 55);
             this.textCantidad.Name = "textCantidad";
-            this.textCantidad.Size = new System.Drawing.Size(100, 22);
+            this.textCantidad.Size = new System.Drawing.Size(197, 22);
             this.textCantidad.TabIndex = 10;
             // 
             // Cantidad
             // 
             this.Cantidad.AutoSize = true;
-            this.Cantidad.Location = new System.Drawing.Point(316, 58);
+            this.Cantidad.Location = new System.Drawing.Point(502, 61);
             this.Cantidad.Name = "Cantidad";
             this.Cantidad.Size = new System.Drawing.Size(61, 16);
             this.Cantidad.TabIndex = 11;
@@ -171,11 +171,11 @@
             this.tiporecurso.TabIndex = 13;
             this.tiporecurso.Text = "Tipo de Recurso";
             // 
-            // InventarioViews
+            // InventarioView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(911, 557);
+            this.ClientSize = new System.Drawing.Size(931, 577);
             this.Controls.Add(this.tiporecurso);
             this.Controls.Add(this.textTipoRecurso);
             this.Controls.Add(this.Cantidad);
@@ -191,7 +191,7 @@
             this.Controls.Add(this.Actualizar);
             this.Controls.Add(this.Salir);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "InventarioViews";
+            this.Name = "InventarioView";
             this.Text = "InventarioViews";
             this.Load += new System.EventHandler(this.InventarioViews_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

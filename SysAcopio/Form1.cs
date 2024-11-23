@@ -68,7 +68,7 @@ namespace SysAcopio
 
         private void btnInventario_Click(object sender, EventArgs e)
         {
-            DashBoardManager.LoadForm(new InventarioViews());
+            DashBoardManager.LoadForm(new InventarioView());
         }
         //btnproveedor
         private void button1_Click(object sender, EventArgs e)

@@ -27,5 +27,6 @@ namespace SysAcopio.Models
         public string NombreRecurso { get; set; }
         public int Cantidad { get; set; }
         public long IdTipoRecurso { get; set; }
+        
     }
 }

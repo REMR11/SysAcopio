@@ -17,6 +17,7 @@ namespace SysAcopio.Views
         public InventarioView()
         {
             InitializeComponent();
+          
         }
 
         private void InventarioViews_Load(object sender, EventArgs e)
