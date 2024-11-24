@@ -185,6 +185,10 @@ namespace SysAcopio.Controllers
             return filtros.Count > 0 ? string.Join(" AND ", filtros) : string.Empty; // Combina los filtros en una cadena
         }
 
+        public bool updateRecursoSolicitud(RecursoSolicitud recursoSolicitud) {
+            return repoRecurso.Update(recursoSolicitud);
+        }
+
         /// <summary>
         /// Método para eliminar un recurso del detalle de la solicitud.
         /// </summary>
@@ -199,6 +203,11 @@ namespace SysAcopio.Controllers
 
             detalleRecursoSolicitud.Remove(recursoDonacion); // Elimina el recurso del detalle
             return true; // Retorna true indicando que se eliminó correctamente
+        }
+
+        public DataTable ObtenerPorId(long idRecursoSolicitud)
+        {
+            return repoRecurso.ObtenerPorId(idRecursoSolicitud);
         }
     }
 }

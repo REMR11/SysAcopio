@@ -339,7 +339,8 @@ namespace SysAcopio.Views
 
             // Llamar al controlador para actualizar la solicitud
             bool resultado = _solicitudController.ActualizarSolicitud(solicitudActualizada);
-
+            UpdateRecursosConfirmados();
+            SaveRecursos(idSolicitud);
 
             // Verificar el resultado de la actualización
             if (resultado)
@@ -354,6 +355,35 @@ namespace SysAcopio.Views
             }
 
             DashBoardManager.LoadForm(new SolicitudView());
+        }
+
+        private void UpdateRecursosConfirmados()
+        {
+            foreach (DataGridViewRow row in dgvDetalle.Rows)
+            {
+                long idRecursoSolicitud = Convert.ToInt64(row.Cells["id_recurso_solicitud"].Value);
+                DataTable recursoSolicitudDataTable = _recursoSolicitudController.ObtenerPorId(idRecursoSolicitud);
+                if (recursoSolicitudDataTable != null && recursoSolicitudDataTable.Rows.Count > 0)
+                {
+                    RecursoSolicitud recursoSolicitudDTO =new RecursoSolicitud();
+
+                    // Mapear los datos del DataTable a la instancia de RecursoSolicitud
+                    recursoSolicitudDTO.IdRecurso = Convert.ToInt32(recursoSolicitudDataTable.Rows[0]["id_recurso"]);
+                    recursoSolicitudDTO.IdSolicitud = Convert.ToInt32(recursoSolicitudDataTable.Rows[0]["id_solicitud"]);
+                    recursoSolicitudDTO.Cantidad = Convert.ToInt32(row.Cells["Cantidad"].Value);
+                    // Si necesitas guardar el DataTable actualizado en la base de datos, 
+                    // llama a un método que realice esa operación.
+                    bool success = _recursoSolicitudController.updateRecursoSolicitud(recursoSolicitudDTO);
+                    if (!success)
+                    {
+                        Alerts.ShowAlertS("Error al guardar el recurso.", AlertsType.Error); // Muestra un mensaje de error
+                    }
+                }
+                else
+                {
+                    Alerts.ShowAlertS("No se encontró el recurso.", AlertsType.Error); // Muestra un mensaje de error
+                }
+            }
         }
 
 
@@ -438,6 +468,29 @@ namespace SysAcopio.Views
             return actualizarSolicitud;
                
         }
+
+        /// <summary>
+        /// Guarda los recursos seleccionados en la solicitud.
+        /// </summary>
+        /// <param name="idSolicitud">ID de la solicitud a la que se asociarán los recursos.</param>
+        private void SaveRecursos(long idSolicitud)
+        {
+            foreach (DataGridViewRow row in dgvNuevosRecursos.Rows)
+            {
+                var recurso = new Recurso
+                {
+                    IdRecurso = Convert.ToInt64(row.Cells["IdRecurso"].Value),
+                    Cantidad = Convert.ToInt32(row.Cells["Cantidad"].Value)
+                };
+
+                long result = _recursoSolicitudController.Create(recurso, idSolicitud); // Guarda el recurso en el controlador
+                if (result <= 0)
+                {
+                    Alerts.ShowAlertS("Error al guardar el recurso.", AlertsType.Error); // Muestra un mensaje de error
+                    return;
+                }
+            }
+        }
         private void btn_Cancelar_Click(object sender, EventArgs e)
         {
             DashBoardManager.LoadForm(new SolicitudView());
@@ -494,6 +547,21 @@ namespace SysAcopio.Views
         private void txtNombreRecurso_TextChanged(object sender, EventArgs e)
         {
             FilterRecursos(); // Filtra los recursos
+        }
+
+        /// <summary>
+        /// Evento que se ejecuta al hacer clic en una celda del detalle.
+        /// Elimina el recurso del detalle si se hace clic en el botón de eliminar.
+        /// </summary>
+        private void dgvDetalle_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.ColumnIndex == dgvDetalle.Columns["deletDetailButton"].Index && e.RowIndex >= 0)
+            {
+                long idRecurso = Convert.ToInt64(dgvDetalle.Rows[e.RowIndex].Cells["idRecurso"].Value);
+
+                _recursoSolicitudController.RemoveFromDetail(idRecurso); // Elimina el recurso del deta
+                RefreshDetalleGrid(); // Actualiza la vista del detalle
+            }
         }
     }
 }
