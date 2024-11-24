@@ -19,7 +19,7 @@ namespace SysAcopio.Views
         private long idSolicitud; // ID de la solicitud actual
         private bool isFirstLoading; // Indica si es la primera carga de datos
 
-        
+
         /// <summary>
         /// Constructor de la clase. Inicializa los controladores y la ID de la solicitud.
         /// </summary>
@@ -32,7 +32,7 @@ namespace SysAcopio.Views
             this.idSolicitud = idSolicitud;
             //InitializeNuevosRecursosGrid();
         }
-        
+
         /// <summary>
         /// Evento que se ejecuta al cargar la vista. Carga los recursos y establece los tipos de recursos.
         /// </summary>
@@ -330,9 +330,114 @@ namespace SysAcopio.Views
 
         private void btnActualizar_Click(object sender, EventArgs e)
         {
-            // Lógica para actualizar la solicitud
+            if (!IsUrgenciaSelected()) return; // Verifica si se ha seleccionado una urgencia estado para la solicitud.
+            if (!IsEstadoSelected()) return; // Verifica si se ha seleccionado un estado para la solicitud.
+            ValidarYMostrarAlertaDireccion(); // Verifica que direccion no contenga valores nulos o espacio en blanco.
+            ValidarYMostarAlertMotivo(); // Verifica que Motivo no contenga valores nulos o espacio en blanco.
+
+            var solicitudActualizada = CreateSolicitudFromInputs(); // Crea una solicitud con los datos obtenidos
+
+            // Llamar al controlador para actualizar la solicitud
+            bool resultado = _solicitudController.ActualizarSolicitud(solicitudActualizada);
+
+
+            // Verificar el resultado de la actualización
+            if (resultado)
+            {
+                Alerts.ShowAlertS("Solicitud actualizada con éxito.", AlertsType.Confirm);
+                // Aquí puedes cerrar el formulario o realizar otras acciones necesarias
+                this.Close();
+            }
+            else
+            {
+                Alerts.ShowAlertS("Error al actualizar la solicitud. Inténtalo de nuevo.", AlertsType.Error);
+            }
+
+            DashBoardManager.LoadForm(new SolicitudView());
         }
 
+
+        /// <summary>
+        /// Verifica si se ha seleccionado una urgencia válida.
+        /// </summary>
+        /// <returns>True si se ha seleccionado una urgencia, de lo contrario false.</return
+        private bool IsUrgenciaSelected()
+        {
+            if (cmbUrgencia.SelectedIndex >= 0) return true; // Retorna true si hay una selección válida
+
+            AlertForm urgenciaSelected = new AlertForm("Por favor, seleccione un valor válido para la urgencia.", AlertsType.Error);
+            return false;
+        }
+
+
+        /// <summary>
+        /// Verifica si se ha seleccionado un valor valido para estado.
+        /// </summary>
+        /// <returns>True si se ha seleccionado un estado, de lo contrario false.</return
+        private bool IsEstadoSelected()
+        {
+            if (cmbEstado.SelectedIndex >= 0) return true; // Retorna true si hay una selección válida
+
+            AlertForm urgenciaSelected = new AlertForm("Por favor, seleccione un valor válido para la Estado.", AlertsType.Error);
+            return false;
+        }
+
+        private bool EsDireccionValida(out string mensajeError)
+        {
+            string direccion = txtDireccion.Text.Trim(); // Obtener la dirección
+            mensajeError = string.Empty; // Inicializar el mensaje de error
+
+            // Validar los datos
+            if (string.IsNullOrWhiteSpace(direccion))
+            {
+                mensajeError = "La dirección no puede estar vacía.";
+                return false;
+            }
+
+            return true;
+        }
+
+        // Método para manejar la validación y la alerta
+        private void ValidarYMostrarAlertaDireccion()
+        {
+            if (!EsDireccionValida(out string mensajeError))
+            {
+                Alerts.ShowAlertS(mensajeError, AlertsType.Info);
+            }
+        }
+
+
+        private bool EsMotidoValido(out string mensajeError) { 
+            string motivo = txtMotivo.Text.Trim();
+            mensajeError = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(motivo)) {
+                mensajeError = "El motivo no puede estar vacio.";
+                return false;
+            }
+            return true;
+        }
+
+        private void ValidarYMostarAlertMotivo() {
+            if (!EsMotidoValido(out string mensajeError)) {
+                Alerts.ShowAlertS(mensajeError, AlertsType.Info);
+            }
+        }
+        /// <summary>
+        /// Crea una nueva solicitud a partir de los valores ingresados en los campos de texto.
+        /// </summary>
+        /// <returns>Una nueva instancia de <see cref="Solicitud"/>.</returns>
+        private Solicitud CreateSolicitudFromInputs()
+        {
+            Solicitud actualizarSolicitud = _solicitudController.ObtenerSolicitudPorId(this.idSolicitud);
+            actualizarSolicitud.Ubicacion = txtDireccion.Text.Trim();
+            actualizarSolicitud.Motivo = txtMotivo.Text.Trim();
+            actualizarSolicitud.Urgencia = Convert.ToByte(cmbUrgencia.SelectedIndex);
+            actualizarSolicitud.Estado = Convert.ToBoolean(cmbEstado.SelectedIndex);
+
+            return actualizarSolicitud;
+               
+        }
         private void btn_Cancelar_Click(object sender, EventArgs e)
         {
             DashBoardManager.LoadForm(new SolicitudView());
@@ -355,8 +460,7 @@ namespace SysAcopio.Views
             {
                 // Crea el formulario de confirmación
                 ConfirmDialogEstate confirm = new ConfirmDialogEstate(
-                    @"¿Quieres completar la solicitud? 
-Esto provocará clasificar esta tarea como inactiva.",
+                    "¿Quieres completar la solicitud? \nEsto provocará clasificar esta tarea como inactiva.",
                     ConfirmarAccion, // Callback para la acción de confirmación
                     () => cmbEstado.SelectedIndex = 1 // Callback para la acción de cancelación
                 );

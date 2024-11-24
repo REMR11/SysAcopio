@@ -5,10 +5,29 @@ namespace SysAcopio.Models
 {
     public partial class Solicitud
     {
+
         /// <summary>
         /// Constructor vacio
         /// </summary>
         public Solicitud(){}
+        
+        /// <summary>
+        /// Constructor con parametros utilizado para actualizar producto
+        /// </summary>
+        /// <param name="ubicacion"></param>
+        /// <param name="motivo"></param>
+        /// <param name="nivelUrgencia"></param>
+        /// <param name="estado"></param>
+        public Solicitud(string ubicacion, string motivo, byte nivelUrgencia, bool estado)
+        {
+            this.Ubicacion = ubicacion;
+            this.Motivo= motivo;
+            this.Urgencia = nivelUrgencia;
+            this.Estado = estado;
+            this.Fecha = DateTime.Now;
+            this.IsCancel = false;
+        }
+
         /// <summary>
         /// Constructor con parametros
         /// </summary>
