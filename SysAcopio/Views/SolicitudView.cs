@@ -1,5 +1,6 @@
 ﻿using SysAcopio.Controllers;
 using SysAcopio.Models;
+using SysAcopio.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -209,6 +210,11 @@ namespace SysAcopio.Views
         private void btnEditarSolicitud_Click_1(object sender, EventArgs e)
         {
 
+            if (!Sesion.isAdmin)
+            {
+                Alerts.ShowAlertS("¡Solo un administrador puede editar la solicitud!", AlertsType.Error);
+                return;
+            }
             if (dbgSolicitudes.SelectedRows.Count > 0) {
                 var row = dbgSolicitudes.CurrentRow;
                 if (row != null)

@@ -348,27 +348,28 @@ namespace SysAcopio.Views
                 e.Handled = true;
             }
         }
-
         private void cmbEstado_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Verifica si la opción seleccionada es "Completado"
-            if (cmbEstado.SelectedItem.ToString() == "completada")
+            if (cmbEstado.SelectedIndex == 0)
             {
+                // Crea el formulario de confirmación
+                ConfirmDialogEstate confirm = new ConfirmDialogEstate(
+                    @"¿Quieres completar la solicitud? 
+Esto provocará clasificar esta tarea como inactiva.",
+                    ConfirmarAccion, // Callback para la acción de confirmación
+                    () => cmbEstado.SelectedIndex = 1 // Callback para la acción de cancelación
+                );
 
-                ConfirmActionForm confirm = new ConfirmActionForm("Quieres completar la solicitud? Esto provocara clasificar esta tarea como inactiva", ConfirmarAccion);
-                DialogResult result = confirm.ShowDialog(); // Devuelve la respuesta del usuario
-                // Si el usuario selecciona "No", restablece la selección a "Activa"
-                if (result == DialogResult.Cancel)
-                {
-                    cmbEstado.SelectedIndex = 1;// O la opción que desees por defecto
-                }
+                // Muestra el formulario como un cuadro de diálogo modal
+                confirm.ShowDialog();
             }
         }
 
         private void ConfirmarAccion()
         {
-            // Lógica que deseas ejecutar al confirmar
-            // Por ejemplo, completar la solicitud
+            // Cambia el estado a "Completado"
+            cmbEstado.SelectedIndex = 0;
         }
 
         /// <summary>
