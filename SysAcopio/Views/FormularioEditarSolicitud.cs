@@ -19,6 +19,7 @@ namespace SysAcopio.Views
         private long idSolicitud; // ID de la solicitud actual
         private bool isFirstLoading; // Indica si es la primera carga de datos
 
+        
         /// <summary>
         /// Constructor de la clase. Inicializa los controladores y la ID de la solicitud.
         /// </summary>
@@ -29,9 +30,9 @@ namespace SysAcopio.Views
             _recursoSolicitudController = new RecursoSolicitudController();
             _solicitudController = new SolicitudController();
             this.idSolicitud = idSolicitud;
-            InitializeNuevosRecursosGrid();
+            //InitializeNuevosRecursosGrid();
         }
-
+        
         /// <summary>
         /// Evento que se ejecuta al cargar la vista. Carga los recursos y establece los tipos de recursos.
         /// </summary>
@@ -153,6 +154,24 @@ namespace SysAcopio.Views
         }
 
         /// <summary>
+        /// Filtra los recursos según el tipo y el nombre ingresados.
+        /// </summary>
+        private void FilterRecursos()
+        {
+            string idTipoRecurso = cmbTipoRecurso.SelectedValue.ToString(); // Obtiene el tipo de recurso seleccionado
+            string nombreRecurso = txtNombreRecurso.Text.Trim(); // Obtiene el nombre del recurso ingresado
+
+            DataRow[] filteredRows = _recursoSolicitudController.FiltrarDatosRecursosGrid(recursos, idTipoRecurso, nombreRecurso); // Filtra los recursos
+
+            if (filteredRows.Length > 0)
+            {
+                DataTable dtFiltrado = filteredRows.CopyToDataTable(); // Crea una tabla filtrada
+                SetRecursos(dtFiltrado); // Establece los recursos filtrados
+            }
+            else { dgvRecursos.DataSource = null; } // Si no hay resultados, limpia la fuente de datos
+        }
+
+        /// <summary>
         /// Obtiene los recursos asociados a una solicitud específica.
         /// </summary>
         /// <param name="solicitudId">ID de la solicitud.</param>
@@ -194,15 +213,6 @@ namespace SysAcopio.Views
             dgvDetalle.Columns["cantidad"].HeaderText = "Cantidad"; // Cambia el encabezado de la columna
         }
 
-        private void InitializeNuevosRecursosGrid()
-        {
-            dgvNuevosRecursos.Columns.Clear(); // Limpia columnas existentes
-
-            // Agrega las columnas necesarias
-            dgvNuevosRecursos.Columns.Add("id_recurso", "ID Recurso");
-            dgvNuevosRecursos.Columns.Add("nombre_recurso", "Nombre del Recurso");
-            dgvNuevosRecursos.Columns.Add("cantidad", "Cantidad");
-        }
         /// <summary>
         /// Muestra un mensaje si no se encuentran recursos para la solicitud.
         /// </summary>
@@ -219,6 +229,7 @@ namespace SysAcopio.Views
             Solicitud solicitud = _solicitudController.ObtenerSolicitudPorId(this.idSolicitud); // Obtiene la solicitud por ID
             cmbUrgencia.SelectedIndex = solicitud.Urgencia; // Establece la urgencia en el combo box
             cmbEstado.SelectedIndex = Convert.ToInt16(solicitud.Estado); // Establece el estado en el combo box
+            txtDireccion.Text = solicitud.Ubicacion.ToString();  // Establece la direcicon a la que se solicita entregar productos
             txtMotivo.Text = solicitud.Motivo; // Establece el motivo en el campo de texto
         }
 
@@ -341,20 +352,43 @@ namespace SysAcopio.Views
         private void cmbEstado_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Verifica si la opción seleccionada es "Completado"
-            if (cmbEstado.SelectedItem.ToString() == "Completado")
+            if (cmbEstado.SelectedItem.ToString() == "completada")
             {
-                // Muestra un mensaje de confirmación
-                DialogResult result = MessageBox.Show("¿Está seguro de completar la solicitud?",
-                    "Confirmación",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
 
-                // Si el usuario selecciona "No", restablece la selección a "Pendiente"
-                if (result == DialogResult.No)
+                ConfirmActionForm confirm = new ConfirmActionForm("Quieres completar la solicitud? Esto provocara clasificar esta tarea como inactiva", ConfirmarAccion);
+                DialogResult result = confirm.ShowDialog(); // Devuelve la respuesta del usuario
+                // Si el usuario selecciona "No", restablece la selección a "Activa"
+                if (result == DialogResult.Cancel)
                 {
-                    cmbEstado.SelectedItem = "Pendiente"; // O la opción que desees por defecto
+                    cmbEstado.SelectedIndex = 1;// O la opción que desees por defecto
                 }
             }
+        }
+
+        private void ConfirmarAccion()
+        {
+            // Lógica que deseas ejecutar al confirmar
+            // Por ejemplo, completar la solicitud
+        }
+
+        /// <summary>
+        /// Evento que se ejecuta al cambiar la selección en el combo box de tipo de recurso.
+        /// Filtra los recursos si no es la primera carga.
+        /// </summary>
+        private void cmbTipoRecurso_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            if (isFirstLoading) return; // No filtra si es la primera carga
+            FilterRecursos(); // Filtra los recursos
+        }
+
+        /// <summary>
+        /// Evento que se ejecuta al cambiar el texto en el campo de nombre de recurso.
+        /// Filtra los recursos según el texto ingresado.
+        /// </summary>
+        private void txtNombreRecurso_TextChanged(object sender, EventArgs e)
+        {
+            FilterRecursos(); // Filtra los recursos
         }
     }
 }
