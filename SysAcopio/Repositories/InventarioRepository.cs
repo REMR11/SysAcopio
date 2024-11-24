@@ -1,34 +1,27 @@
 ﻿using SysAcopio.Controllers;
 using SysAcopio.Models;
 using System;
-using System.Data.SqlClient;
-using System.Data;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Contexts;
-using System.Windows.Forms;
-using System.Runtime.CompilerServices;
-using Org.BouncyCastle.Asn1.BC;
-using System.Security.Cryptography.X509Certificates;
-using System.Linq.Expressions;
-using MySqlX.XDevAPI;
-using System.Data.Common;
-using Org.BouncyCastle.Utilities;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace SysAcopio.Repositories
 {
 
     public class InventarioRepository
     {
-       
+
 
         public long IdRecurso { get; set; }
         public string NombreRecurso { get; set; }
         public string Cantidad { get; set; }
         public string IdTipoRecurso { get; set; }
 
-
-        //metodo para obtener los registros
+        
+      
+       
         public DataTable GetInventario()
         {
             DataTable mydt = new DataTable();
@@ -37,7 +30,7 @@ namespace SysAcopio.Repositories
             // Usar la conexión a la base de datos
             using (SqlConnection conn = conectar.ConnectionServer())
             {
-                string sql = "SELECT idrecursos, nombre_recursos, cantidad, tipo_recursos FROM Recurso"; // Consulta SQL
+                string sql = "SELECT * Recurso(id_recurso, nombre_recurso,cantidad,IdTipoRecurso) ";// Consulta SQL
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     try
@@ -55,7 +48,7 @@ namespace SysAcopio.Repositories
                     catch (SqlException ex)
                     {
                         // Manejo de la excepción (puedes registrar el error o mostrar un mensaje)
-                        MessageBox.Show("Error en la consulta: " + ex.Message);
+                        MessageBox.Show("Error en la consulta: ");
                     }
                     // La conexión se cierra automáticamente al salir del bloque using
                 }
@@ -143,7 +136,7 @@ namespace SysAcopio.Repositories
 
         }
 
-        public int EliminarInventario()
+ public int EliminarInventario()
         {
             int affected = 0;
             SysAcopioDbContext conectar = new SysAcopioDbContext();
@@ -178,14 +171,16 @@ namespace SysAcopio.Repositories
                 // Manejo de errores: puedes lanzar una excepción o registrar un mensaje
                 Console.WriteLine($"No se encontró el recurso con ID: {id}");
             }
-
         }
+
+
+
 
 
 
     }
 
-       
-    
-  
+
+
+
 }

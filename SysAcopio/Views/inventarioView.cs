@@ -1,37 +1,34 @@
-﻿using SysAcopio.Repositories;
+﻿using SysAcopio.Controllers;
+using SysAcopio.Repositories;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
+using System.Runtime.Remoting.Contexts;
 using System.Windows.Forms;
 
 namespace SysAcopio.Views
 {
     public partial class InventarioView : Form
-    { private  InventarioRepository inventario = new InventarioRepository();
-       
+    {
+        private InventarioRepository inventario = new InventarioRepository();
+
         public InventarioView()
         {
             InitializeComponent();
-          
+
         }
 
         private void InventarioViews_Load(object sender, EventArgs e)
         {
-
-            
-          
+            refrescarGrid();
         }
         public void refrescarGrid()
         {
-            dataGridView1.DataSource = inventario.GetInventario();
+           
+
+
         }
 
-      
+
 
         private void Actualizar_Click_1(object sender, EventArgs e)
         {
@@ -81,11 +78,9 @@ namespace SysAcopio.Views
                     MessageBox.Show($"Ocurrió un error al actualizar el inventario: {ex.Message}");
                 }
             }
-            else
-            {
-                MessageBox.Show("Por favor, selecciona un recurso para actualizar.");
-            
-        }
+
+
+
 
         }
 
@@ -189,10 +184,7 @@ namespace SysAcopio.Views
                     {
                         MessageBox.Show("Recurso agregado con éxito.");
                         refrescarGrid();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se pudo agregar el recurso.");
+                    
                     }
                 }
                 catch (Exception ex)
@@ -203,30 +195,12 @@ namespace SysAcopio.Views
             else
             {
                 MessageBox.Show("Por favor, completa todos los campos.");
-            } 
-        }
-
-        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-        {
-            if (dataGridView1.SelectedRows.Count > 0)
-            {
-                // Obtener la fila seleccionada
-                var row = dataGridView1.CurrentRow;
-
-                // Asegurarse de que la fila no sea nula
-                if (row != null)
-                {
-                    // Asignar el ID del recurso al campo de texto
-                    textIdRecurso.Text = row.Cells["ID"].Value?.ToString(); // Asegúrate de que el nombre de la columna sea correcto
-
-                    // Asignar los demás valores desde las celdas correspondientes
-                    textNombre.Text = row.Cells["NombreRecurso"].Value?.ToString() ?? string.Empty; // Cambia "NombreRecurso" por el nombre real de la columna
-                    textCantidad.Text = row.Cells["Cantidad"].Value?.ToString() ?? string.Empty; // Cambia "Cantidad" por el nombre real de la columna
-                    textTipoRecurso.Text = row.Cells["IdTipoRecurso"].Value?.ToString() ?? string.Empty; // Cambia "IdTipoRecurso" por el nombre real de la columna
-                }
             }
-
         }
+
+
+
+
 
         private void textTipoRecurso_TextChanged(object sender, EventArgs e)
         {
@@ -238,7 +212,32 @@ namespace SysAcopio.Views
             Application.Exit();
 
         }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                // Obtener la fila seleccionada
+                var row = dataGridView1.CurrentRow;
+                // Asignar el ID del recurso al campo de texto
+                textIdRecurso.Text = row.Cells["Id"].Value.ToString(); // Asegúrate de que el nombre de la columna sea correcto
+
+                // Asignar los demás valores desde las celdas correspondientes
+               
+               
+
+            }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            textNombre.Text = dataGridView1.CurrentRow.Cells[0].Value.ToString();
+            textCantidad.Text = dataGridView1.CurrentRow.Cells[1].Value.ToString();
+             textTipoRecurso.Text = dataGridView1.CurrentRow.Cells[2].Value.ToString();
+
+        }
     }
+
 }
 
-        

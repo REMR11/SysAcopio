@@ -31,7 +31,6 @@
             this.Salir = new System.Windows.Forms.Button();
             this.Actualizar = new System.Windows.Forms.Button();
             this.Limpiar = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Eliminar = new System.Windows.Forms.Button();
             this.Agregar = new System.Windows.Forms.Button();
             this.textNombre = new System.Windows.Forms.TextBox();
@@ -42,6 +41,11 @@
             this.Cantidad = new System.Windows.Forms.Label();
             this.textTipoRecurso = new System.Windows.Forms.TextBox();
             this.tiporecurso = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Id_recurso = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Tipo_recurso = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cantidad_Recurso = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,17 +78,6 @@
             this.Limpiar.Text = "Limpiar";
             this.Limpiar.UseVisualStyleBackColor = true;
             this.Limpiar.Click += new System.EventHandler(this.Limpiar_Click_1);
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 216);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(779, 329);
-            this.dataGridView1.TabIndex = 3;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             // 
             // Eliminar
             // 
@@ -171,11 +164,57 @@
             this.tiporecurso.TabIndex = 13;
             this.tiporecurso.Text = "Tipo de Recurso";
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Nombre,
+            this.Id_recurso,
+            this.Tipo_recurso,
+            this.cantidad_Recurso});
+            this.dataGridView1.Location = new System.Drawing.Point(76, 212);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersWidth = 51;
+            this.dataGridView1.RowTemplate.Height = 24;
+            this.dataGridView1.Size = new System.Drawing.Size(715, 353);
+            this.dataGridView1.TabIndex = 14;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
+            // 
+            // Nombre
+            // 
+            this.Nombre.HeaderText = "Nombre";
+            this.Nombre.MinimumWidth = 6;
+            this.Nombre.Name = "Nombre";
+            this.Nombre.Width = 125;
+            // 
+            // Id_recurso
+            // 
+            this.Id_recurso.HeaderText = "Id_recurso";
+            this.Id_recurso.MinimumWidth = 6;
+            this.Id_recurso.Name = "Id_recurso";
+            this.Id_recurso.Width = 125;
+            // 
+            // Tipo_recurso
+            // 
+            this.Tipo_recurso.HeaderText = "Tip-recurso";
+            this.Tipo_recurso.MinimumWidth = 6;
+            this.Tipo_recurso.Name = "Tipo_recurso";
+            this.Tipo_recurso.Width = 125;
+            // 
+            // cantidad_Recurso
+            // 
+            this.cantidad_Recurso.HeaderText = "Cantida_recurso";
+            this.cantidad_Recurso.MinimumWidth = 6;
+            this.cantidad_Recurso.Name = "cantidad_Recurso";
+            this.cantidad_Recurso.Width = 125;
+            // 
             // InventarioView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(931, 577);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.tiporecurso);
             this.Controls.Add(this.textTipoRecurso);
             this.Controls.Add(this.Cantidad);
@@ -186,7 +225,6 @@
             this.Controls.Add(this.textNombre);
             this.Controls.Add(this.Agregar);
             this.Controls.Add(this.Eliminar);
-            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.Limpiar);
             this.Controls.Add(this.Actualizar);
             this.Controls.Add(this.Salir);
@@ -205,7 +243,6 @@
         private System.Windows.Forms.Button Salir;
         private System.Windows.Forms.Button Actualizar;
         private System.Windows.Forms.Button Limpiar;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button Eliminar;
         private System.Windows.Forms.Button Agregar;
         private System.Windows.Forms.TextBox textNombre;
@@ -216,5 +253,10 @@
         private System.Windows.Forms.Label Cantidad;
         private System.Windows.Forms.TextBox textTipoRecurso;
         private System.Windows.Forms.Label tiporecurso;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Nombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id_recurso;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Tipo_recurso;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cantidad_Recurso;
     }
 }
