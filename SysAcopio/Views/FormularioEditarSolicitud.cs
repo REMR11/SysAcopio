@@ -322,20 +322,39 @@ namespace SysAcopio.Views
             // Lógica para actualizar la solicitud
         }
 
-        /// <summary>
-        /// Evento que se ejecuta al presionar una tecla en el campo de cantidad de recurso.
-        /// Permite solo la entrada de dígitos.
-        /// </summary>
-        private void txtNombreRecurso_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Evita la entrada de caracteres no numéricos
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-                e.Handled = true;
-        }
-
         private void btn_Cancelar_Click(object sender, EventArgs e)
         {
             DashBoardManager.LoadForm(new SolicitudView());
+        }
+
+        private void txtRecursoCantidad_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Verifica si la tecla presionada es un número (del 0 al 9)
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                // Cancela el evento si la tecla no es un número
+                Alerts.ShowAlertS("Debes asegurarte de ingresar numeros en este campo", AlertsType.Error); // Muestra un mensaje de error
+                e.Handled = true;
+            }
+        }
+
+        private void cmbEstado_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Verifica si la opción seleccionada es "Completado"
+            if (cmbEstado.SelectedItem.ToString() == "Completado")
+            {
+                // Muestra un mensaje de confirmación
+                DialogResult result = MessageBox.Show("¿Está seguro de completar la solicitud?",
+                    "Confirmación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                // Si el usuario selecciona "No", restablece la selección a "Pendiente"
+                if (result == DialogResult.No)
+                {
+                    cmbEstado.SelectedItem = "Pendiente"; // O la opción que desees por defecto
+                }
+            }
         }
     }
 }
