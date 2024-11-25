@@ -14,15 +14,17 @@ namespace SysAcopio.Controllers
     public class RecursoSolicitudController
     {
         private readonly RecursoSolicitudRepository repoRecurso; // Repositorio para acceder a los datos de recursos
+        private readonly InventarioController _InventarioController;
         public List<Recurso> detalleRecursoSolicitud = new List<Recurso>(); // Lista que contiene los detalles de los recursos solicitados
         public List<Recurso> nuevosRecursoSolicitud = new List<Recurso>(); // Lista que contiene los detalles de los recursos solicitados
-        
+
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="RecursoSolicitudController"/>.
         /// </summary>
         public RecursoSolicitudController()
         {
             this.repoRecurso = new RecursoSolicitudRepository(); // Inicializa el repositorio de recursos
+            this._InventarioController = new InventarioController();
         }
 
         /// <summary>
@@ -125,7 +127,69 @@ namespace SysAcopio.Controllers
             return true; // Retorna true indicando que se añadió o actualizó correctamente
         }
 
-       
+        /// <summary>
+        /// Actualiza la cantidad de un recurso en la solicitud especificada.
+        /// </summary>
+        /// <param name="recursoSolicitud">La solicitud de recurso que contiene la información necesaria para la actualización.</param>
+        /// <returns>Devuelve true si la cantidad se actualizó correctamente; de lo contrario, false.</returns>
+        /// <exception cref="ArgumentNullException">Se lanza si <paramref name="recursoSolicitud"/> es null.</exception>
+        public bool ActualizarCantidadRecurso(RecursoSolicitud recursoSolicitud)
+        {
+            if (recursoSolicitud == null) throw new ArgumentNullException(nameof(recursoSolicitud));
+
+            DataTable solicitud = ObtenerDetallesSolicitud(recursoSolicitud.IdSolicitud);
+
+            if (!EsEstadoSolicitudCompleto(solicitud)) return false;
+
+            Recurso recursoObjetivo = ObtenerRecursoObjetivo(recursoSolicitud.IdRecurso);
+
+            if (recursoObjetivo == null) return false; // O manejar el caso donde el recurso no se encuentra
+
+            ActualizarCantidadRecurso(recursoObjetivo, recursoSolicitud.Cantidad);
+            return _InventarioController.Modify(recursoObjetivo);
+        }
+
+        /// <summary>
+        /// Verifica si el estado de la solicitud es completo.
+        /// </summary>
+        /// <param name="solicitud">La tabla de datos que contiene los detalles de la solicitud.</param>
+        /// <returns>Devuelve true si el estado de la solicitud es completo; de lo contrario, false.</returns>
+        private bool EsEstadoSolicitudCompleto(DataTable solicitud)
+        {
+            return Convert.ToBoolean(solicitud.Rows[0]["Estado"]);
+        }
+
+        /// <summary>
+        /// Obtiene el recurso objetivo a partir del ID del recurso.
+        /// </summary>
+        /// <param name="idRecurso">El ID del recurso que se desea obtener.</param>
+        /// <returns>Devuelve el recurso correspondiente al ID especificado, o null si no se encuentra.</returns>
+        private Recurso ObtenerRecursoObjetivo(long idRecurso)
+        {
+            return detalleRecursoSolicitud.FirstOrDefault(detalle => detalle.IdRecurso == idRecurso);
+        }
+
+        /// <summary>
+        /// Actualiza la cantidad de un recurso restando la cantidad especificada.
+        /// </summary>
+        /// <param name="recurso">El recurso cuya cantidad se va a actualizar.</param>
+        /// <param name="cantidad">La cantidad que se va a restar del recurso.</param>
+        private void ActualizarCantidadRecurso(Recurso recurso, int cantidad)
+        {
+            recurso.Cantidad -= cantidad;
+        }
+
+        /// <summary>
+        /// Obtiene los detalles de la solicitud a partir del ID de la solicitud.
+        /// </summary>
+        /// <param name="idSolicitud">El ID de la solicitud para la cual se desean obtener los detalles.</param>
+        /// <returns>Devuelve un DataTable que contiene los detalles de la solicitud.</returns>
+        private DataTable ObtenerDetallesSolicitud(long idSolicitud)
+        {
+            // Implementa la lógica para obtener los detalles de la solicitud
+            return GetDetailSolicitud(idSolicitud);
+        }
+
         /// <summary>
         /// Método para obtener los detalles de una solicitud.
         /// </summary>
@@ -185,7 +249,13 @@ namespace SysAcopio.Controllers
             return filtros.Count > 0 ? string.Join(" AND ", filtros) : string.Empty; // Combina los filtros en una cadena
         }
 
-        public bool updateRecursoSolicitud(RecursoSolicitud recursoSolicitud) {
+        /// <summary>
+        /// Actualiza la solicitud de recurso con la información proporcionada.
+        /// </summary>
+        /// <param name="recursoSolicitud">La solicitud de recurso que se desea actualizar.</param>
+        /// <returns>Devuelve true si la actualización fue exitosa; de lo contrario, false.</returns>
+        public bool updateRecursoSolicitud(RecursoSolicitud recursoSolicitud)
+        {
             return repoRecurso.Update(recursoSolicitud);
         }
 
@@ -205,12 +275,23 @@ namespace SysAcopio.Controllers
             return true; // Retorna true indicando que se eliminó correctamente
         }
 
+        // <summary>
+        /// Obtiene un recurso por su ID.
+        /// </summary>
+        /// <param name="idRecursoSolicitud">El ID de la solicitud de recurso que se desea obtener.</param>
+        /// <returns>Devuelve un DataTable que contiene los detalles del recurso solicitado.</returns>
         public DataTable ObtenerPorId(long idRecursoSolicitud)
         {
             return repoRecurso.ObtenerPorId(idRecursoSolicitud);
         }
 
-        public bool eliminarRecursoSolicitud(long idRecursoSolicitud) {
+        /// <summary>
+        /// Elimina un recurso de la solicitud utilizando su ID.
+        /// </summary>
+        /// <param name="idRecursoSolicitud">El ID de la solicitud de recurso que se desea eliminar.</param>
+        /// <returns>Devuelve true si la eliminación fue exitosa; de lo contrario, false.</returns>
+        public bool eliminarRecursoSolicitud(long idRecursoSolicitud)
+        {
             return repoRecurso.RemoveRecursoFromSolicitud(idRecursoSolicitud);
         }
     }
