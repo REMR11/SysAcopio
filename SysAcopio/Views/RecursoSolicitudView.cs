@@ -15,6 +15,7 @@ namespace SysAcopio.Views
     {
         private readonly SolicitudController _solicitudController; // Controlador para gestionar solicitudes
         private readonly RecursoSolicitudController _recursoSolicitudController; // Controlador para gestionar recursos
+        //private readonly RecursoController
         private Recurso _recursoToAdd; // Recurso seleccionado para añadir
         private DataTable _recursos; // Tabla que contiene los recursos disponibles
         private bool _isFirstLoading = true; // Indica si es la primera carga de la vista
@@ -149,6 +150,13 @@ namespace SysAcopio.Views
         {
             if (!IsUrgenciaSelected()) return; // Verifica si se ha seleccionado una urgencia
 
+            // Validar que los campos no estén vacíos
+            if (!AreInputsValid())
+            {
+                AlertForm miAlertForm = new AlertForm("Por favor, complete todos los campos requeridos antes de guardar.", AlertsType.Info);
+                miAlertForm.ShowDialog();
+                return;
+            }
             var nuevaSolicitud = CreateSolicitudFromInputs(); // Crea una nueva solicitud a partir de los inputs
             long idSolicitud = _solicitudController.CrearSolicitud(nuevaSolicitud); // Crea la solicitud en el controlador
 
@@ -167,11 +175,19 @@ namespace SysAcopio.Views
         private bool IsUrgenciaSelected()
         {
             if (cmbUrgencia.SelectedIndex >= 0) return true; // Retorna true si hay una selección válida
-
-            MessageBox.Show("Por favor, seleccione un valor válido para la urgencia.");
+            AlertForm miAlertForm = new AlertForm("Por favor, seleccione un valor válido para la urgencia.", AlertsType.Info);
+            miAlertForm.ShowDialog();
             return false;
         }
 
+        private bool AreInputsValid()
+        {
+            // Aquí puedes agregar la lógica para verificar que los campos no estén vacíos
+            return !string.IsNullOrWhiteSpace(txtDireccion.Text) &&
+                   !string.IsNullOrWhiteSpace(txtNombreSolicitante.Text) &&
+                   cmbUrgencia.SelectedIndex > 0 && // Asegúrate de que se haya seleccionado una urgencia válida
+                   !string.IsNullOrWhiteSpace(txtMotivo.Text);
+        }
         /// <summary>
         /// Crea una nueva solicitud a partir de los valores ingresados en los campos de texto.
         /// </summary>
@@ -179,10 +195,10 @@ namespace SysAcopio.Views
         private Solicitud CreateSolicitudFromInputs()
         {
             return new Solicitud(
-                txtDireccion.Text,
-                txtNombreSolicitante.Text,
+                txtDireccion.Text.Trim(),
+                txtNombreSolicitante.Text.Trim(),
                 (byte)(cmbUrgencia.SelectedIndex + 1),
-                txtMotivo.Text);
+                txtMotivo.Text.Trim());
         }
 
 

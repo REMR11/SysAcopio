@@ -131,9 +131,9 @@ namespace SysAcopio.Controllers
         /// </summary>
         /// <param name="idDonacion">ID de la donación para la cual se obtienen los detalles.</param>
         /// <returns>DataTable con los detalles de la solicitud.</returns>
-        public DataTable GetDetailSolicitud(long idDonacion)
+        public DataTable GetDetailSolicitud(long idSolicitud)
         {
-            return repoRecurso.GetDetailSolicitud(idDonacion); // Llama al método del repositorio para obtener los detalles de la solicitud
+            return repoRecurso.GetDetailSolicitud(idSolicitud); // Llama al método del repositorio para obtener los detalles de la solicitud
         }
 
         /// <summary>
@@ -208,6 +208,10 @@ namespace SysAcopio.Controllers
         public DataTable ObtenerPorId(long idRecursoSolicitud)
         {
             return repoRecurso.ObtenerPorId(idRecursoSolicitud);
+        }
+
+        public bool eliminarRecursoSolicitud(long idRecursoSolicitud) {
+            return repoRecurso.RemoveRecursoFromSolicitud(idRecursoSolicitud);
         }
     }
 }

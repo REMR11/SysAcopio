@@ -76,8 +76,8 @@ namespace SysAcopio.Views
         private void RefreshDetalleGrid()
         {
             dgvDetalle.DataSource = null; // Limpia la fuente de datos
-            RemoveDetailButtonColumn();  // Elimina la columna de botón de detalle
-            dgvDetalle.DataSource = _recursoSolicitudController.detalleRecursoSolicitud; // Establece la nueva fuente de datos
+            RemoveDetailButtonColumn();
+            dgvDetalle.DataSource = GetRecursosBySolicitudId(this.idSolicitud);// Establece la nueva fuente de datos
             HideUnnecessaryColumns(dgvDetalle, "IdRecurso", "IdTipoRecurso"); // Oculta columnas innecesarias
             AddDeleteButtonColumn(); // Añade la columna de botón para eliminar recursos
 
@@ -86,8 +86,10 @@ namespace SysAcopio.Views
         private void RefreshNewRecurso()
         {
             dgvNuevosRecursos.DataSource = null;
+            RemoveDetailButtonColumn();
             dgvNuevosRecursos.DataSource = _recursoSolicitudController.nuevosRecursoSolicitud;
             HideUnnecessaryColumns(dgvNuevosRecursos, "IdRecurso", "IdTipoRecurso"); // Oculta columnas innecesarias
+            AddDeleteButtonColumn(); // Añade la columna de botón para eliminar recursos
 
         }
         /// <summary>
@@ -134,9 +136,18 @@ namespace SysAcopio.Views
         /// <param name="columnNames">Nombres de las columnas a ocultar.</param>
         private void HideUnnecessaryColumns(DataGridView dgv, params string[] columnNames)
         {
+            try
+            {
+
             // Oculta la columna
             foreach (var columnName in columnNames)
-                dgv.Columns[columnName].Visible = false;
+            {
+                if (dgv.Columns[columnName] != null) dgv.Columns[columnName].Visible = false;
+            }
+            }
+            catch (Exception ex ) { 
+                
+            }
         }
 
         /// <summary>
@@ -555,13 +566,22 @@ namespace SysAcopio.Views
         /// </summary>
         private void dgvDetalle_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.ColumnIndex == dgvDetalle.Columns["deletDetailButton"].Index && e.RowIndex >= 0)
+            if (e.ColumnIndex == dgvDetalle.Columns["deletDetailButton"].Index && e.RowIndex >= 0)
             {
-                long idRecurso = Convert.ToInt64(dgvDetalle.Rows[e.RowIndex].Cells["idRecurso"].Value);
-
-                _recursoSolicitudController.RemoveFromDetail(idRecurso); // Elimina el recurso del deta
-                RefreshDetalleGrid(); // Actualiza la vista del detalle
+                long idRecursoSolicitud = Convert.ToInt64(dgvDetalle.Rows[e.RowIndex].Cells["id_recurso_solicitud"].Value);
+                ConfirmActionForm confirm = new ConfirmActionForm(
+                    "¿Quieres eliminar este recurso definitivamente?",
+                    () => ConfirmRemoved(idRecursoSolicitud) // Usar una expresión lambda
+                );
+                confirm.ShowDialog(); // Mostrar el diálogo de confirmación
             }
+        }
+
+
+        private void ConfirmRemoved(long idRecursoSolicitud)
+        {
+            _recursoSolicitudController.eliminarRecursoSolicitud(idRecursoSolicitud); // Elimina el recurso del deta
+            RefreshDetalleGrid(); // Actualiza la vista del detalle
         }
     }
 }

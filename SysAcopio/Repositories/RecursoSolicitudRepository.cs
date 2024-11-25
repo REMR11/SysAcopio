@@ -119,16 +119,15 @@ namespace SysAcopio.Repositories
             }
         }
 
-        public bool RemoveRecursoFromSolicitud(RecursoSolicitud recursoSolicitud)
+        public bool RemoveRecursoFromSolicitud(long idRecursoSolicitud)
         {
             // Aquí implementas la lógica para eliminar el recurso de la solicitud en la base de datos
 
             string query = @"DELETE FROM RECURSO_SOLICITUD 
-                            WHERE id_solicitud = @idSolicitud AND id_recurso = @idRecurso";
+                            WHERE id_recurso_solicitud = @idRecursoSolicitud";
             SqlParameter[] parametros = new SqlParameter[]
             {
-                new SqlParameter("@idSolicitud", recursoSolicitud.IdSolicitud),
-                new SqlParameter("@idRecurso", recursoSolicitud.IdRecurso)
+                new SqlParameter("@idRecursoSolicitud", idRecursoSolicitud),
             };
             return GenericFuncDB.AffectRow(query, parametros);
         }

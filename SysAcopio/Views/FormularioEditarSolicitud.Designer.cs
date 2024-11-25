@@ -37,7 +37,6 @@
             this.txtDireccion = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.cmbEstado = new System.Windows.Forms.ComboBox();
-            this.btn_Cancelar = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.btnActualizar = new System.Windows.Forms.Button();
             this.txtMotivo = new System.Windows.Forms.TextBox();
@@ -99,7 +98,6 @@
             this.pnlFormulario.Controls.Add(this.txtDireccion);
             this.pnlFormulario.Controls.Add(this.label11);
             this.pnlFormulario.Controls.Add(this.cmbEstado);
-            this.pnlFormulario.Controls.Add(this.btn_Cancelar);
             this.pnlFormulario.Controls.Add(this.label5);
             this.pnlFormulario.Controls.Add(this.btnActualizar);
             this.pnlFormulario.Controls.Add(this.txtMotivo);
@@ -146,21 +144,6 @@
             this.cmbEstado.Size = new System.Drawing.Size(201, 21);
             this.cmbEstado.TabIndex = 33;
             this.cmbEstado.SelectedIndexChanged += new System.EventHandler(this.cmbEstado_SelectedIndexChanged);
-            // 
-            // btn_Cancelar
-            // 
-            this.btn_Cancelar.BackColor = System.Drawing.Color.IndianRed;
-            this.btn_Cancelar.FlatAppearance.BorderSize = 0;
-            this.btn_Cancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Cancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Cancelar.ForeColor = System.Drawing.Color.Transparent;
-            this.btn_Cancelar.Location = new System.Drawing.Point(579, 92);
-            this.btn_Cancelar.Name = "btn_Cancelar";
-            this.btn_Cancelar.Size = new System.Drawing.Size(160, 26);
-            this.btn_Cancelar.TabIndex = 32;
-            this.btn_Cancelar.Text = "Cancelar";
-            this.btn_Cancelar.UseVisualStyleBackColor = false;
-            this.btn_Cancelar.Click += new System.EventHandler(this.btn_Cancelar_Click);
             // 
             // label5
             // 
@@ -511,7 +494,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel pnlFormulario;
         private System.Windows.Forms.ComboBox cmbEstado;
-        private System.Windows.Forms.Button btn_Cancelar;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnActualizar;
         private System.Windows.Forms.TextBox txtMotivo;
