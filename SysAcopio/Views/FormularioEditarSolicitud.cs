@@ -385,10 +385,12 @@ namespace SysAcopio.Views
                     // Si necesitas guardar el DataTable actualizado en la base de datos, 
                     // llama a un método que realice esa operación.
                     bool success = _recursoSolicitudController.updateRecursoSolicitud(recursoSolicitudDTO);
-                    if (!success)
+                    bool resultadoRecurso = _recursoSolicitudController.ActualizarCantidadRecurso(recursoSolicitudDTO);
+                    if (!success && !resultadoRecurso)
                     {
                         Alerts.ShowAlertS("Error al guardar el recurso.", AlertsType.Error); // Muestra un mensaje de error
                     }
+
                 }
                 else
                 {

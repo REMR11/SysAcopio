@@ -224,21 +224,24 @@ namespace SysAcopio.Views
         private void btnEditarSolicitud_Click_1(object sender, EventArgs e)
         {
 
+            var row = dbgSolicitudes.CurrentRow;
             if (!Sesion.isAdmin)
             {
                 Alerts.ShowAlertS("¡Solo un administrador puede editar la solicitud!", AlertsType.Error);
                 return;
             }
+            if (row == null) return ;
+            
+            bool isCompletedTak = Convert.ToBoolean(row.Cells["Estado"].Value);
+            if (!isCompletedTak) {
+                Alerts.ShowAlertS("Solo puedes editar solicitudes activas!", AlertsType.Info);
+                return;
+            }
+                                    
+
             if (dbgSolicitudes.SelectedRows.Count > 0) {
-                var row = dbgSolicitudes.CurrentRow;
-                if (row != null)
-                {
                     long idSolicitud = Convert.ToInt32(row.Cells["Id"].Value);
                     DashBoardManager.LoadForm(new FormularioEditarSolicitud(idSolicitud));
-
-                   //FormularioEditarSolicitud.DatosGuardadosHandler += FormularioEditar_DatosGuardados;
-
-                }
             }
         }
 

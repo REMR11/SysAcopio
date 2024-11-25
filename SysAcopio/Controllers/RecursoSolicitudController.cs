@@ -13,8 +13,9 @@ namespace SysAcopio.Controllers
     /// </summary>
     public class RecursoSolicitudController
     {
-        private readonly RecursoSolicitudRepository repoRecurso; // Repositorio para acceder a los datos de recursos
+        private readonly RecursoSolicitudRepository _repoRecurso; // Repositorio para acceder a los datos de recursos
         private readonly InventarioController _InventarioController;
+        private readonly SolicitudController _solicitudController;
         public List<Recurso> detalleRecursoSolicitud = new List<Recurso>(); // Lista que contiene los detalles de los recursos solicitados
         public List<Recurso> nuevosRecursoSolicitud = new List<Recurso>(); // Lista que contiene los detalles de los recursos solicitados
 
@@ -23,8 +24,9 @@ namespace SysAcopio.Controllers
         /// </summary>
         public RecursoSolicitudController()
         {
-            this.repoRecurso = new RecursoSolicitudRepository(); // Inicializa el repositorio de recursos
+            this._repoRecurso = new RecursoSolicitudRepository(); // Inicializa el repositorio de recursos
             this._InventarioController = new InventarioController();
+            this._solicitudController = new SolicitudController();
         }
 
         /// <summary>
@@ -33,7 +35,7 @@ namespace SysAcopio.Controllers
         /// <returns>DataTable con todos los recursos.</returns>
         public DataTable GetAllRecurso()
         {
-            return repoRecurso.GetAllRecursos(); // Llama al método del repositorio para obtener todos los recursos
+            return _repoRecurso.GetAllRecursos(); // Llama al método del repositorio para obtener todos los recursos
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace SysAcopio.Controllers
         /// <returns>DataTable con todos los tipos de recursos.</returns>
         public DataTable GetAllTipoRecurso()
         {
-            return repoRecurso.GetAllTipoRecurso(); // Llama al método del repositorio para obtener todos los tipos de recursos
+            return _repoRecurso.GetAllTipoRecurso(); // Llama al método del repositorio para obtener todos los tipos de recursos
         }
 
         /// <summary>
@@ -137,11 +139,11 @@ namespace SysAcopio.Controllers
         {
             if (recursoSolicitud == null) throw new ArgumentNullException(nameof(recursoSolicitud));
 
-            DataTable solicitud = ObtenerDetallesSolicitud(recursoSolicitud.IdSolicitud);
+            Solicitud solicitud = _solicitudController.ObtenerSolicitudPorId(recursoSolicitud.IdSolicitud);
 
-            if (!EsEstadoSolicitudCompleto(solicitud)) return false;
+            if (EsEstadoSolicitudCompleto(solicitud)) return false;
 
-            Recurso recursoObjetivo = ObtenerRecursoObjetivo(recursoSolicitud.IdRecurso);
+            Recurso recursoObjetivo = _InventarioController.GetRecurso(recursoSolicitud.IdRecurso);
 
             if (recursoObjetivo == null) return false; // O manejar el caso donde el recurso no se encuentra
 
@@ -154,9 +156,9 @@ namespace SysAcopio.Controllers
         /// </summary>
         /// <param name="solicitud">La tabla de datos que contiene los detalles de la solicitud.</param>
         /// <returns>Devuelve true si el estado de la solicitud es completo; de lo contrario, false.</returns>
-        private bool EsEstadoSolicitudCompleto(DataTable solicitud)
+        private bool EsEstadoSolicitudCompleto(Solicitud solicitud)
         {
-            return Convert.ToBoolean(solicitud.Rows[0]["Estado"]);
+            return Convert.ToBoolean(solicitud.Estado);
         }
 
         /// <summary>
@@ -197,7 +199,7 @@ namespace SysAcopio.Controllers
         /// <returns>DataTable con los detalles de la solicitud.</returns>
         public DataTable GetDetailSolicitud(long idSolicitud)
         {
-            return repoRecurso.GetDetailSolicitud(idSolicitud); // Llama al método del repositorio para obtener los detalles de la solicitud
+            return _repoRecurso.GetDetailSolicitud(idSolicitud); // Llama al método del repositorio para obtener los detalles de la solicitud
         }
 
         /// <summary>
@@ -208,7 +210,7 @@ namespace SysAcopio.Controllers
         /// <returns>El ID de la nueva solicitud creada.</returns>
         public long Create(Recurso recursoSolicitud, long idSolicitud)
         {
-            return repoRecurso.Create(recursoSolicitud, idSolicitud); // Llama al método del repositorio para crear la solicitud
+            return _repoRecurso.Create(recursoSolicitud, idSolicitud); // Llama al método del repositorio para crear la solicitud
         }
 
         /// <summary>
@@ -256,7 +258,7 @@ namespace SysAcopio.Controllers
         /// <returns>Devuelve true si la actualización fue exitosa; de lo contrario, false.</returns>
         public bool updateRecursoSolicitud(RecursoSolicitud recursoSolicitud)
         {
-            return repoRecurso.Update(recursoSolicitud);
+            return _repoRecurso.Update(recursoSolicitud);
         }
 
         /// <summary>
@@ -282,7 +284,7 @@ namespace SysAcopio.Controllers
         /// <returns>Devuelve un DataTable que contiene los detalles del recurso solicitado.</returns>
         public DataTable ObtenerPorId(long idRecursoSolicitud)
         {
-            return repoRecurso.ObtenerPorId(idRecursoSolicitud);
+            return _repoRecurso.ObtenerPorId(idRecursoSolicitud);
         }
 
         /// <summary>
@@ -292,7 +294,7 @@ namespace SysAcopio.Controllers
         /// <returns>Devuelve true si la eliminación fue exitosa; de lo contrario, false.</returns>
         public bool eliminarRecursoSolicitud(long idRecursoSolicitud)
         {
-            return repoRecurso.RemoveRecursoFromSolicitud(idRecursoSolicitud);
+            return _repoRecurso.RemoveRecursoFromSolicitud(idRecursoSolicitud);
         }
     }
 }

@@ -131,5 +131,10 @@ namespace SysAcopio.Controllers
         {
             return repository.SearchRecursos(searchQuery, estadoFiltro, idTipo);
         }
+
+        internal Recurso GetRecurso(long idRecurso)
+        {
+            return repository.GetById(idRecurso);
+        }
     }
 }
