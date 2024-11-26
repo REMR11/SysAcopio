@@ -21,21 +21,22 @@ namespace SysAcopio.Controllers
 
         public SqlConnection ConnectionServer()
         {
-            SqlConnection conn = null;
+           // SqlConnection conn = null;
 
             try
             {
                 // Inicializa la conexión con la cadena de conexión
-                conn = new SqlConnection(connectionStringDeRL);
-                conn.Open(); // Abre la conexión
+                return  new SqlConnection(connectionStringDeRL);
+              //  conn.Open(); // Abre la conexión
             }
             catch (Exception ex)
             {
                 // Manejo de excepciones (puedes registrar el error o lanzarlo)
                 Console.WriteLine($"Error al conectar: {ex.Message}");
+                throw;
             }
 
-            return conn;
+           // return conn;
 
         }
     }

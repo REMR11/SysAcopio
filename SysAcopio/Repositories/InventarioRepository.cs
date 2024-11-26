@@ -16,8 +16,8 @@ namespace SysAcopio.Repositories
 
         public long IdRecurso { get; set; }
         public string NombreRecurso { get; set; }
-        public string Cantidad { get; set; }
-        public string IdTipoRecurso { get; set; }
+        public int Cantidad { get; set; }
+        public int IdTipoRecurso { get; set; }
 
         
       
@@ -30,13 +30,17 @@ namespace SysAcopio.Repositories
             // Usar la conexión a la base de datos
             using (SqlConnection conn = conectar.ConnectionServer())
             {
-                string sql = "SELECT * Recurso(id_recurso, nombre_recurso,cantidad,IdTipoRecurso) ";// Consulta SQL
+                string sql = "SELECT id_recurso, nombre_recurso,cantidad,IdTipoRecurso FROM Recurso";// Consulta SQL
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     try
-                    {
+                    { 
+                        if(conn.State  != ConnectionState.Open)
+                        {
+                            conn.Open();
+                        }
                         // Abrir la conexión
-                        conn.Open();
+                        //conn.Open();
 
                         // Ejecución de la consulta y lectura de la tabla
                         using (SqlDataReader mydr = cmd.ExecuteReader())
@@ -66,19 +70,24 @@ namespace SysAcopio.Repositories
             // Usar 'using' para asegurar que los recursos se liberen correctamente
             using (SqlConnection conn = conectar.ConnectionServer())
             {
-                string insertsql = "INSERT INTO Recurso(nombre_recursos, cantidad, tipo_recursos) VALUES (@nombre_recursos, @cantidad, @tipo_recursos); SELECT SCOPE_IDENTITY();";
+                string insertsql = "INSERT INTO Recurso(nombre_recurso, cantidad, id_tipo_recurso) VALUES (@nombre_recursos, @cantidad, @tipo_recursos); SELECT SCOPE_IDENTITY();";
 
                 using (SqlCommand cmd = new SqlCommand(insertsql, conn))
                 {
                     // Agregar parámetros
                     cmd.Parameters.Add("@nombre_recursos", SqlDbType.VarChar).Value = this.NombreRecurso;
                     cmd.Parameters.Add("@cantidad", SqlDbType.Int).Value = this.Cantidad; // Ajusta el tipo según sea necesario
-                    cmd.Parameters.Add("@tipo_recursos", SqlDbType.Int).Value = this.IdTipoRecurso; // Ajusta el tipo según sea necesario
+                    cmd.Parameters.Add("@tipo_recursos", SqlDbType.Int).Value =this.IdTipoRecurso; // Ajusta el tipo según sea necesario
+                  
 
                     try
                     {
+                        if (conn.State != ConnectionState.Open)
+                        {
+                            conn.Open();
+                        }
                         // Abrir la conexión
-                        conn.Open();
+                        // conn.Open();
 
                         // Ejecutar la consulta y obtener el ID insertado
                         id = Convert.ToInt64(cmd.ExecuteScalar());
@@ -105,7 +114,7 @@ namespace SysAcopio.Repositories
             using (SqlConnection conn = conectar.ConnectionServer())
             {
                 // Corrección de la consulta SQL
-                string updatesql = "UPDATE Recurso SET nombre_recursos = @nombre_recursos, cantidad = @cantidad, tipo_recursos = @tipo_recursos WHERE id_recursos = @id_recursos;";
+                string updatesql = "UPDATE Recurso SET nombre_recurso = @nombre_recursos, cantidad = @cantidad, id_tipo_recurso = @tipo_recursos WHERE id_recurso = @id_recursos;";
 
                 using (SqlCommand cmd = new SqlCommand(updatesql, conn))
                 {
@@ -117,8 +126,11 @@ namespace SysAcopio.Repositories
 
                     try
                     {
-                        // Abrir la conexión
-                        conn.Open();
+                        if (conn.State != ConnectionState.Open)
+                        {
+                            conn.Open();
+                        } // Abrir la conexión
+                        //conn.Open();
 
                         // Ejecutar la consulta y capturar el número de filas afectadas
                         affected = cmd.ExecuteNonQuery();
@@ -136,26 +148,39 @@ namespace SysAcopio.Repositories
 
         }
 
- public int EliminarInventario()
+       
+
+ /*public int EliminarInventario()
         {
             int affected = 0;
             SysAcopioDbContext conectar = new SysAcopioDbContext();
-            SqlConnection conn = conectar.ConnectionServer();
-            string updatesql = "UPDATE Recurso SET IsDeleted  WHERE id_recursos = @id_recursos";
-            SqlCommand cmd = new SqlCommand(updatesql, conn);
-            cmd.Parameters.AddWithValue("@id_recursos", SqlDbType.BigInt).Value = this.IdRecurso;
-            try
-            {
-                conn.Open();
-                affected = cmd.ExecuteNonQuery();
-            }
-            finally
-            {
-                cmd.Dispose();
-                conn.Close();
+            using(SqlConnection conn = conectar.ConnectionServer())
+            { 
+                string updatesql = "UPDATE Recurso SET IsDeleted  WHERE id_recurso = @id_recursos";
+                using(SqlCommand cmd = new SqlCommand(updatesql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id_recursos", SqlDbType.BigInt).Value = this.IdRecurso;
+                    try
+                    {
+                        if (conn.State != ConnectionState.Open)
+                        {
+                            conn.Open();
+                        }
+                       // conn.Open();
+                        affected = cmd.ExecuteNonQuery();
+                    }
+                    catch(SqlException ex) 
+                    {
+                        throw new Exception($"error al eliminar inventario: {ex.Message}", ex);
+              //  cmd.Dispose();
+               // conn.Close();
+                    }
+                }
             }
             return affected;
         }
+            
+            
         public void EliminarInventario(List<Inventario> inventario, int id)
         {
             // Buscar el elemento que se desea eliminar
@@ -170,13 +195,84 @@ namespace SysAcopio.Repositories
             {
                 // Manejo de errores: puedes lanzar una excepción o registrar un mensaje
                 Console.WriteLine($"No se encontró el recurso con ID: {id}");
+                //throw new Exception($"No se encontró el recurso con ID: {id}");
             }
+        }
+ */
+
+         public List<Inventario> ListaInventario()
+        {
+            List<Inventario> invetarios = new List<Inventario>();
+            SysAcopioDbContext conectar = new SysAcopioDbContext();
+            using(SqlConnection conn=conectar.ConnectionServer())
+            {
+                string selectSql = "SELECT id_recurso,nombre_recurso,cantidad,id_tipo_recurso FROM Recurso WHERE cantidad >= 0;";
+                using(SqlCommand cmd = new SqlCommand(selectSql,conn))
+                {
+                    try
+                    {
+                        if (conn.State != ConnectionState.Open)
+                        {
+                            conn.Open();
+                        }
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Inventario inventario = new Inventario
+                                {
+                                    IdRecurso = reader.GetInt64(reader.GetOrdinal("id_recurso")),
+                                    NombreRecurso = reader.GetString(reader.GetOrdinal("nombre_recurso")),
+                                    Cantidad = reader.GetInt32(reader.GetOrdinal("cantidad")),
+                                    IdTipoRecurso = reader.GetInt64(reader.GetOrdinal("id_tipo_recurso"))
+                                };
+                                invetarios.Add(inventario);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"ERROR al listar: {ex.Message}", ex);
+                    }
+                }
+            }
+            return invetarios;
         }
 
 
 
 
+        public int EliminarRegistro()
+        {
+            int affected = 0;
+            SysAcopioDbContext conectar = new SysAcopioDbContext();
 
+            using (SqlConnection conn = conectar.ConnectionServer())
+            {
+                string updateSql = "UPDATE Recurso SET cantidad = - 1 WHERE id_recurso = @id_recurso AND cantidad > 0";
+
+                using (SqlCommand cmd = new SqlCommand(updateSql, conn))
+                {
+                    cmd.Parameters.Add("@id_recurso", SqlDbType.BigInt).Value = this.IdRecurso;
+
+                    try
+                    {
+                        if (conn.State != ConnectionState.Open)
+                        {
+                            conn.Open();
+                        }
+
+                        affected = cmd.ExecuteNonQuery();
+                    }
+                    catch (SqlException ex)
+                    {
+                        throw new Exception($"Error al restar cantidad: {ex.Message}", ex);
+                    }
+                }
+            }
+
+            return affected;
+        }
 
     }
 

@@ -8,8 +8,8 @@ namespace SysAcopio.Models
 {
     public partial class Inventario
     {
-        internal readonly int IdRecurso;
-       
+       // internal readonly int IdRecurso;
+
 
         ///<summary>
         ///</summary>
@@ -19,13 +19,16 @@ namespace SysAcopio.Models
         ///<param name="idTipoRecurso"></param>
 
 
-
+        public long IdRecurso { get; set; }
+        public string NombreRecurso { get; set; }
+        public int Cantidad { get; set; }
+        public long IdTipoRecurso { get; set; }
 
         public Inventario()
         {
 
         }
-        public Inventario(long idRecurso, string nombreRecurso, string cantidad, string idTipoRecurso)
+        public Inventario(long idRecurso, string nombreRecurso, int cantidad, int idTipoRecurso)
         {
             idRecurso= idRecurso;
             nombreRecurso= nombreRecurso;
