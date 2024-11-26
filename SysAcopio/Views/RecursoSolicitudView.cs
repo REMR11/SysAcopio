@@ -12,7 +12,7 @@ namespace SysAcopio.Views
     /// Hereda de <see cref="Form"/> y proporciona una interfaz de usuario para crear y gestionar solicitudes de recursos.
     /// </summary>
     public partial class RecursoSolicitudView : Form
-   {
+    {
         private readonly SolicitudController _solicitudController; // Controlador para gestionar solicitudes
         private readonly RecursoSolicitudController _recursoSolicitudController; // Controlador para gestionar recursos
         //private readonly RecursoController
@@ -323,6 +323,12 @@ namespace SysAcopio.Views
             if (Convert.ToInt32(txtRecursoCantidad.Text) <= 0)
             {
                 Alerts.ShowAlertS("La cantidad a donar debe ser mayor que 0", AlertsType.Info); // Muestra un mensaje de error
+                return false;
+            }
+
+            if (!_recursoSolicitudController.CheckInvetory(_recursoToAdd, Convert.ToInt32(txtRecursoCantidad.Text)))
+            {
+                Alerts.ShowAlertS("La cantidad que desea agregar del recurso supera la del inventario", AlertsType.Info); // Muestra un mensaje de error
                 return false;
             }
 

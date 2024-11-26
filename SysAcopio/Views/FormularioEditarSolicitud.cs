@@ -242,7 +242,7 @@ namespace SysAcopio.Views
         private void loadSolicitud()
         {
             Solicitud solicitud = _solicitudController.ObtenerSolicitudPorId(this.idSolicitud); // Obtiene la solicitud por ID
-            cmbUrgencia.SelectedIndex =  solicitud.Urgencia ==3? solicitud.Urgencia-1 : solicitud.Urgencia; // Establece la urgencia en el combo box
+            cmbUrgencia.SelectedIndex = solicitud.Urgencia == 3 ? solicitud.Urgencia - 1 : solicitud.Urgencia; // Establece la urgencia en el combo box
             cmbEstado.SelectedIndex = Convert.ToInt16(solicitud.Estado); // Establece el estado en el combo box
             txtDireccion.Text = solicitud.Ubicacion.ToString();  // Establece la direcicon a la que se solicita entregar productos
             txtMotivo.Text = solicitud.Motivo; // Establece el motivo en el campo de texto
@@ -308,6 +308,12 @@ namespace SysAcopio.Views
                 return false;
             }
 
+            if (!_recursoSolicitudController.CheckInvetory(recursoToAdd, Convert.ToInt32(txtRecursoCantidad.Text)))
+            {
+                Alerts.ShowAlertS("La cantidad que desea agregar del recurso supera la del inventario", AlertsType.Info); // Muestra un mensaje de error
+                return false;
+            }
+
             return true; // Retorna true si es válido
         }
 
@@ -356,7 +362,7 @@ namespace SysAcopio.Views
             // Llamar al controlador para actualizar la solicitud
             bool resultado = _solicitudController.ActualizarSolicitud(solicitudActualizada);
             UpdateRecursosConfirmados();
-            
+
 
             // Verificar el resultado de la actualización
             if (resultado)
@@ -371,10 +377,11 @@ namespace SysAcopio.Views
 
             DashBoardManager.LoadForm(new SolicitudView());
         }
-        private void removedRecursoSelected() {
+        private void removedRecursoSelected()
+        {
             foreach (var item in recursosToRemoved)
             {
-                _recursoSolicitudController.eliminarRecursoSolicitud(item);   
+                _recursoSolicitudController.eliminarRecursoSolicitud(item);
             }
         }
         private void UpdateRecursosConfirmados()
@@ -408,7 +415,7 @@ namespace SysAcopio.Views
                     Alerts.ShowAlertS("No se encontró el recurso.", AlertsType.Error); // Muestra un mensaje de error
                 }
             }
-            
+
         }
 
 
@@ -477,7 +484,8 @@ namespace SysAcopio.Views
             return true;
         }
 
-        private bool ValidarYMostarAlertMotivo() {
+        private bool ValidarYMostarAlertMotivo()
+        {
             if (!EsMotidoValido(out string mensajeError))
             {
                 Alerts.ShowAlertS(mensajeError, AlertsType.Info);
@@ -497,7 +505,7 @@ namespace SysAcopio.Views
             actualizarSolicitud.Urgencia = Convert.ToByte(cmbUrgencia.SelectedIndex);
             actualizarSolicitud.Estado = Convert.ToBoolean(cmbEstado.SelectedIndex);
 
-            return actualizarSolicitud;            
+            return actualizarSolicitud;
         }
 
         /// <summary>
@@ -515,7 +523,7 @@ namespace SysAcopio.Views
                 };
 
                 long result = _recursoSolicitudController.Create(recurso, idSolicitud); // Guarda el recurso en el controlador
-                
+
                 if (result <= 0)
                 {
                     Alerts.ShowAlertS("Error al guardar el recurso.", AlertsType.Error); // Muestra un mensaje de error
@@ -603,7 +611,7 @@ namespace SysAcopio.Views
         {
             recursosToRemoved.Add(idRecursoSolicitud);
             _recursoSolicitudController.RemoveFromDetail(idRecursoSolicitud); // Elimina el recurso del deta
-            
+
             RefreshDetalleGrid(); // Actualiza la vista del detalle
         }
     }

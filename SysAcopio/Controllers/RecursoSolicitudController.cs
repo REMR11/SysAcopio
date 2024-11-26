@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace SysAcopio.Controllers
 {
@@ -295,6 +296,26 @@ namespace SysAcopio.Controllers
         public bool eliminarRecursoSolicitud(long idRecursoSolicitud)
         {
             return _repoRecurso.RemoveRecursoFromSolicitud(idRecursoSolicitud);
+        }
+
+        /// <summary>
+        /// Método que valida si la cantidad del recurso en el inventario es suficiente para poder agregarla a la solicutud
+        /// </summary>
+        /// <param name="recurso"></param>
+        /// <returns></returns>
+        public bool CheckInvetory(Recurso recurso, int cantidad)
+        {
+            Recurso recursoInDataBase = _InventarioController.GetRecurso(recurso.IdRecurso);
+
+            if (recursoInDataBase != null && recursoInDataBase.Cantidad > cantidad)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void setCurrentListRecursosSolicitud(long id)
+        {
         }
     }
 }
