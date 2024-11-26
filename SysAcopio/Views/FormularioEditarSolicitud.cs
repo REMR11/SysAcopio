@@ -45,6 +45,7 @@ namespace SysAcopio.Views
             LoadRecursos(); // Carga los recursos disponibles
             setRecursosSolicitud(); // Carga los recursos específicos de la solicitud
             SetTipoRecursos(); // Establece los tipos de recursos en el combo box
+            _recursoSolicitudController.SetCurrentListRecursosSolicitud(idSolicitud);
         }
 
         /// <summary>
@@ -80,8 +81,9 @@ namespace SysAcopio.Views
             dgvDetalle.DataSource = null; // Limpia la fuente de datos
             RemoveDetailButtonColumn();
             //dgvDetalle.DataSource = GetRecursosBySolicitudId(this.idSolicitud);// Establece la nueva fuente de datos
-            dgvDetalle.DataSource = _recursoSolicitudController.detalleRecursoSolicitud;// Establece la nueva fuente de datos
-            HideUnnecessaryColumns(dgvDetalle, "IdRecurso", "IdTipoRecurso"); // Oculta columnas innecesarias
+            dgvDetalle.DataSource = _recursoSolicitudController.GetDataTableCurrentListRecursosSolicitudJ(idSolicitud);// Establece la nueva fuente de datos
+            HideUnnecessaryColumns(dgvDetalle, "id_recurso_solicitud", "id_recurso", "id_solicitud"); // Oculta columnas innecesarias
+            ConfigureGridColumns();//Configuramos las columnas
             AddDeleteButtonColumn(); // Añade la columna de botón para eliminar recursos
 
         }
@@ -598,19 +600,22 @@ namespace SysAcopio.Views
             if (e.ColumnIndex == dgvDetalle.Columns["deletDetailButton"].Index && e.RowIndex >= 0)
             {
                 long idRecursoSolicitud = Convert.ToInt64(dgvDetalle.Rows[e.RowIndex].Cells["id_recurso_solicitud"].Value);
+                long idRecurso = Convert.ToInt64(dgvDetalle.Rows[e.RowIndex].Cells["id_recurso"].Value);
                 ConfirmActionForm confirm = new ConfirmActionForm(
                     "¿Quieres eliminar este recurso definitivamente?",
-                    () => ConfirmRemoved(idRecursoSolicitud) // Usar una expresión lambda
+                    () => ConfirmRemoved(idRecursoSolicitud, idRecurso) // Usar una expresión lambda
                 );
                 confirm.ShowDialog(); // Mostrar el diálogo de confirmación
             }
         }
 
 
-        private void ConfirmRemoved(long idRecursoSolicitud)
+        private void ConfirmRemoved(long idRecursoSolicitud, long idRecurso)
         {
-            recursosToRemoved.Add(idRecursoSolicitud);
-            _recursoSolicitudController.RemoveFromDetail(idRecursoSolicitud); // Elimina el recurso del deta
+            if (_recursoSolicitudController.RemoveFromDetail(idRecurso))// Elimina el recurso del deta
+            {
+                recursosToRemoved.Add(idRecursoSolicitud);
+            }
 
             RefreshDetalleGrid(); // Actualiza la vista del detalle
         }

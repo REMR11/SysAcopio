@@ -314,8 +314,50 @@ namespace SysAcopio.Controllers
             return false;
         }
 
-        public void setCurrentListRecursosSolicitud(long id)
+        /// <summary>
+        /// Método que setea la lista actual de los recursos
+        /// </summary>
+        /// <param name="id"></param>
+        public void SetCurrentListRecursosSolicitud(long id)
         {
+            //Obtenemos el detalle
+            DataTable listaDeRecurso = _repoRecurso.GetDetailSolicitud(id);
+
+            //Iteramos sobre cada fila
+            foreach (DataRow row in listaDeRecurso.Rows)
+            {
+                AddDetalle(new Recurso
+                {
+                    IdRecurso = Convert.ToInt64(row["id_recurso"]),
+                    NombreRecurso = row["nombre_recurso"].ToString(),
+                }, Convert.ToInt32(row["cantidad"]));
+            }
+        }
+
+        /// <summary>
+        /// Método para convertir a tabla toda la lista de recursos actuales
+        /// </summary>
+        /// <param name="id"></param>
+        public DataTable GetDataTableCurrentListRecursosSolicitudJ(long id)
+        {
+            // Obtenemos el detalle
+            DataTable listaDeRecurso = _repoRecurso.GetDetailSolicitud(id);
+
+            // Recorremos el DataTable en orden inverso para evitar problemas al eliminar filas
+            for (int i = listaDeRecurso.Rows.Count - 1; i >= 0; i--)
+            {
+                DataRow row = listaDeRecurso.Rows[i];
+                long idRecurso = Convert.ToInt64(row["id_recurso"]);
+
+                //Verificamos si esta en la lista, en caso que no este lo eliminamos
+                var recurso = detalleRecursoSolicitud.FirstOrDefault(detalle => detalle.IdRecurso == idRecurso);
+                if (recurso == null)
+                {
+                    listaDeRecurso.Rows.Remove(row);
+                }
+            }
+
+            return listaDeRecurso;
         }
     }
 }
