@@ -163,7 +163,7 @@ namespace SysAcopio.Views
             ClearInputs(); // Limpia los inputs
             SaveRecursos(idSolicitud); // Guarda los recursos asociados a la solicitud
             RefreshDetalleGrid(); // Actualiza la vista del detalle
-            Alerts.ShowAlertS("Recursos guardados exitosamente.", AlertsType.Info); // Muestra un mensaje de éxito
+            Alerts.ShowAlertS("Recursos guardados exitosamente.", AlertsType.Confirm); // Muestra un mensaje de éxito
             DashBoardManager.LoadForm(new SolicitudView()); // Carga la vista de solicitud
         }
 
@@ -185,7 +185,7 @@ namespace SysAcopio.Views
             // Aquí puedes agregar la lógica para verificar que los campos no estén vacíos
             return !string.IsNullOrWhiteSpace(txtDireccion.Text) &&
                    !string.IsNullOrWhiteSpace(txtNombreSolicitante.Text) &&
-                   cmbUrgencia.SelectedIndex > 0 && // Asegúrate de que se haya seleccionado una urgencia válida
+                   cmbUrgencia.SelectedIndex >= 0 && // Asegúrate de que se haya seleccionado una urgencia válida
                    !string.IsNullOrWhiteSpace(txtMotivo.Text);
         }
         /// <summary>
@@ -270,7 +270,7 @@ namespace SysAcopio.Views
                 ResetRecursoSelection(); // Resetea la selección del recurso
                 RefreshDetalleGrid(); // Actualiza la vista del detalle
             }
-            
+
         }
 
 
