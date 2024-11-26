@@ -238,7 +238,7 @@ namespace SysAcopio.Views
         private void loadSolicitud()
         {
             Solicitud solicitud = _solicitudController.ObtenerSolicitudPorId(this.idSolicitud); // Obtiene la solicitud por ID
-            cmbUrgencia.SelectedIndex = solicitud.Urgencia; // Establece la urgencia en el combo box
+            cmbUrgencia.SelectedIndex =  solicitud.Urgencia ==3? solicitud.Urgencia-1 : solicitud.Urgencia; // Establece la urgencia en el combo box
             cmbEstado.SelectedIndex = Convert.ToInt16(solicitud.Estado); // Establece el estado en el combo box
             txtDireccion.Text = solicitud.Ubicacion.ToString();  // Establece la direcicon a la que se solicita entregar productos
             txtMotivo.Text = solicitud.Motivo; // Establece el motivo en el campo de texto
@@ -343,22 +343,22 @@ namespace SysAcopio.Views
         {
             if (!IsUrgenciaSelected()) return; // Verifica si se ha seleccionado una urgencia estado para la solicitud.
             if (!IsEstadoSelected()) return; // Verifica si se ha seleccionado un estado para la solicitud.
-            ValidarYMostrarAlertaDireccion(); // Verifica que direccion no contenga valores nulos o espacio en blanco.
-            ValidarYMostarAlertMotivo(); // Verifica que Motivo no contenga valores nulos o espacio en blanco.
+                                             // Verifica que la dirección y el motivo sean válidos
+            if (!ValidarYMostrarAlertaDireccion()) return; // Verifica que direccion no contenga valores nulos o espacio en blanco.
+            if (!ValidarYMostarAlertMotivo()) return; // Verifica que Motivo no contenga valores nulos o espacio en blanco.
 
             var solicitudActualizada = CreateSolicitudFromInputs(); // Crea una solicitud con los datos obtenidos
 
             // Llamar al controlador para actualizar la solicitud
             bool resultado = _solicitudController.ActualizarSolicitud(solicitudActualizada);
             UpdateRecursosConfirmados();
-            SaveRecursos(idSolicitud);
+            
 
             // Verificar el resultado de la actualización
             if (resultado)
             {
                 Alerts.ShowAlertS("Solicitud actualizada con éxito.", AlertsType.Confirm);
-                // Aquí puedes cerrar el formulario o realizar otras acciones necesarias
-                this.Close();
+                this.Close(); // Aquí puedes cerrar el formulario o realizar otras acciones necesarias
             }
             else
             {
@@ -370,6 +370,8 @@ namespace SysAcopio.Views
 
         private void UpdateRecursosConfirmados()
         {
+            SaveRecursos(idSolicitud);
+            RefreshDetalleGrid();
             foreach (DataGridViewRow row in dgvDetalle.Rows)
             {
                 long idRecursoSolicitud = Convert.ToInt64(row.Cells["id_recurso_solicitud"].Value);
@@ -397,6 +399,7 @@ namespace SysAcopio.Views
                     Alerts.ShowAlertS("No se encontró el recurso.", AlertsType.Error); // Muestra un mensaje de error
                 }
             }
+            
         }
 
 
@@ -441,12 +444,14 @@ namespace SysAcopio.Views
         }
 
         // Método para manejar la validación y la alerta
-        private void ValidarYMostrarAlertaDireccion()
+        private bool ValidarYMostrarAlertaDireccion()
         {
             if (!EsDireccionValida(out string mensajeError))
             {
                 Alerts.ShowAlertS(mensajeError, AlertsType.Info);
+                return false; // Indica que la validación falló
             }
+            return true; // Indica que la validación fue exitosa
         }
 
 
@@ -461,10 +466,13 @@ namespace SysAcopio.Views
             return true;
         }
 
-        private void ValidarYMostarAlertMotivo() {
-            if (!EsMotidoValido(out string mensajeError)) {
+        private bool ValidarYMostarAlertMotivo() {
+            if (!EsMotidoValido(out string mensajeError))
+            {
                 Alerts.ShowAlertS(mensajeError, AlertsType.Info);
+                return false; // Indica que la validación falló
             }
+            return true; // Indica que la validación fue exitosa
         }
         /// <summary>
         /// Crea una nueva solicitud a partir de los valores ingresados en los campos de texto.
@@ -497,6 +505,8 @@ namespace SysAcopio.Views
                 };
 
                 long result = _recursoSolicitudController.Create(recurso, idSolicitud); // Guarda el recurso en el controlador
+                
+
                 if (result <= 0)
                 {
                     Alerts.ShowAlertS("Error al guardar el recurso.", AlertsType.Error); // Muestra un mensaje de error
