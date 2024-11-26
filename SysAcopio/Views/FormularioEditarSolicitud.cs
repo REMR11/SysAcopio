@@ -59,7 +59,6 @@ namespace SysAcopio.Views
         private void setRecursosSolicitud()
         {
             DataTable recursos = GetRecursosBySolicitudId(this.idSolicitud); // Obtiene los recursos por ID de solicitud
-
             if (HasRecursos(recursos)) // Verifica si hay recursos
             {
                 BindRecursosToGrid(recursos); // Vincula los recursos al DataGridView
@@ -139,14 +138,15 @@ namespace SysAcopio.Views
             try
             {
 
-            // Oculta la columna
-            foreach (var columnName in columnNames)
+                // Oculta la columna
+                foreach (var columnName in columnNames)
+                {
+                    if (dgv.Columns[columnName] != null) dgv.Columns[columnName].Visible = false;
+                }
+            }
+            catch (Exception ex)
             {
-                if (dgv.Columns[columnName] != null) dgv.Columns[columnName].Visible = false;
-            }
-            }
-            catch (Exception ex ) { 
-                
+
             }
         }
 
@@ -217,7 +217,7 @@ namespace SysAcopio.Views
         /// </summary>
         private void ConfigureGridColumns()
         {
-
+            dgvDetalle.Columns["id_recurso"].Visible = false;
             dgvDetalle.Columns["id_recurso_solicitud"].Visible = false; // Ocultar columna ID si no es necesaria
             dgvDetalle.Columns["id_solicitud"].Visible = false; // Ocultar columna ID de solicitud si no es necesaria  
             dgvDetalle.Columns["nombre_recurso"].HeaderText = "Nombre del Producto"; // Cambia el encabezado de la columna
@@ -343,8 +343,16 @@ namespace SysAcopio.Views
         {
             if (!IsUrgenciaSelected()) return; // Verifica si se ha seleccionado una urgencia estado para la solicitud.
             if (!IsEstadoSelected()) return; // Verifica si se ha seleccionado un estado para la solicitud.
-            ValidarYMostrarAlertaDireccion(); // Verifica que direccion no contenga valores nulos o espacio en blanco.
-            ValidarYMostarAlertMotivo(); // Verifica que Motivo no contenga valores nulos o espacio en blanco.
+            if (txtDireccion.Text.Trim() == string.Empty)
+            {
+                Alerts.ShowAlertS("La direccion no puede estar vacia", AlertsType.Info);
+                return;
+            }; // Verifica que direccion no contenga valores nulos o espacio en blanco.
+            if (txtMotivo.Text.Trim() == string.Empty)
+            {
+                Alerts.ShowAlertS("El motivo no puede estar vacio", AlertsType.Info);
+                return;
+            }; // Verifica que Motivo no contenga valores nulos o espacio en blanco.
 
             var solicitudActualizada = CreateSolicitudFromInputs(); // Crea una solicitud con los datos obtenidos
 
@@ -376,7 +384,7 @@ namespace SysAcopio.Views
                 DataTable recursoSolicitudDataTable = _recursoSolicitudController.ObtenerPorId(idRecursoSolicitud);
                 if (recursoSolicitudDataTable != null && recursoSolicitudDataTable.Rows.Count > 0)
                 {
-                    RecursoSolicitud recursoSolicitudDTO =new RecursoSolicitud();
+                    RecursoSolicitud recursoSolicitudDTO = new RecursoSolicitud();
 
                     // Mapear los datos del DataTable a la instancia de RecursoSolicitud
                     recursoSolicitudDTO.IdRecurso = Convert.ToInt32(recursoSolicitudDataTable.Rows[0]["id_recurso"]);
@@ -450,19 +458,23 @@ namespace SysAcopio.Views
         }
 
 
-        private bool EsMotidoValido(out string mensajeError) { 
+        private bool EsMotidoValido(out string mensajeError)
+        {
             string motivo = txtMotivo.Text.Trim();
             mensajeError = string.Empty;
 
-            if (string.IsNullOrWhiteSpace(motivo)) {
+            if (string.IsNullOrWhiteSpace(motivo))
+            {
                 mensajeError = "El motivo no puede estar vacio.";
                 return false;
             }
             return true;
         }
 
-        private void ValidarYMostarAlertMotivo() {
-            if (!EsMotidoValido(out string mensajeError)) {
+        private void ValidarYMostarAlertMotivo()
+        {
+            if (!EsMotidoValido(out string mensajeError))
+            {
                 Alerts.ShowAlertS(mensajeError, AlertsType.Info);
             }
         }
@@ -479,7 +491,7 @@ namespace SysAcopio.Views
             actualizarSolicitud.Estado = Convert.ToBoolean(cmbEstado.SelectedIndex);
 
             return actualizarSolicitud;
-               
+
         }
 
         /// <summary>
