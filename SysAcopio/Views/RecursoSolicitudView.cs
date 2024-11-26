@@ -12,7 +12,7 @@ namespace SysAcopio.Views
     /// Hereda de <see cref="Form"/> y proporciona una interfaz de usuario para crear y gestionar solicitudes de recursos.
     /// </summary>
     public partial class RecursoSolicitudView : Form
-    {
+   {
         private readonly SolicitudController _solicitudController; // Controlador para gestionar solicitudes
         private readonly RecursoSolicitudController _recursoSolicitudController; // Controlador para gestionar recursos
         //private readonly RecursoController
@@ -149,7 +149,7 @@ namespace SysAcopio.Views
         private void btnCrear_Click(object sender, EventArgs e)
         {
             if (!IsUrgenciaSelected()) return; // Verifica si se ha seleccionado una urgencia
-
+            if (!IsDetalleValido()) return; // Verifica que el detalle no esté vacío
             // Validar que los campos no estén vacíos
             if (!AreInputsValid())
             {
@@ -157,6 +157,7 @@ namespace SysAcopio.Views
                 miAlertForm.ShowDialog();
                 return;
             }
+
             var nuevaSolicitud = CreateSolicitudFromInputs(); // Crea una nueva solicitud a partir de los inputs
             long idSolicitud = _solicitudController.CrearSolicitud(nuevaSolicitud); // Crea la solicitud en el controlador
 
@@ -180,6 +181,20 @@ namespace SysAcopio.Views
             return false;
         }
 
+        /// <summary>
+        /// Verifica si el DataGridView tiene al menos una fila.
+        /// </summary>
+        /// <returns>True si el detalle es válido, de lo contrario false.</returns>
+        private bool IsDetalleValido()
+        {
+            if (dgvDetalle.Rows.Count == 0)
+            {
+                AlertForm miAlertForm = new AlertForm("El detalle no puede estar vacío. Por favor, agregue al menos un elemento antes de guardar.", AlertsType.Info);
+                miAlertForm.ShowDialog();
+                return false;
+            }
+            return true;
+        }
         private bool AreInputsValid()
         {
             // Aquí puedes agregar la lógica para verificar que los campos no estén vacíos
@@ -384,7 +399,7 @@ namespace SysAcopio.Views
         /// </summary>
         private void btn_Cancelar_Click(object sender, EventArgs e)
         {
-            DashBoardManager.LoadForm(new SolicitudView()); // Carga la vista de solicitud
+            DashBoardManager.LoadForm(new SolicitudView()); // Carga la vista de s-olicitud
         }
     }
 }

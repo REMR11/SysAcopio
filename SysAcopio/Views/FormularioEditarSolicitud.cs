@@ -2,6 +2,8 @@
 using SysAcopio.Models;
 using SysAcopio.Utils;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 
@@ -19,6 +21,7 @@ namespace SysAcopio.Views
         private long idSolicitud; // ID de la solicitud actual
         private bool isFirstLoading; // Indica si es la primera carga de datos
 
+        private List<long> recursosToRemoved = new List<long>();
 
         /// <summary>
         /// Constructor de la clase. Inicializa los controladores y la ID de la solicitud.
@@ -76,7 +79,8 @@ namespace SysAcopio.Views
         {
             dgvDetalle.DataSource = null; // Limpia la fuente de datos
             RemoveDetailButtonColumn();
-            dgvDetalle.DataSource = GetRecursosBySolicitudId(this.idSolicitud);// Establece la nueva fuente de datos
+            //dgvDetalle.DataSource = GetRecursosBySolicitudId(this.idSolicitud);// Establece la nueva fuente de datos
+            dgvDetalle.DataSource = _recursoSolicitudController.detalleRecursoSolicitud;// Establece la nueva fuente de datos
             HideUnnecessaryColumns(dgvDetalle, "IdRecurso", "IdTipoRecurso"); // Oculta columnas innecesarias
             AddDeleteButtonColumn(); // Añade la columna de botón para eliminar recursos
 
@@ -348,7 +352,7 @@ namespace SysAcopio.Views
             if (!ValidarYMostarAlertMotivo()) return; // Verifica que Motivo no contenga valores nulos o espacio en blanco.
 
             var solicitudActualizada = CreateSolicitudFromInputs(); // Crea una solicitud con los datos obtenidos
-
+            removedRecursoSelected();
             // Llamar al controlador para actualizar la solicitud
             bool resultado = _solicitudController.ActualizarSolicitud(solicitudActualizada);
             UpdateRecursosConfirmados();
@@ -367,7 +371,12 @@ namespace SysAcopio.Views
 
             DashBoardManager.LoadForm(new SolicitudView());
         }
-
+        private void removedRecursoSelected() {
+            foreach (var item in recursosToRemoved)
+            {
+                _recursoSolicitudController.eliminarRecursoSolicitud(item);   
+            }
+        }
         private void UpdateRecursosConfirmados()
         {
             SaveRecursos(idSolicitud);
@@ -592,7 +601,9 @@ namespace SysAcopio.Views
 
         private void ConfirmRemoved(long idRecursoSolicitud)
         {
-            _recursoSolicitudController.eliminarRecursoSolicitud(idRecursoSolicitud); // Elimina el recurso del deta
+            recursosToRemoved.Add(idRecursoSolicitud);
+            _recursoSolicitudController.RemoveFromDetail(idRecursoSolicitud); // Elimina el recurso del deta
+            
             RefreshDetalleGrid(); // Actualiza la vista del detalle
         }
     }
