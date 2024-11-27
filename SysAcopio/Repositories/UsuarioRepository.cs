@@ -259,9 +259,43 @@ namespace SysAcopio.Repositories
                 }
             }
         }
+        /// <summary>
+        /// Método para obtener los datos de un usuario por su alias.
+        /// </summary>
+        /// <param name="aliasUsuario">El alias del usuario.</param>
+        /// <returns>Una tupla que indica si el usuario fue encontrado y sus datos (contraseña encriptada, nombre de usuario, rol de usuario, ID de rol).</returns>
+        public (bool, string, string, string, long) ObtenerDatosUsuario(string aliasUsuario)
+        {
+            using (SqlConnection connection = dbContext.ConnectionServer())
+            {
+                // Consulta SQL para obtener los datos del usuario y su rol
+                string consulta = @"SELECT u.id_usuario, u.id_rol, u.nombre_usuario, r.nombre_rol, u.contrasenia
+                            FROM Usuario as u 
+                            JOIN Rol as r ON u.id_rol = r.id_rol
+                            WHERE u.alias_usuario = @alias_usuario AND u.estado = 1;";
+                SqlCommand cmd = new SqlCommand(consulta, connection);
+                cmd.Parameters.AddWithValue("@alias_usuario", aliasUsuario);
 
+                // Ejecutar la consulta y leer los resultados
+                using (SqlDataReader lector = cmd.ExecuteReader())
+                {
+                    if (lector.HasRows)
+                    {
+                        lector.Read();
+                        // Obtener los datos del usuario
+                        string contraseniaEncriptada = lector["contrasenia"].ToString();
+                        string nombreUsuario = lector["nombre_usuario"].ToString();
+                        string rolUsuario = lector["nombre_rol"].ToString();
+                        long idRol = Convert.ToInt64(lector["id_rol"]);
 
-
+                        // Devolver los datos del usuario 
+                        return (true, contraseniaEncriptada, nombreUsuario, rolUsuario, idRol);
+                    }
+                }
+            }
+            // Devolver valores por defecto si el usuario no fue encontrado
+            return (false, null, null, null, 0);
+        }
 
     }
 
