@@ -186,6 +186,12 @@ namespace SysAcopio.Views
                 return;
             }
 
+            if (!Int32.TryParse(txtNombreRecurso.Text, out int result))
+            {
+                Alerts.ShowAlertS("El número es muy grande", AlertsType.Error);
+                return;
+            }
+
             if (Convert.ToInt32(txtRecursoCantidad.Text) <= 0)
             {
                 Alerts.ShowAlertS("La cantidad a donar debe ser mayor que 0", AlertsType.Info);
@@ -222,7 +228,7 @@ namespace SysAcopio.Views
 
         private void btnCrear_Click(object sender, EventArgs e)
         {
-             long idProveedor = Convert.ToInt64(cmbProveedores.SelectedValue);
+            long idProveedor = Convert.ToInt64(cmbProveedores.SelectedValue);
 
             if (idProveedor == 0)
             {
@@ -281,6 +287,17 @@ namespace SysAcopio.Views
             proveedorView.StartPosition = FormStartPosition.CenterScreen;
             proveedorView.Show();
             Alerts.ShowAlertS("Una vez creado el proveedor, por favor cerrar la venta y presionar el boton de reiniciar en el apartado de formulario para que sus datos aparezcan de nuevo.", AlertsType.Info);
+        }
+
+        private void btnRegistrarRecurso_Click(object sender, EventArgs e)
+        {
+            //Mostramos el formulario de Inventario
+            Inventario inventario = new Inventario();
+            inventario.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            inventario.TopLevel = true;
+            inventario.StartPosition = FormStartPosition.CenterScreen;
+            inventario.Show();
+            Alerts.ShowAlertS("Una vez creado el recurso, por favor cerrar la ventana y presionar el boton de reiniciar en el apartado de formulario", AlertsType.Info);
         }
     }
 }

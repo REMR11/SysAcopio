@@ -1,4 +1,6 @@
-﻿using SysAcopio.Models;
+﻿using SysAcopio.Controllers;
+using SysAcopio.Models;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -25,6 +27,19 @@ namespace SysAcopio.Repositories
             return GenericFuncDB.GetRowsToTable(query, null); // Ejecuta la consulta y devuelve el resultado como DataTable
         }
 
+        public DataTable ObtenerPorId(long idRecursoSolicitud)
+        {
+            string query = @"SELECT id_recurso, id_solicitud, cantidad
+                            FROM RECURSO_SOLICITUD
+                            WHERE id_recurso_solicitud = @id_recurso_solicitud";
+
+            SqlParameter[] parametros = new SqlParameter[]
+            {
+                new SqlParameter("@id_recurso_solicitud", idRecursoSolicitud)
+            };
+            return GenericFuncDB.GetRowsToTable(query, parametros);
+        }
+
         /// <summary>
         /// Método que obtiene todos los tipos de recurso disponibles en la base de datos.
         /// </summary>
@@ -32,7 +47,7 @@ namespace SysAcopio.Repositories
         public DataTable GetAllTipoRecurso()
         {
             // Consulta SQL para obtener todos los tipos de recurso
-            string query = "SELECT * FROM Tipo_Recurso";
+            string query = @"SELECT id_tipo_recurso, nombre_tipo FROM Tipo_Recurso";
 
             return GenericFuncDB.GetRowsToTable(query, null); // Ejecuta la consulta y devuelve el resultado como DataTable
         }
@@ -45,10 +60,10 @@ namespace SysAcopio.Repositories
         public DataTable GetDetailSolicitud(long idsolicitud)
         {
             // Consulta SQL para obtener los detalles de la solicitud de recurso
-            string query = "SELECT rs.id_recurso_solicitud, rs.id_recurso, r.nombre_recurso, rs.id_solicitud, rs.cantidad " +
-                "FROM RECURSO_SOLICITUD as rs " +
-                "JOIN Recurso as r ON rs.id_recurso = r.id_recurso " +
-                "WHERE id_Solicitud = @idSolicitud";
+            string query = @"SELECT rs.id_recurso_solicitud, rs.id_recurso, r.nombre_recurso, rs.id_solicitud, rs.cantidad
+                            FROM RECURSO_SOLICITUD as rs
+                                JOIN Recurso as r ON rs.id_recurso = r.id_recurso
+                            WHERE id_Solicitud = @idSolicitud";
             SqlParameter[] parametros = new SqlParameter[]
             {
                 new SqlParameter("@idSolicitud", idsolicitud), // Parámetro para la consulta
@@ -66,8 +81,8 @@ namespace SysAcopio.Repositories
         public long Create(Recurso recursoSolicitud, long idSolicitud)
         {
             // Consulta SQL para insertar un nuevo recurso en la solicitud
-            string query = "INSERT INTO RECURSO_SOLICITUD(id_recurso, id_solicitud, cantidad) " +
-                "VALUES (@idRecurso, @idSolicitud, @cantidad)";
+            string query = @"INSERT INTO RECURSO_SOLICITUD(id_recurso, id_solicitud, cantidad) 
+                                VALUES (@idRecurso, @idSolicitud, @cantidad)";
             SqlParameter[] parametros = new SqlParameter[]
             {
                 new SqlParameter("@idSolicitud", idSolicitud), // Parámetro para el ID de la solicitud
@@ -75,6 +90,46 @@ namespace SysAcopio.Repositories
                 new SqlParameter("@cantidad", recursoSolicitud.Cantidad) // Parámetro para la cantidad del recurso
             };
             return GenericFuncDB.InsertRow(query, parametros); // Ejecuta la consulta de inserción y devuelve el ID de la nueva fila
+        }
+        public bool Update(RecursoSolicitud recursoSolicitud)
+        {
+            // Consulta SQL para actualizar un recurso en la solicitud
+            string query = @"UPDATE RECURSO_SOLICITUD SET  
+                        Cantidad = @Cantidad
+                    WHERE id_solicitud = @idSolicitud AND id_recurso = @idRecurso";
+
+            // Definición de los parámetros para la consulta
+            SqlParameter[] parametros = new SqlParameter[]
+            {
+                new SqlParameter("@idRecurso", recursoSolicitud.IdRecurso), // Parámetro para el ID del recurso
+                new SqlParameter("@idSolicitud", recursoSolicitud.IdSolicitud), // Parámetro para el ID de la solicitud
+                new SqlParameter("@Cantidad", recursoSolicitud.Cantidad), // Parámetro para la cantidad del recurso
+            };
+
+            try
+            {
+                // Ejecuta la consulta de actualización y devuelve booleano si afectó o no al registro
+                return GenericFuncDB.AffectRow(query, parametros);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores (puedes registrar el error o lanzar una excepción)
+                // Por ejemplo: log.Error(ex);
+                return false; // O lanzar una excepción según tu lógica de manejo de errores
+            }
+        }
+
+        public bool RemoveRecursoFromSolicitud(long idRecursoSolicitud)
+        {
+            // Aquí implementas la lógica para eliminar el recurso de la solicitud en la base de datos
+
+            string query = @"DELETE FROM RECURSO_SOLICITUD 
+                            WHERE id_recurso_solicitud = @idRecursoSolicitud";
+            SqlParameter[] parametros = new SqlParameter[]
+            {
+                new SqlParameter("@idRecursoSolicitud", idRecursoSolicitud),
+            };
+            return GenericFuncDB.AffectRow(query, parametros);
         }
     }
 }

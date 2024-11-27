@@ -76,16 +76,6 @@ namespace SysAcopio.Controllers
         }
 
         /// <summary>
-        /// Elimina definitivamente una solicitud del sistema.
-        /// </summary>
-        /// <param name="id">El ID de la solicitud a eliminar definitivamente.</param>
-        /// <returns>True si la eliminación fue exitosa, false en caso contrario.</returns>
-        public bool EliminarSolicitudDefinitivamente(long id)
-        {
-            return solicitudrepository.Delete(id);
-        }
-
-        /// <summary>
         /// Obtiene todas las solicitudes activas del sistema.
         /// </summary>
         /// <returns>Una colección de solicitudes activas.</returns>

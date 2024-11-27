@@ -14,7 +14,7 @@ namespace SysAcopio.Views
     {
         private UsuarioRepository usuarioRepository;
         private UsuarioController usuarioController;
-        private long usuarioIdSeleccionado; 
+        private long usuarioIdSeleccionado;
         public UsuarioView()
         {
             InitializeComponent();
@@ -22,7 +22,7 @@ namespace SysAcopio.Views
             usuarioRepository = new UsuarioRepository();//inicializa el repositorio de usuarios
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;// establece la seleccion de filas
             ConfigureComboBoxes();// configura los comboBoxes de la vista
- 
+
         }
         // Evento que se ejecuta al cargar la vista 
         private void UsuarioView_Load(object sender, EventArgs e)
@@ -83,7 +83,7 @@ namespace SysAcopio.Views
         //Oculta columnas en el DataGridView
         private void OcultarColumnas()
         {  //Estable las columnas a ocultar
-            var columnasOcultar = new[] { "IdUsuario", "Contrasenia", "id_usuario" };
+            var columnasOcultar = new[] { "IdUsuario", "Contrasenia", "id_usuario", "id_rol" };
             //recorre todas las columnas en el datagridview
             foreach (var columna in columnasOcultar)
             {
@@ -133,12 +133,12 @@ namespace SysAcopio.Views
         // Configura los ComboBoxes para seleccionar el tipo de usuario (Admin, Operador) y el estado (Activo, Inactivo)
         private void ConfigureComboBoxes()
         {
-         
+
             // Configurar ComboBox de tipo de usuario
-            var tipoUsuarios = new List<KeyValuePair<string, int>>
+            var tipoUsuarios = new List<KeyValuePair<string, long>>
            {
-            new KeyValuePair<string, int>("Admin", 1),
-             new KeyValuePair<string, int>("Operador", 2)
+            new KeyValuePair<string, long>("Admin", 1),
+             new KeyValuePair<string, long>("Operador", 2)
            };
             cmbTipoUsuario.DataSource = tipoUsuarios;  // Establece la lista de tipos de usuarios como fuente de datos del ComboBox
             cmbTipoUsuario.DisplayMember = "Key";
@@ -199,12 +199,18 @@ namespace SysAcopio.Views
         private bool ValidarCampos()
         {  // Verifica si alguno de los campos obligatorios está vacío
             if (string.IsNullOrEmpty(txtAliasUsuario.Text) ||
-                string.IsNullOrEmpty(txtNombreUsuario.Text) ||
-                string.IsNullOrEmpty(txtContrasenia.Text))
+                string.IsNullOrEmpty(txtNombreUsuario.Text))
             {
                 Alerts.ShowAlertS("Por favor, complete todos los campos.", AlertsType.Info);
                 return false;
             }
+
+            if (btnGuardar.Text != "Actualizar" && string.IsNullOrEmpty(txtContrasenia.Text))
+            {
+                Alerts.ShowAlertS("Por favor, ingrese la contraseña.", AlertsType.Info);
+                return false;
+            }
+
             // Verifica si no se ha seleccionado un tipo de usuario o un estado
             if (cmbTipoUsuario.SelectedValue == null || cmbEstado.SelectedValue == null)
             {
@@ -271,7 +277,7 @@ namespace SysAcopio.Views
         { // Rellena los campos con los datos del usuario
             txtAliasUsuario.Text = usuario.AliasUsuario;
             txtNombreUsuario.Text = usuario.NombreUsuario;
-            txtContrasenia.Text = usuario.Contrasenia;
+            txtContrasenia.Clear();
             cmbTipoUsuario.SelectedValue = usuario.IdRol;
             cmbEstado.SelectedValue = usuario.Estado;
         }
@@ -314,7 +320,7 @@ namespace SysAcopio.Views
             }
             catch (Exception ex)
             {
-               Alerts.ShowAlertS("Ocurrió un error: " + ex.Message, AlertsType.Error);
+                Alerts.ShowAlertS("Ocurrió un error: " + ex.Message, AlertsType.Error);
             }
         }
 
@@ -355,6 +361,33 @@ namespace SysAcopio.Views
 
             MostrarTabPage1();
         }
+
+        /// <summary>
+        /// Método para eliminar un usuario
+        /// </summary>
+        void EliminarUsuario()
+        {
+            try
+            {
+                // Llamar al método de eliminación lógica del controlador
+                bool eliminado = usuarioController.DesactivarUsuario(usuarioIdSeleccionado);
+
+                if (eliminado)
+                {
+                    Alerts.ShowAlertS("Usuario desactivado", AlertsType.Confirm);
+                    LoadUsuarios(); // Recargar la lista de usuarios
+                }
+                else
+                {
+                    MessageBox.Show("Error al eliminar el usuario.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error: " + ex.Message);
+            }
+        }
+
         // Evento que se ejecuta cuando se hace clic en el botón
         private void btnEliminar_Click(object sender, EventArgs e)
         {
@@ -367,25 +400,8 @@ namespace SysAcopio.Views
                     return;
                 }
 
-                // Confirmar la eliminación
-                var confirmResult = MessageBox.Show("¿Está seguro de que desea eliminar este usuario?",
-                                                     "Confirmar Eliminación",
-                                                     MessageBoxButtons.YesNo);
-                if (confirmResult == DialogResult.Yes)
-                {
-                    // Llamar al método de eliminación lógica del controlador
-                    bool eliminado = usuarioController.DesactivarUsuario(usuarioIdSeleccionado);
-
-                    if (eliminado)
-                    {
-                        MessageBox.Show("Usuario eliminado exitosamente.");
-                        LoadUsuarios(); // Recargar la lista de usuarios
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error al eliminar el usuario.");
-                    }
-                }
+                ConfirmActionForm confirmacion = new ConfirmActionForm("¿Estas seguro que deseas inhabilitar el usuario?", EliminarUsuario);
+                confirmacion.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -395,7 +411,7 @@ namespace SysAcopio.Views
         // Función que se ejecuta al seleccionar una pestaña en el TabControl
         private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {
-          
+
             if (e.TabPage != tabControl1.SelectedTab)
             {
                 e.Cancel = true;
@@ -408,6 +424,7 @@ namespace SysAcopio.Views
             {
                 // Recargar todos los datos de usuarios
                 LoadUsuarios();
+                textBoxBuscar.Clear();
             }
             catch (Exception ex)
             {

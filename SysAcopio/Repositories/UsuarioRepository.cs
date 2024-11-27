@@ -9,6 +9,7 @@ using SysAcopio.Controllers;
 using BCrypt.Net;
 using System.Runtime.Remoting.Contexts;
 using System.Data;
+using System.Windows.Forms;
 
 
 namespace SysAcopio.Repositories
@@ -62,7 +63,7 @@ namespace SysAcopio.Repositories
             }
             catch (Exception ex)
             {
-              
+
                 throw new Exception("Error al guardar el usuario: " + ex.Message, ex);
             }
         }
@@ -138,6 +139,32 @@ namespace SysAcopio.Repositories
             return null;
         }
 
+
+        //Método para actualizar la contraseña
+        public void UpdatePassword(long id, string password)
+        {
+            try
+            {
+                using (SqlConnection conn = dbContext.ConnectionServer())
+                {
+                    string query = @"UPDATE Usuario SET 
+                                        contrasenia = @Contrasenia
+                                     WHERE id_Usuario = @IdUsuario";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IdUsuario", id);
+                        cmd.Parameters.AddWithValue("@Contrasenia", BCrypt.Net.BCrypt.HashPassword(password)); // Encriptación de contraseña
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
         /// <summary>
         /// Método para actualizar un usuario.
         /// </summary>
@@ -147,10 +174,16 @@ namespace SysAcopio.Repositories
             {
                 using (SqlConnection conn = dbContext.ConnectionServer())
                 {
+                    if (!string.IsNullOrEmpty(usuario.Contrasenia))
+                    {
+                        //MessageBox.Show($"Va a actualizarla {usuario.IdUsuario} {usuario.Contrasenia}");
+                        //Actualizamos la contraseña
+                        UpdatePassword(usuario.IdUsuario, usuario.Contrasenia);
+                    }
+
                     string query = @"UPDATE Usuario SET 
                                         alias_usuario = @AliasUsuario, 
                                         nombre_usuario = @NombreUsuario, 
-                                        contrasenia = @Contrasenia, 
                                         id_rol = @IdRol, 
                                         estado = @Estado 
                                      WHERE id_Usuario = @IdUsuario";
@@ -160,7 +193,6 @@ namespace SysAcopio.Repositories
                         cmd.Parameters.AddWithValue("@IdUsuario", usuario.IdUsuario);
                         cmd.Parameters.AddWithValue("@AliasUsuario", usuario.AliasUsuario);
                         cmd.Parameters.AddWithValue("@NombreUsuario", usuario.NombreUsuario);
-                        cmd.Parameters.AddWithValue("@Contrasenia", BCrypt.Net.BCrypt.HashPassword(usuario.Contrasenia)); // Encriptación de contraseña
                         cmd.Parameters.AddWithValue("@IdRol", usuario.IdRol);
                         cmd.Parameters.AddWithValue("@Estado", usuario.Estado);
 
@@ -242,7 +274,7 @@ namespace SysAcopio.Repositories
 
         public DataTable ObtenerUsuariosDataTable()
         {
-            string query = "SELECT id_Usuario, alias_usuario, nombre_usuario, contrasenia, id_rol, estado FROM Usuario";
+            string query = "SELECT u.id_Usuario, u.alias_usuario, u.nombre_usuario, u.contrasenia, u.id_rol, u.estado, r.nombre_rol FROM Usuario AS u JOIN Rol as r ON r.id_rol = u.id_rol";
 
             using (SqlConnection connection = dbContext.ConnectionServer())
             {

@@ -13,6 +13,7 @@ namespace SysAcopio.Controllers
     {
         //Atributos
         private readonly DonacionRepository donacionRepository;
+        private readonly RecursoDonacionRepository recursoDonacionRepository;
         private readonly Alerts alerts;
         public List<Recurso> detalleRecursoDonacion = new List<Recurso>();//Usado para guardar los recursos a añadir
 
@@ -22,6 +23,7 @@ namespace SysAcopio.Controllers
         public DonacionesController()
         {
             donacionRepository = new DonacionRepository();
+            recursoDonacionRepository = new RecursoDonacionRepository();
             alerts = new Alerts();
         }
 
@@ -217,6 +219,11 @@ namespace SysAcopio.Controllers
             // Filtrar el DataTable
             DataRow[] filasFiltradas = recursos.Select(filtro);
             return filasFiltradas;
+        }
+
+        public DataTable GenerarReporte(DateTime? fechaInicio, DateTime? fechaFin, string ubicacion, long? idProveedor)
+        {
+            return recursoDonacionRepository.GetReportInfo(fechaInicio.Value, fechaFin.Value, ubicacion, idProveedor.Value);
         }
     }
 }

@@ -35,6 +35,11 @@ namespace SysAcopio.Controllers
         /// <param name="proveedor"></param>
         public bool Create(Proveedor proveedor)
         {
+            if (repository.ExistByName(proveedor.NombreProveedor))
+            {
+                Alerts.ShowAlertS("Lo sentimos, ya existe un proveedor con ese nombre", AlertsType.Info);
+                return false;
+            }
             long id = repository.Create(proveedor);
 
             if (id > 0)

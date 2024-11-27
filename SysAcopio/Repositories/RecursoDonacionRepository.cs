@@ -38,5 +38,44 @@ namespace SysAcopio.Repositories
             };
             return GenericFuncDB.InsertRow(query, parametros);
         }
+
+        public DataTable GetReportInfo(DateTime startDate, DateTime endDate, String location, long providerId)
+        {
+            StringBuilder queryBuilder = new StringBuilder(@"
+        SELECT  p.nombre_proveedor as 'Proveedor', d.ubicacion as 'Ubicacion', r.nombre_recurso as 'Recurso', rd.cantidad as 'Cantidad'
+        FROM Recurso_Donacion as rd
+        JOIN Recurso as r ON rd.id_recurso = r.id_recurso
+        JOIN Donacion as d ON rd.id_donacion = d.id_donacion
+        JOIN Proveedor as p ON d.id_proveedor = p.id_proveedor
+        WHERE 1=1");
+
+
+            var parameters = new List<SqlParameter>
+            {
+
+            };
+
+            if (startDate != null && endDate != null)
+            {
+                queryBuilder.Append(" AND CAST(d.fecha as DATE) BETWEEN @startDate AND @endDate");
+                parameters.Add(new SqlParameter("@startDate", startDate));
+                parameters.Add(new SqlParameter("@endDate", endDate));
+            }
+
+            if(!string.IsNullOrEmpty(location))
+            {
+                queryBuilder.Append(" AND d.ubicacion = @location");
+                parameters.Add(new SqlParameter("@location", location));
+            }
+
+            if (providerId != 0)
+            {
+                queryBuilder.Append(" AND d.id_proveedor = @providerId");
+                parameters.Add(new SqlParameter("@providerId", providerId));
+            }
+
+            string query = queryBuilder.ToString();
+            return GenericFuncDB.GetRowsToTable(query, parameters.ToArray());
+        }
     }
 }
