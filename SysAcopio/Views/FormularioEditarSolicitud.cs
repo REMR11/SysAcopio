@@ -271,9 +271,12 @@ namespace SysAcopio.Views
                     Convert.ToInt64(row.Cells["id_recurso"].Value) == recursoToAdd.IdRecurso)
                 {
                     // Si el recurso ya existe, actualiza la cantidad
-                    int cantidadActual = Convert.ToInt32(row.Cells["cantidad"].Value);
+                    int cantidadActual = Convert.ToInt32(row.Cells["Cantidad"].Value);
                     int nuevaCantidad = cantidadActual + Convert.ToInt32(txtRecursoCantidad.Text);
-                    row.Cells["cantidad"].Value = nuevaCantidad;
+                    row.Cells["Cantidad"].Value = nuevaCantidad;
+
+                    //Tambien actualizamos su cantidad
+                    _recursoSolicitudController.AddDetalle(recursoToAdd, nuevaCantidad);
 
                     exists = true;
                     break;
@@ -365,6 +368,8 @@ namespace SysAcopio.Views
             bool resultado = _solicitudController.ActualizarSolicitud(solicitudActualizada);
             UpdateRecursosConfirmados();
 
+            //Verificamos si necesita actualizar la cantidad de los nuevos recursos;
+            _recursoSolicitudController.ActualizarCantidadRecursosNuevos(idSolicitud);
 
             // Verificar el resultado de la actualización
             if (resultado)
@@ -401,7 +406,13 @@ namespace SysAcopio.Views
                     // Mapear los datos del DataTable a la instancia de RecursoSolicitud
                     recursoSolicitudDTO.IdRecurso = Convert.ToInt32(recursoSolicitudDataTable.Rows[0]["id_recurso"]);
                     recursoSolicitudDTO.IdSolicitud = Convert.ToInt32(recursoSolicitudDataTable.Rows[0]["id_solicitud"]);
-                    recursoSolicitudDTO.Cantidad = Convert.ToInt32(row.Cells["Cantidad"].Value);
+                    //recursoSolicitudDTO.Cantidad = Convert.ToInt32(row.Cells["Cantidad"].Value);
+
+                    //Obtenemos la cantidad en base al detalle en el controller ya que ahí esta actualizada
+                    var recurso = _recursoSolicitudController.ObtenerRecursoObjetivo(recursoSolicitudDTO.IdRecurso);
+
+                    recursoSolicitudDTO.Cantidad = recurso.Cantidad;
+
                     // Si necesitas guardar el DataTable actualizado en la base de datos, 
                     // llama a un método que realice esa operación.
                     bool success = _recursoSolicitudController.updateRecursoSolicitud(recursoSolicitudDTO);

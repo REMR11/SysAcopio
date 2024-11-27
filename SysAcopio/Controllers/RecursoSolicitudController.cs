@@ -167,7 +167,7 @@ namespace SysAcopio.Controllers
         /// </summary>
         /// <param name="idRecurso">El ID del recurso que se desea obtener.</param>
         /// <returns>Devuelve el recurso correspondiente al ID especificado, o null si no se encuentra.</returns>
-        private Recurso ObtenerRecursoObjetivo(long idRecurso)
+        public Recurso ObtenerRecursoObjetivo(long idRecurso)
         {
             return detalleRecursoSolicitud.FirstOrDefault(detalle => detalle.IdRecurso == idRecurso);
         }
@@ -358,6 +358,31 @@ namespace SysAcopio.Controllers
             }
 
             return listaDeRecurso;
+        }
+
+        /// <summary>
+        /// Método para actualizar los nuevos recursos
+        /// </summary>
+        /// <param name="recursoSolicitud"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public bool ActualizarCantidadRecursosNuevos(long id)
+        {
+            Solicitud solicitud = _solicitudController.ObtenerSolicitudPorId(id);
+
+            if (EsEstadoSolicitudCompleto(solicitud)) return false;
+            //Recorremos cada nuevo recurso
+            foreach (Recurso recurso in nuevosRecursoSolicitud)
+            {
+
+                Recurso recursoObjetivo = _InventarioController.GetRecurso(recurso.IdRecurso);
+
+                if (recursoObjetivo == null) return false; // O manejar el caso donde el recurso no se encuentra
+
+                recursoObjetivo.Cantidad = recursoObjetivo.Cantidad - recurso.Cantidad;
+                _InventarioController.Modify(recursoObjetivo);
+            }
+            return true;
         }
     }
 }
