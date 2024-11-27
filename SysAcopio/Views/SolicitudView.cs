@@ -253,10 +253,27 @@ namespace SysAcopio.Views
             // Actualiza el DataGridView según sea necesario
         }
 
+        /// <summary>
+        /// Genera el reporte de solicitudes a partir del dataSource actual
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnGenerateReport_Click(object sender, EventArgs e)
         {
+
+            // Obtiene el DataTable actual de la fuente de datos
+            DataTable dtSolicitud = _solicitudBindingSource.DataSource as DataTable;
+
+            // Verifica si hay datos para generar el reporte
+            if (dtSolicitud == null || dtSolicitud.Rows.Count == 0)
+            {
+                Alerts.ShowAlertS("No hay datos para generar el reporte", AlertsType.Info);
+                return;
+            }
+
+            // Si hay datos, crea una instancia de ReportView y carga el reporte
             ReportView reporte = new ReportView();
-            reporte.dataTable = _solicitudBindingSource.DataSource as DataTable;
+            reporte.dataTable = dtSolicitud;
             reporte.CargarReporte("dsRequest", "SysAcopio.Reports.RequestReport.rdlc");
             reporte.ShowDialog();
             }

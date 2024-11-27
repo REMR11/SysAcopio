@@ -20,7 +20,7 @@ namespace SysAcopio.Repositories
                 "WHERE id_donacion = @idDonacion";
             SqlParameter[] parametros = new SqlParameter[]
             {
-                new SqlParameter("@idDonacion", idDonacion),
+                    new SqlParameter("@idDonacion", idDonacion),
             };
 
             return GenericFuncDB.GetRowsToTable(query, parametros);
@@ -32,9 +32,9 @@ namespace SysAcopio.Repositories
                 "VALUES (@idDonacion, @idRecurso, @cantidad)";
             SqlParameter[] parametros = new SqlParameter[]
             {
-                new SqlParameter("@idDonacion", idDonacion),
-                new SqlParameter("@idRecurso", recursoDonacion.IdRecurso),
-                new SqlParameter("@cantidad", recursoDonacion.Cantidad)
+                    new SqlParameter("@idDonacion", idDonacion),
+                    new SqlParameter("@idRecurso", recursoDonacion.IdRecurso),
+                    new SqlParameter("@cantidad", recursoDonacion.Cantidad)
             };
             return GenericFuncDB.InsertRow(query, parametros);
         }
@@ -42,12 +42,12 @@ namespace SysAcopio.Repositories
         public DataTable GetReportInfo(DateTime startDate, DateTime endDate, String location, long providerId)
         {
             StringBuilder queryBuilder = new StringBuilder(@"
-        SELECT  p.nombre_proveedor as 'Proveedor', d.ubicacion as 'Ubicacion', r.nombre_recurso as 'Recurso', rd.cantidad as 'Cantidad'
-        FROM Recurso_Donacion as rd
-        JOIN Recurso as r ON rd.id_recurso = r.id_recurso
-        JOIN Donacion as d ON rd.id_donacion = d.id_donacion
-        JOIN Proveedor as p ON d.id_proveedor = p.id_proveedor
-        WHERE 1=1");
+            SELECT  p.nombre_proveedor as 'Proveedor', d.ubicacion as 'Ubicacion', r.nombre_recurso as 'Recurso', rd.cantidad as 'Cantidad'
+            FROM Recurso_Donacion as rd
+            JOIN Recurso as r ON rd.id_recurso = r.id_recurso
+            JOIN Donacion as d ON rd.id_donacion = d.id_donacion
+            JOIN Proveedor as p ON d.id_proveedor = p.id_proveedor
+            WHERE 1=1");
 
 
             var parameters = new List<SqlParameter>
@@ -62,9 +62,9 @@ namespace SysAcopio.Repositories
                 parameters.Add(new SqlParameter("@endDate", endDate));
             }
 
-            if(!string.IsNullOrEmpty(location))
+            if (!string.IsNullOrEmpty(location))
             {
-                queryBuilder.Append(" AND d.ubicacion = @location");
+                queryBuilder.Append(" AND d.ubicacion LIKE '%' + @location + '%'");
                 parameters.Add(new SqlParameter("@location", location));
             }
 

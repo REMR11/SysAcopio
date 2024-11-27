@@ -162,6 +162,7 @@ namespace SysAcopio.Controllers
             {
                 filtro = filtro.Substring(0, filtro.Length - 5);
             }
+
             // Filtrar el DataTable
             DataRow[] filasFiltradas = donaciones.Select(filtro);
 
@@ -221,6 +222,14 @@ namespace SysAcopio.Controllers
             return filasFiltradas;
         }
 
+        /// <summary>
+        /// Método que obtiene los datos necesarios para generar un reporte de recursos donados
+        /// </summary>
+        /// <param name="fechaInicio"></param>
+        /// <param name="fechaFin"></param>
+        /// <param name="ubicacion"></param>
+        /// <param name="idProveedor"></param>
+        /// <returns></returns>
         public DataTable GenerarReporte(DateTime? fechaInicio, DateTime? fechaFin, string ubicacion, long? idProveedor)
         {
             return recursoDonacionRepository.GetReportInfo(fechaInicio.Value, fechaFin.Value, ubicacion, idProveedor.Value);

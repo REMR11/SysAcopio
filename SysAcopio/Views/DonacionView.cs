@@ -216,26 +216,34 @@ namespace SysAcopio.Views
             DashBoardManager.LoadForm(new RecursoDonacionView());
         }
 
+        /// <summary>
+        /// Genera el reporte de recursos donados en base a los parámetros de filtro seleccionados
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnGenerateReport_Click(object sender, EventArgs e)
         {
+            // Obtener los parámetros de filtro
             string idProveedor = cmbProveedores.SelectedValue.ToString();
             string ubicacion = txtUbicación.Text.Trim();
             DateTime? fechaInicio = dtpFechaInicio.Value.Date;
             DateTime? fechaFin = dtpFechaFin.Value.Date;
 
+            // Obtiene el DataTable de registros filtrados
             DataTable dtReporte = donacionesController.GenerarReporte(fechaInicio.Value, fechaFin.Value, ubicacion, Convert.ToInt64(idProveedor));
 
-            if (dtReporte.Rows.Count > 0)
-            {
-                ReportView reportView = new ReportView();
-                reportView.dataTable = dtReporte;
-                reportView.CargarReporte("dsDonation", "SysAcopio.Reports.DonationReport.rdlc");
-                reportView.Show();
-            }
-            else
+            // Verificar si existen registros para generar el reporte
+            if (dtReporte == null || dtReporte.Rows.Count == 0)
             {
                 Alerts.ShowAlertS("No existen datos para generar el reporte", AlertsType.Info);
+                return;
             }
+
+            // Crea una instancia del ReportView y carga el reporte
+            ReportView reportView = new ReportView();
+            reportView.dataTable = dtReporte;
+            reportView.CargarReporte("dsDonation", "SysAcopio.Reports.DonationReport.rdlc");
+            reportView.Show();
         }
     }
 }
