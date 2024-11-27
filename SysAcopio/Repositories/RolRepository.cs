@@ -58,7 +58,7 @@ namespace SysAcopio.Repositories
             var roles = new List<Rol>();
             using (SqlConnection conn = dbContext.ConnectionServer())
             {
-                string query = "SELECT * FROM Rol";
+                string query = "SELECT id_rol, nombre_rol FROM Rol";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -84,7 +84,7 @@ namespace SysAcopio.Repositories
         {
             using (SqlConnection conn = dbContext.ConnectionServer())
             {
-                string query = "SELECT * FROM Rol WHERE id_rol = @IdRol";
+                string query = "SELECT id_rol, nombre_rol FROM Rol WHERE id_rol = @IdRol";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@IdRol", id);
