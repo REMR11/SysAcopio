@@ -186,6 +186,12 @@ namespace SysAcopio.Views
                 return;
             }
 
+            if (!Int32.TryParse(txtNombreRecurso.Text, out int result))
+            {
+                Alerts.ShowAlertS("El número es muy grande", AlertsType.Error);
+                return;
+            }
+
             if (Convert.ToInt32(txtRecursoCantidad.Text) <= 0)
             {
                 Alerts.ShowAlertS("La cantidad a donar debe ser mayor que 0", AlertsType.Info);

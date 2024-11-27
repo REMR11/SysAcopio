@@ -134,7 +134,7 @@ namespace SysAcopio.Views
                     }
                     else
                     {
-                        MessageBox.Show("Usuario no encontrado.");
+                        Alerts.ShowAlertS("Usuario no encontrado.", AlertsType.Error);
                     }
                 }
                 catch (Exception ex)
