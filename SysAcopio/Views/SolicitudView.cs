@@ -229,5 +229,13 @@ namespace SysAcopio.Views
             MessageBox.Show($"Datos guardados: {campo1}, {campo2}");
             // Actualiza el DataGridView según sea necesario
         }
+
+        private void btnGenerateReport_Click(object sender, EventArgs e)
+        {
+            ReportView reporte = new ReportView();
+            reporte.dataTable = _solicitudBindingSource.DataSource as DataTable;
+            reporte.CargarReporte("dsRequest", "SysAcopio.Reports.RequestReport.rdlc");
+            reporte.ShowDialog();
+        }
     }
 }
