@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace SysAcopio.Controllers
 {
@@ -13,16 +14,20 @@ namespace SysAcopio.Controllers
     /// </summary>
     public class RecursoSolicitudController
     {
-        private readonly RecursoSolicitudRepository repoRecurso; // Repositorio para acceder a los datos de recursos
+        private readonly RecursoSolicitudRepository _repoRecurso; // Repositorio para acceder a los datos de recursos
+        private readonly InventarioController _InventarioController;
+        private readonly SolicitudController _solicitudController;
         public List<Recurso> detalleRecursoSolicitud = new List<Recurso>(); // Lista que contiene los detalles de los recursos solicitados
         public List<Recurso> nuevosRecursoSolicitud = new List<Recurso>(); // Lista que contiene los detalles de los recursos solicitados
-        
+
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="RecursoSolicitudController"/>.
         /// </summary>
         public RecursoSolicitudController()
         {
-            this.repoRecurso = new RecursoSolicitudRepository(); // Inicializa el repositorio de recursos
+            this._repoRecurso = new RecursoSolicitudRepository(); // Inicializa el repositorio de recursos
+            this._InventarioController = new InventarioController();
+            this._solicitudController = new SolicitudController();
         }
 
         /// <summary>
@@ -31,7 +36,7 @@ namespace SysAcopio.Controllers
         /// <returns>DataTable con todos los recursos.</returns>
         public DataTable GetAllRecurso()
         {
-            return repoRecurso.GetAllRecursos(); // Llama al método del repositorio para obtener todos los recursos
+            return _repoRecurso.GetAllRecursos(); // Llama al método del repositorio para obtener todos los recursos
         }
 
         /// <summary>
@@ -40,7 +45,7 @@ namespace SysAcopio.Controllers
         /// <returns>DataTable con todos los tipos de recursos.</returns>
         public DataTable GetAllTipoRecurso()
         {
-            return repoRecurso.GetAllTipoRecurso(); // Llama al método del repositorio para obtener todos los tipos de recursos
+            return _repoRecurso.GetAllTipoRecurso(); // Llama al método del repositorio para obtener todos los tipos de recursos
         }
 
         /// <summary>
@@ -125,15 +130,77 @@ namespace SysAcopio.Controllers
             return true; // Retorna true indicando que se añadió o actualizó correctamente
         }
 
-       
+        /// <summary>
+        /// Actualiza la cantidad de un recurso en la solicitud especificada.
+        /// </summary>
+        /// <param name="recursoSolicitud">La solicitud de recurso que contiene la información necesaria para la actualización.</param>
+        /// <returns>Devuelve true si la cantidad se actualizó correctamente; de lo contrario, false.</returns>
+        /// <exception cref="ArgumentNullException">Se lanza si <paramref name="recursoSolicitud"/> es null.</exception>
+        public bool ActualizarCantidadRecurso(RecursoSolicitud recursoSolicitud)
+        {
+            if (recursoSolicitud == null) throw new ArgumentNullException(nameof(recursoSolicitud));
+
+            Solicitud solicitud = _solicitudController.ObtenerSolicitudPorId(recursoSolicitud.IdSolicitud);
+
+            if (EsEstadoSolicitudCompleto(solicitud)) return false;
+
+            Recurso recursoObjetivo = _InventarioController.GetRecurso(recursoSolicitud.IdRecurso);
+
+            if (recursoObjetivo == null) return false; // O manejar el caso donde el recurso no se encuentra
+
+            ActualizarCantidadRecurso(recursoObjetivo, recursoSolicitud.Cantidad);
+            return _InventarioController.Modify(recursoObjetivo);
+        }
+
+        /// <summary>
+        /// Verifica si el estado de la solicitud es completo.
+        /// </summary>
+        /// <param name="solicitud">La tabla de datos que contiene los detalles de la solicitud.</param>
+        /// <returns>Devuelve true si el estado de la solicitud es completo; de lo contrario, false.</returns>
+        private bool EsEstadoSolicitudCompleto(Solicitud solicitud)
+        {
+            return Convert.ToBoolean(solicitud.Estado);
+        }
+
+        /// <summary>
+        /// Obtiene el recurso objetivo a partir del ID del recurso.
+        /// </summary>
+        /// <param name="idRecurso">El ID del recurso que se desea obtener.</param>
+        /// <returns>Devuelve el recurso correspondiente al ID especificado, o null si no se encuentra.</returns>
+        public Recurso ObtenerRecursoObjetivo(long idRecurso)
+        {
+            return detalleRecursoSolicitud.FirstOrDefault(detalle => detalle.IdRecurso == idRecurso);
+        }
+
+        /// <summary>
+        /// Actualiza la cantidad de un recurso restando la cantidad especificada.
+        /// </summary>
+        /// <param name="recurso">El recurso cuya cantidad se va a actualizar.</param>
+        /// <param name="cantidad">La cantidad que se va a restar del recurso.</param>
+        private void ActualizarCantidadRecurso(Recurso recurso, int cantidad)
+        {
+            recurso.Cantidad -= cantidad;
+        }
+
+        /// <summary>
+        /// Obtiene los detalles de la solicitud a partir del ID de la solicitud.
+        /// </summary>
+        /// <param name="idSolicitud">El ID de la solicitud para la cual se desean obtener los detalles.</param>
+        /// <returns>Devuelve un DataTable que contiene los detalles de la solicitud.</returns>
+        private DataTable ObtenerDetallesSolicitud(long idSolicitud)
+        {
+            // Implementa la lógica para obtener los detalles de la solicitud
+            return GetDetailSolicitud(idSolicitud);
+        }
+
         /// <summary>
         /// Método para obtener los detalles de una solicitud.
         /// </summary>
         /// <param name="idDonacion">ID de la donación para la cual se obtienen los detalles.</param>
         /// <returns>DataTable con los detalles de la solicitud.</returns>
-        public DataTable GetDetailSolicitud(long idDonacion)
+        public DataTable GetDetailSolicitud(long idSolicitud)
         {
-            return repoRecurso.GetDetailSolicitud(idDonacion); // Llama al método del repositorio para obtener los detalles de la solicitud
+            return _repoRecurso.GetDetailSolicitud(idSolicitud); // Llama al método del repositorio para obtener los detalles de la solicitud
         }
 
         /// <summary>
@@ -144,7 +211,7 @@ namespace SysAcopio.Controllers
         /// <returns>El ID de la nueva solicitud creada.</returns>
         public long Create(Recurso recursoSolicitud, long idSolicitud)
         {
-            return repoRecurso.Create(recursoSolicitud, idSolicitud); // Llama al método del repositorio para crear la solicitud
+            return _repoRecurso.Create(recursoSolicitud, idSolicitud); // Llama al método del repositorio para crear la solicitud
         }
 
         /// <summary>
@@ -186,6 +253,16 @@ namespace SysAcopio.Controllers
         }
 
         /// <summary>
+        /// Actualiza la solicitud de recurso con la información proporcionada.
+        /// </summary>
+        /// <param name="recursoSolicitud">La solicitud de recurso que se desea actualizar.</param>
+        /// <returns>Devuelve true si la actualización fue exitosa; de lo contrario, false.</returns>
+        public bool updateRecursoSolicitud(RecursoSolicitud recursoSolicitud)
+        {
+            return _repoRecurso.Update(recursoSolicitud);
+        }
+
+        /// <summary>
         /// Método para eliminar un recurso del detalle de la solicitud.
         /// </summary>
         /// <param name="idRecurso">ID del recurso a eliminar.</param>
@@ -199,6 +276,113 @@ namespace SysAcopio.Controllers
 
             detalleRecursoSolicitud.Remove(recursoDonacion); // Elimina el recurso del detalle
             return true; // Retorna true indicando que se eliminó correctamente
+        }
+
+        // <summary>
+        /// Obtiene un recurso por su ID.
+        /// </summary>
+        /// <param name="idRecursoSolicitud">El ID de la solicitud de recurso que se desea obtener.</param>
+        /// <returns>Devuelve un DataTable que contiene los detalles del recurso solicitado.</returns>
+        public DataTable ObtenerPorId(long idRecursoSolicitud)
+        {
+            return _repoRecurso.ObtenerPorId(idRecursoSolicitud);
+        }
+
+        /// <summary>
+        /// Elimina un recurso de la solicitud utilizando su ID.
+        /// </summary>
+        /// <param name="idRecursoSolicitud">El ID de la solicitud de recurso que se desea eliminar.</param>
+        /// <returns>Devuelve true si la eliminación fue exitosa; de lo contrario, false.</returns>
+        public bool eliminarRecursoSolicitud(long idRecursoSolicitud)
+        {
+            return _repoRecurso.RemoveRecursoFromSolicitud(idRecursoSolicitud);
+        }
+
+        /// <summary>
+        /// Método que valida si la cantidad del recurso en el inventario es suficiente para poder agregarla a la solicutud
+        /// </summary>
+        /// <param name="recurso"></param>
+        /// <returns></returns>
+        public bool CheckInvetory(Recurso recurso, int cantidad)
+        {
+            Recurso recursoInDataBase = _InventarioController.GetRecurso(recurso.IdRecurso);
+
+            if (recursoInDataBase != null && recursoInDataBase.Cantidad > cantidad)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Método que setea la lista actual de los recursos
+        /// </summary>
+        /// <param name="id"></param>
+        public void SetCurrentListRecursosSolicitud(long id)
+        {
+            //Obtenemos el detalle
+            DataTable listaDeRecurso = _repoRecurso.GetDetailSolicitud(id);
+
+            //Iteramos sobre cada fila
+            foreach (DataRow row in listaDeRecurso.Rows)
+            {
+                AddDetalle(new Recurso
+                {
+                    IdRecurso = Convert.ToInt64(row["id_recurso"]),
+                    NombreRecurso = row["nombre_recurso"].ToString(),
+                }, Convert.ToInt32(row["cantidad"]));
+            }
+        }
+
+        /// <summary>
+        /// Método para convertir a tabla toda la lista de recursos actuales
+        /// </summary>
+        /// <param name="id"></param>
+        public DataTable GetDataTableCurrentListRecursosSolicitudJ(long id)
+        {
+            // Obtenemos el detalle
+            DataTable listaDeRecurso = _repoRecurso.GetDetailSolicitud(id);
+
+            // Recorremos el DataTable en orden inverso para evitar problemas al eliminar filas
+            for (int i = listaDeRecurso.Rows.Count - 1; i >= 0; i--)
+            {
+                DataRow row = listaDeRecurso.Rows[i];
+                long idRecurso = Convert.ToInt64(row["id_recurso"]);
+
+                //Verificamos si esta en la lista, en caso que no este lo eliminamos
+                var recurso = detalleRecursoSolicitud.FirstOrDefault(detalle => detalle.IdRecurso == idRecurso);
+                if (recurso == null)
+                {
+                    listaDeRecurso.Rows.Remove(row);
+                }
+            }
+
+            return listaDeRecurso;
+        }
+
+        /// <summary>
+        /// Método para actualizar los nuevos recursos
+        /// </summary>
+        /// <param name="recursoSolicitud"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public bool ActualizarCantidadRecursosNuevos(long id)
+        {
+            Solicitud solicitud = _solicitudController.ObtenerSolicitudPorId(id);
+
+            if (EsEstadoSolicitudCompleto(solicitud)) return false;
+            //Recorremos cada nuevo recurso
+            foreach (Recurso recurso in nuevosRecursoSolicitud)
+            {
+
+                Recurso recursoObjetivo = _InventarioController.GetRecurso(recurso.IdRecurso);
+
+                if (recursoObjetivo == null) return false; // O manejar el caso donde el recurso no se encuentra
+
+                recursoObjetivo.Cantidad = recursoObjetivo.Cantidad - recurso.Cantidad;
+                _InventarioController.Modify(recursoObjetivo);
+            }
+            return true;
         }
     }
 }

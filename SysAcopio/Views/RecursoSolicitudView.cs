@@ -15,6 +15,7 @@ namespace SysAcopio.Views
     {
         private readonly SolicitudController _solicitudController; // Controlador para gestionar solicitudes
         private readonly RecursoSolicitudController _recursoSolicitudController; // Controlador para gestionar recursos
+        //private readonly RecursoController
         private Recurso _recursoToAdd; // Recurso seleccionado para añadir
         private DataTable _recursos; // Tabla que contiene los recursos disponibles
         private bool _isFirstLoading = true; // Indica si es la primera carga de la vista
@@ -148,6 +149,14 @@ namespace SysAcopio.Views
         private void btnCrear_Click(object sender, EventArgs e)
         {
             if (!IsUrgenciaSelected()) return; // Verifica si se ha seleccionado una urgencia
+            if (!IsDetalleValido()) return; // Verifica que el detalle no esté vacío
+            // Validar que los campos no estén vacíos
+            if (!AreInputsValid())
+            {
+                AlertForm miAlertForm = new AlertForm("Por favor, complete todos los campos requeridos antes de guardar.", AlertsType.Info);
+                miAlertForm.ShowDialog();
+                return;
+            }
 
             var nuevaSolicitud = CreateSolicitudFromInputs(); // Crea una nueva solicitud a partir de los inputs
             long idSolicitud = _solicitudController.CrearSolicitud(nuevaSolicitud); // Crea la solicitud en el controlador
@@ -155,7 +164,7 @@ namespace SysAcopio.Views
             ClearInputs(); // Limpia los inputs
             SaveRecursos(idSolicitud); // Guarda los recursos asociados a la solicitud
             RefreshDetalleGrid(); // Actualiza la vista del detalle
-            Alerts.ShowAlertS("Recursos guardados exitosamente.", AlertsType.Info); // Muestra un mensaje de éxito
+            Alerts.ShowAlertS("Recursos guardados exitosamente.", AlertsType.Confirm); // Muestra un mensaje de éxito
             DashBoardManager.LoadForm(new SolicitudView()); // Carga la vista de solicitud
         }
 
@@ -167,11 +176,33 @@ namespace SysAcopio.Views
         private bool IsUrgenciaSelected()
         {
             if (cmbUrgencia.SelectedIndex >= 0) return true; // Retorna true si hay una selección válida
-
-            MessageBox.Show("Por favor, seleccione un valor válido para la urgencia.");
+            AlertForm miAlertForm = new AlertForm("Por favor, seleccione un valor válido para la urgencia.", AlertsType.Info);
+            miAlertForm.ShowDialog();
             return false;
         }
 
+        /// <summary>
+        /// Verifica si el DataGridView tiene al menos una fila.
+        /// </summary>
+        /// <returns>True si el detalle es válido, de lo contrario false.</returns>
+        private bool IsDetalleValido()
+        {
+            if (dgvDetalle.Rows.Count == 0)
+            {
+                AlertForm miAlertForm = new AlertForm("El detalle no puede estar vacío. Por favor, agregue al menos un elemento antes de guardar.", AlertsType.Info);
+                miAlertForm.ShowDialog();
+                return false;
+            }
+            return true;
+        }
+        private bool AreInputsValid()
+        {
+            // Aquí puedes agregar la lógica para verificar que los campos no estén vacíos
+            return !string.IsNullOrWhiteSpace(txtDireccion.Text) &&
+                   !string.IsNullOrWhiteSpace(txtNombreSolicitante.Text) &&
+                   cmbUrgencia.SelectedIndex >= 0 && // Asegúrate de que se haya seleccionado una urgencia válida
+                   !string.IsNullOrWhiteSpace(txtMotivo.Text);
+        }
         /// <summary>
         /// Crea una nueva solicitud a partir de los valores ingresados en los campos de texto.
         /// </summary>
@@ -179,10 +210,10 @@ namespace SysAcopio.Views
         private Solicitud CreateSolicitudFromInputs()
         {
             return new Solicitud(
-                txtDireccion.Text,
-                txtNombreSolicitante.Text,
+                txtDireccion.Text.Trim(),
+                txtNombreSolicitante.Text.Trim(),
                 (byte)(cmbUrgencia.SelectedIndex + 1),
-                txtMotivo.Text);
+                txtMotivo.Text.Trim());
         }
 
 
@@ -254,7 +285,7 @@ namespace SysAcopio.Views
                 ResetRecursoSelection(); // Resetea la selección del recurso
                 RefreshDetalleGrid(); // Actualiza la vista del detalle
             }
-            
+
         }
 
 
@@ -292,6 +323,12 @@ namespace SysAcopio.Views
             if (Convert.ToInt32(txtRecursoCantidad.Text) <= 0)
             {
                 Alerts.ShowAlertS("La cantidad a donar debe ser mayor que 0", AlertsType.Info); // Muestra un mensaje de error
+                return false;
+            }
+
+            if (!_recursoSolicitudController.CheckInvetory(_recursoToAdd, Convert.ToInt32(txtRecursoCantidad.Text)))
+            {
+                Alerts.ShowAlertS("La cantidad que desea agregar del recurso supera la del inventario", AlertsType.Info); // Muestra un mensaje de error
                 return false;
             }
 
@@ -368,7 +405,7 @@ namespace SysAcopio.Views
         /// </summary>
         private void btn_Cancelar_Click(object sender, EventArgs e)
         {
-            DashBoardManager.LoadForm(new SolicitudView()); // Carga la vista de solicitud
+            DashBoardManager.LoadForm(new SolicitudView()); // Carga la vista de s-olicitud
         }
     }
 }
