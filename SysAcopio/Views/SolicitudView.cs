@@ -253,6 +253,14 @@ namespace SysAcopio.Views
             // Actualiza el DataGridView según sea necesario
         }
 
+        private void btnGenerateReport_Click(object sender, EventArgs e)
+        {
+            ReportView reporte = new ReportView();
+            reporte.dataTable = _solicitudBindingSource.DataSource as DataTable;
+            reporte.CargarReporte("dsRequest", "SysAcopio.Reports.RequestReport.rdlc");
+            reporte.ShowDialog();
+            }
+
         private void dbgSolicitudes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == dbgSolicitudes.Columns["detalleButton"].Index && e.RowIndex >= 0)

@@ -351,5 +351,14 @@ namespace SysAcopio.Views
 
             (idRecurso == 0 ? (Action)Guardar : Modificar)();
         }
+
+        private void btnGenerateReport_Click(object sender, EventArgs e)
+        {
+
+            ReportView reporte = new ReportView();
+            reporte.dataTable = dgvRecursos.DataSource as DataTable;
+            reporte.CargarReporte("dsInventory", "SysAcopio.Reports.InventoryReport.rdlc");
+            reporte.ShowDialog();
+        }
     }
 }
