@@ -1,5 +1,6 @@
 ﻿using SysAcopio.Controllers;
 using SysAcopio.Models;
+using SysAcopio.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,6 +17,7 @@ namespace SysAcopio.Views
     public partial class SolicitudView : Form
     {
         private readonly SolicitudController _controller; // Controlador para gestionar solicitudes
+        private readonly RecursoSolicitudController _recursoSolicitudController;
         private int selectedRowIndex = -1; // Índice de la fila seleccionada en el DataGridView
         private SqlDataAdapter _solicitudDataAdapter; // Adaptador de datos para las solicitudes
         private BindingSource _solicitudBindingSource; // Fuente de datos para enlazar al DataGridView
@@ -35,6 +37,7 @@ namespace SysAcopio.Views
         {
             InitializeComponent();
             _controller = new SolicitudController(); // Inicializa el controlador de solicitudes
+            _recursoSolicitudController = new RecursoSolicitudController();
             dbgSolicitudes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
@@ -68,6 +71,18 @@ namespace SysAcopio.Views
             // Oculta columnas innecesarias en el DataGridView
             dbgSolicitudes.Columns["Id"].Visible = false;
             dbgSolicitudes.Columns["cancelado"].Visible = false;
+            if (!dbgSolicitudes.Columns.Contains("detalleButton"))
+            {
+                dbgSolicitudes.Columns.Add(new DataGridViewButtonColumn
+                {
+                    Name = "detalleButton",
+                    HeaderText = "Detalle de Donaciones",
+                    Text = "Ver Detalle",
+                    UseColumnTextForButtonValue = true, // Usar el texto definido
+                    Width = 100, // Ajusta el ancho del botón
+                    FlatStyle = FlatStyle.Flat, // Estilo plano
+                });
+            }
         }
 
         /// <summary>
@@ -209,16 +224,24 @@ namespace SysAcopio.Views
         private void btnEditarSolicitud_Click_1(object sender, EventArgs e)
         {
 
+            var row = dbgSolicitudes.CurrentRow;
+            if (!Sesion.isAdmin)
+            {
+                Alerts.ShowAlertS("¡Solo un administrador puede editar la solicitud!", AlertsType.Error);
+                return;
+            }
+            if (row == null) return ;
+            
+            bool isCompletedTak = Convert.ToBoolean(row.Cells["Estado"].Value);
+            if (!isCompletedTak) {
+                Alerts.ShowAlertS("Solo puedes editar solicitudes activas!", AlertsType.Info);
+                return;
+            }
+                                    
+
             if (dbgSolicitudes.SelectedRows.Count > 0) {
-                var row = dbgSolicitudes.CurrentRow;
-                if (row != null)
-                {
                     long idSolicitud = Convert.ToInt32(row.Cells["Id"].Value);
                     DashBoardManager.LoadForm(new FormularioEditarSolicitud(idSolicitud));
-
-                   //FormularioEditarSolicitud.DatosGuardadosHandler += FormularioEditar_DatosGuardados;
-
-                }
             }
         }
 
@@ -236,6 +259,26 @@ namespace SysAcopio.Views
             reporte.dataTable = _solicitudBindingSource.DataSource as DataTable;
             reporte.CargarReporte("dsRequest", "SysAcopio.Reports.RequestReport.rdlc");
             reporte.ShowDialog();
+            }
+
+        private void dbgSolicitudes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dbgSolicitudes.Columns["detalleButton"].Index && e.RowIndex >= 0)
+            {
+                long solicitudId = Convert.ToInt64(dbgSolicitudes.Rows[e.RowIndex].Cells["Id"].Value);
+
+                
+                DataTable dtDonacionDetalle = _recursoSolicitudController.GetDetailSolicitud(solicitudId);
+
+                string fechaDonacion = dbgSolicitudes.Rows[e.RowIndex].Cells["Fecha"].Value.ToString();
+                string proveedor = dbgSolicitudes.Rows[e.RowIndex].Cells["Solicitante"].Value.ToString();
+                
+                string titulo = $"Solicitud de {proveedor} el día {fechaDonacion}";
+                string[] camposOcultos = { "id_recurso_Solicitud", "id_solicitud", "id_recurso" };
+
+                DetailsGridForm frm = new DetailsGridForm("Detalle de la Solicitud", titulo, dtDonacionDetalle, camposOcultos);
+                frm.Show();
+            }
         }
     }
 }

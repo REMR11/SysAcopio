@@ -76,6 +76,7 @@ namespace SysAcopio.Views
             this.dbgSolicitudes.Size = new System.Drawing.Size(1100, 775);
             this.dbgSolicitudes.TabIndex = 0;
             this.dbgSolicitudes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            this.dbgSolicitudes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dbgSolicitudes_CellContentClick);
             // 
             // btnGuardar
             // 
