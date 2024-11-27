@@ -122,7 +122,7 @@ namespace SysAcopio.Repositories
             string query = @"SELECT r.id_recurso, r.nombre_recurso AS NombreRecurso, r.id_tipo_recurso, tr.nombre_tipo AS 'Tipo'
                 FROM Recurso AS r
                 JOIN Tipo_Recurso AS tr on r.id_tipo_recurso = tr.id_tipo_recurso
-                WHERE r.cantidad > 0";
+                WHERE r.cantidad >= 0";
 
             return GenericFuncDB.GetRowsToTable(query, null);
         }
@@ -133,7 +133,7 @@ namespace SysAcopio.Repositories
         /// <returns>Objeto de tipo DataTable con todos los recursos</returns>
         public DataTable GetAllTipoRecurso()
         {
-            string query = "SELECT * FROM Tipo_Recurso";
+            string query = "SELECT id_tipo_recurso, nombre_tipo FROM Tipo_Recurso";
 
             return GenericFuncDB.GetRowsToTable(query, null);
         }

@@ -7,6 +7,7 @@ namespace SysAcopio.Controllers
 {
     internal class ProveedoresController
     {
+        //Atributos
         private readonly ProveedorRepository repository;
         private readonly Alerts alerts;
 
@@ -34,6 +35,11 @@ namespace SysAcopio.Controllers
         /// <param name="proveedor"></param>
         public bool Create(Proveedor proveedor)
         {
+            if (repository.ExistByName(proveedor.NombreProveedor))
+            {
+                Alerts.ShowAlertS("Lo sentimos, ya existe un proveedor con ese nombre", AlertsType.Info);
+                return false;
+            }
             long id = repository.Create(proveedor);
 
             if (id > 0)
@@ -102,6 +108,11 @@ namespace SysAcopio.Controllers
             }
         }
 
+        /// <summary>
+        /// Método para buscar los proveedores basado en una string de busqueda
+        /// </summary>
+        /// <param name="searchQuery"></param>
+        /// <returns></returns>
         public DataTable Search(string searchQuery)
         {
             return repository.SearchProveedores(searchQuery);

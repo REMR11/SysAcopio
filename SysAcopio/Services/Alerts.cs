@@ -27,12 +27,16 @@ namespace SysAcopio.Utils
             alertForm.ShowDialog();
         }
 
+        /// <summary>
+        /// Método estatico que funciona igual que el anterior con la diferencia que es invocado desde la clase
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="type"></param>
         public static void ShowAlertS(string message, AlertsType type)
         {
             AlertForm alertForm = new AlertForm(message, type);
             alertForm.ShowDialog();
         }
-
     }
 }
 
