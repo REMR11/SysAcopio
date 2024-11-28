@@ -36,7 +36,8 @@ Este proyecto es un sistema de acopio diseñado para uso en catástrofes natural
 - Asegúrate de tener acceso a la base de datos para realizar operaciones de lectura y escritura.
 
 ## Contribuciones
-Si deseas contribuir al proyecto, por favor abre un issue o envía un pull request con tus sugerencias y mejoras.
+Las contribuciones son bienvenidas. Si deseas agregar tus funcionalidades, asegúrate de seguir las pautas y mantener la estructura del repositorio.
+ - [Pautas de repositorio](Pautas.md)
 
 ## Licencia
 Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
