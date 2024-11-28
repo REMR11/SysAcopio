@@ -14,7 +14,7 @@
    
 3. **📜 Sigue las Convenciones de Codificación**
    
-    Asegúrate de seguir las convenciones de codificación de Java y las pautas establecidas en las sesiones de clase. Esto incluye:
+    Asegúrate de seguir las convenciones de codificación de .NET y las pautas establecidas en las sesiones de clase. Esto incluye:
     * Nombres de variables y métodos claros y descriptivos.
     * Comentarios adecuados donde sea necesario.
     * Formato y estilo de código consistente.
