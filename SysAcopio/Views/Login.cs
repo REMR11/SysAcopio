@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using SysAcopio.Controllers;
-using SysAcopio.Models;
+﻿using SysAcopio.Controllers;
 using SysAcopio.Repositories;
+using SysAcopio.Utils;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace SysAcopio.Views
 {
     public partial class Login : Form
-    {
+    {   // Instancia del repositorio de usuarios para acceder a los datos de usuario
         private readonly UsuarioRepository usuarioRepository;
+        // instancia de la base de datos para gestionar la conexión
         private readonly SysAcopioDbContext dbContext;
         public Login()
         {
@@ -25,36 +19,49 @@ namespace SysAcopio.Views
             dbContext = new SysAcopioDbContext();
         }
 
+        /// <summary>
+        /// Evento que ocurre cuando el control de texto de usuario recibe el foco.
+        /// Limpia el texto y cambia el color del texto a negro.
+        /// </summary>
         private void txtUser_Enter(object sender, EventArgs e)
-        {
+        { // Verifica si el texto es "Usuario", y lo borra
             if (txtUser.Text == "Usuario")
             {
                 txtUser.Text = "";
                 txtUser.ForeColor = Color.Black;
             }
         }
-
+        /// <summary>
+        /// Evento que ocurre cuando el control de texto de usuario pierde el foco.
+        /// Si el control está vacío, establece el texto predeterminado y el color gris.
+        /// </summary>
         private void txtUser_Leave(object sender, EventArgs e)
-        {
+        { // Si el campo está vacío, muestra el texto "Usuario" con un color gris
             if (txtUser.Text == "")
             {
                 txtUser.Text = "Usuario";
                 txtUser.ForeColor = Color.DimGray;
             }
         }
-
+        /// <summary>
+        /// Evento que ocurre cuando el control de texto de contraseña recibe el foco.
+        /// Limpia el texto y cambia el color del texto a negro. También habilita el modo de contraseña.
+        /// </summary>
         private void txtPass_Enter(object sender, EventArgs e)
-        {
+        {   // Verifica si el texto es "Contraseña", y lo borra
             if (txtPass.Text == "Contraseña")
             {
                 txtPass.Text = "";
                 txtPass.ForeColor = Color.Black;
-                txtPass.UseSystemPasswordChar = true;
+                txtPass.UseSystemPasswordChar = true;  // Activa el modo de contraseña
             }
         }
-
+        /// <summary>
+        /// Evento que ocurre cuando el control de texto de contraseña pierde el foco.
+        /// Si el control está vacío, establece el texto predeterminado y desactiva el modo de contraseña.
+        /// </summary>
         private void txtPass_Leave(object sender, EventArgs e)
-        {
+        {  // Si el campo está vacío, muestra el texto "Contraseña" y desactiva el modo de contraseña
             if (txtPass.Text == "")
             {
                 txtPass.Text = "Contraseña";
@@ -63,35 +70,30 @@ namespace SysAcopio.Views
 
             }
         }
-
+        /// <summary>
+        /// Evento que cierra la aplicación al hacer clic en el botón de cerrar.
+        /// </summary>
         private void btnCerrar_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
-
+        /// <summary>
+        /// Evento que maneja el inicio de sesión cuando se hace clic en el botón "Acceder".
+        /// Realiza una consulta a la base de datos para verificar las credenciales del usuario.
+        /// </summary>
         private void btnAcceder_Click(object sender, EventArgs e)
         {
-            // Usamos el método ConnectionServer de SysAcopioDbContext para obtener la conexión
-            using (SqlConnection connection = dbContext.ConnectionServer())
+            try
             {
-                try
+                var (usuarioEncontrado, contraseniaEncriptada, nombreUsuario, rolUsuario, idRol) = usuarioRepository.ObtenerDatosUsuario(txtUser.Text);
+
+                if (usuarioEncontrado)
                 {
-                    // Consulta SQL con parámetros para evitar inyección SQL
-                    string consulta = "SELECT * FROM Usuario WHERE alias_usuario = @alias_usuario AND contrasenia = @contrasenia";
-                    SqlCommand cmd = new SqlCommand(consulta, connection);
-                    cmd.Parameters.AddWithValue("@alias_usuario", txtUser.Text);
-                    cmd.Parameters.AddWithValue("@contrasenia", txtPass.Text);
-
-                    SqlDataReader lector = cmd.ExecuteReader();
-                    
-                    if (lector.HasRows)
-                    { // Si el usuario es válido, leer los datos
-                        lector.Read();
-                        string nombreUsuario = lector["nombre_usuario"].ToString();
-                        string rolUsuario = lector["id_rol"].ToString();  // Suponiendo que 'id_rol' es el rol como string
-
-                        // Guardar los datos del usuario en la clase estática Sesion
-                        Sesion.GuardarDatosUsuario(nombreUsuario, rolUsuario);
+                    // Verificar la contraseña ingresada contra el hash
+                    if (BCrypt.Net.BCrypt.Verify(txtPass.Text, contraseniaEncriptada))
+                    {
+                        // Guardar datos del usuario en la sesión
+                        Sesion.GuardarDatosUsuario(nombreUsuario, rolUsuario, idRol);
 
                         // Mostrar el formulario principal
                         Form1 form1 = new Form1();
@@ -100,20 +102,19 @@ namespace SysAcopio.Views
                     }
                     else
                     {
-                        MessageBox.Show("Usuario o contraseña incorrectos");
+                        Alerts.ShowAlertS("Contraseña o usuario incorrectos", AlertsType.Error);
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Error en la conexión: " + ex.Message);
+                    Alerts.ShowAlertS("Usuario no encontrado.", AlertsType.Error);
                 }
             }
+            catch (Exception ex)
+            {
+                Alerts.ShowAlertS("Error en la conexión: " + ex.Message, AlertsType.Error);
+            }
         }
-        private void msgError(string msg)
-        {
-            lblError.Text = " " + msg;
-            lblError.Visible = true;
 
-        }
     }
 }

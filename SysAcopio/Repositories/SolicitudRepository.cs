@@ -67,7 +67,9 @@ namespace SysAcopio.Controllers
             var solicitudes = new List<Solicitud>();
             using (SqlConnection conn = dbContext.ConnectionServer())
             {
-                string query = "SELECT * FROM Solicitud";
+                string query = @"SELECT id_solicitud, ubicacion, fecha, estado, nombre_solicitante, urgencia, motivo, is_cancel 
+                                    FROM Solicitud";
+
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -102,7 +104,9 @@ namespace SysAcopio.Controllers
         {
             using (SqlConnection conn = dbContext.ConnectionServer())
             {
-                string query = "SELECT * FROM Solicitud WHERE id_solicitud = @IdSolicitud";
+                string query = @"SELECT id_solicitud, ubicacion, fecha, estado, nombre_solicitante, urgencia, motivo, is_cancel 
+                                FROM Solicitud 
+                                WHERE id_solicitud = @IdSolicitud";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@IdSolicitud", id);
@@ -139,7 +143,8 @@ namespace SysAcopio.Controllers
             {
                 using (SqlConnection conn = dbContext.ConnectionServer())
                 {
-                    string query = @"UPDATE Solicitud SET Ubicacion = @Ubicacion, Fecha = @Fecha, Estado = @Estado, nombre_solicitante = @NombreSolicitante, Urgencia = @Urgencia, Motivo = @Motivo, is_cancel = @IsCancel WHERE Id_Solicitud = @IdSolicitud";
+                    string query = @"UPDATE Solicitud SET Ubicacion = @Ubicacion, Fecha = @Fecha, Estado = @Estado, nombre_solicitante = @NombreSolicitante, Urgencia = @Urgencia, Motivo = @Motivo, is_cancel = @IsCancel 
+                                        WHERE Id_Solicitud = @IdSolicitud";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -177,35 +182,8 @@ namespace SysAcopio.Controllers
                 solicitud.Estado = false;
                 return Update(solicitud);
             }
-            catch (Exception)
-            {
-                return false;
-            }
+            catch (Exception) { return false; }
         }
 
-
-        /// <summary>
-        /// Metodo para eliminar definitivamente un usuario mediante un ID
-        /// </summary>
-        /// <param name="id"></param>
-        public bool Delete(long id)
-        {
-            try
-            {
-                using (SqlConnection conn = dbContext.ConnectionServer())
-                {
-                    string query = "DELETE FROM Solicitud WHERE id_solicitud = @IdSolicitud";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@IdSolicitud", id);
-                        return cmd.ExecuteNonQuery() > 0;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
     }
 }

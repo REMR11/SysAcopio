@@ -16,24 +16,30 @@ namespace SysAcopio.Views
 {
     public partial class ProveedorView : Form
     {
+        //Atributos
         private readonly ProveedoresController proveedoresController = new ProveedoresController();
         private long idProveedor = 0;
+
+        //Constructor
         public ProveedorView()
         {
             InitializeComponent();
         }
 
+        //Evento Load
         private void Proveedores_Load(object sender, EventArgs e)
         {
             ReiniciarGrid();
         }
 
+        //Método para reiniciar el DataGrid 
         void ReiniciarGrid()
         {
             var data = proveedoresController.GetAll();
             RefresCarGrid(data);
         }
 
+        //Método para mostrar el DataGrid
         void RefresCarGrid(DataTable data)
         {
             dgvProveedores.DataSource = data;
@@ -43,6 +49,7 @@ namespace SysAcopio.Views
             dgvProveedores.Columns["estado"].Visible = false;
         }
 
+        //Eventos
         private void btnCrear_Click(object sender, EventArgs e)
         {
             //Validar que no hallan campos vacios
@@ -151,6 +158,12 @@ namespace SysAcopio.Views
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
+            if (!Sesion.isAdmin)
+            {
+                Alerts.ShowAlertS("¡Solo un administrador puede eliminar proveedores!", AlertsType.Error);
+                return;
+            }
+
             if (idProveedor == 0)
             {
                 Alerts.ShowAlertS("¡Seleccione un proveedor a modificar!", AlertsType.Info);

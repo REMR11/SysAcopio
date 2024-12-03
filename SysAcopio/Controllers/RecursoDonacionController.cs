@@ -12,6 +12,7 @@ namespace SysAcopio.Controllers
 {
     internal class RecursoDonacionController
     {
+        //Atributos
         private readonly RecursoDonacionRepository repository;
 
         /// <summary>
@@ -31,7 +32,13 @@ namespace SysAcopio.Controllers
             return repository.GetDetailDonation(IdDonacion);
         }
 
-        public bool CreateDetail(RecursoDonacion recursoDonacion, long idDonacion)
+        /// <summary>
+        /// Método para crear un detalle de una Donación
+        /// </summary>
+        /// <param name="recursoDonacion"></param>
+        /// <param name="idDonacion"></param>
+        /// <returns>Valor de tipo bool que representa si se creo o no se creo</returns>
+        public bool CreateDetail(Recurso recursoDonacion, long idDonacion)
         {
             //Validamos que la donación exista
             DonacionesController donacionesController = new DonacionesController();

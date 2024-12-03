@@ -28,23 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblTitulo = new System.Windows.Forms.Label();
             this.picIcono = new System.Windows.Forms.PictureBox();
             this.txtMensaje = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblTitulo = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.picIcono)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // lblTitulo
-            // 
-            this.lblTitulo.AutoSize = true;
-            this.lblTitulo.Font = new System.Drawing.Font("Microsoft Sans Serif", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitulo.Location = new System.Drawing.Point(153, 123);
-            this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(176, 48);
-            this.lblTitulo.TabIndex = 0;
-            this.lblTitulo.Text = "lblTitulo";
             // 
             // picIcono
             // 
@@ -82,14 +72,26 @@
             this.panel1.Size = new System.Drawing.Size(484, 80);
             this.panel1.TabIndex = 3;
             // 
+            // lblTitulo
+            // 
+            this.lblTitulo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lblTitulo.Font = new System.Drawing.Font("Microsoft Sans Serif", 25F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.Location = new System.Drawing.Point(1, 123);
+            this.lblTitulo.Name = "lblTitulo";
+            this.lblTitulo.ReadOnly = true;
+            this.lblTitulo.Size = new System.Drawing.Size(481, 48);
+            this.lblTitulo.TabIndex = 4;
+            this.lblTitulo.TabStop = false;
+            this.lblTitulo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // AlertForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(482, 253);
+            this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.picIcono);
-            this.Controls.Add(this.lblTitulo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "AlertForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -102,10 +104,9 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label lblTitulo;
         private System.Windows.Forms.PictureBox picIcono;
         private System.Windows.Forms.TextBox txtMensaje;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox lblTitulo;
     }
 }

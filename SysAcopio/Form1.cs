@@ -1,23 +1,21 @@
 ﻿using SysAcopio.Controllers;
-using SysAcopio.Models;
 using SysAcopio.Views;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysAcopio
 {
     public partial class Form1 : Form
     {
+        // propiedadeds para acceder a los botones 
         private Point mouseLocationDrag;
+        public Button BtnUsuario => btnUsuario;
+        public Button BtnInventario => btnInventario;
+        public Button BtnSolicitus => btnSolicitud;
+        public Button BtnDonacion => btnDonacion;
+        public Button Button1 => button1;
+
 
         public Form1()
         {
@@ -28,6 +26,8 @@ namespace SysAcopio
         private void Form1_Load(object sender, EventArgs e)
         {
             DashBoardManager.LoadForm(new InicioView());
+            //Asigna los permisos de usuarios
+            Sesion.Permisos(this);
         }
         // Método para cargar los datos del usuario desde la clase Sesion
         private void LoadUserData()
@@ -38,7 +38,7 @@ namespace SysAcopio
             // Mostrar el rol del usuario en lblRol
             lblRol.Text = Sesion.RolUsuario;
         }
-        private void button2_Click(object sender, EventArgs e)
+        private void btnDonacion_Click(object sender, EventArgs e)
         {
             //Cuando este se descomenta y se cambia el nombre de ser necesario
             //LoadForm(new DonacionForm());
@@ -58,7 +58,7 @@ namespace SysAcopio
 
         private void btnInventario_Click(object sender, EventArgs e)
         {
-            DashBoardManager.LoadForm(new InventarioView());
+            DashBoardManager.LoadForm(new Inventario());
         }
         //btnproveedor
         private void button1_Click(object sender, EventArgs e)
@@ -71,7 +71,7 @@ namespace SysAcopio
         {
 
             //Aquí iria la de Reporte cuando este
-
+            DashBoardManager.LoadForm(new ReportView());
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)
@@ -108,6 +108,17 @@ namespace SysAcopio
             Login loginForm = new Login(); // Crea una nueva instancia del formulario Login
             loginForm.Show();
 
+        }
+        //boton de minimizar 
+
+        private void btnMinimizar_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new TipoRecursoView());
         }
     }
 }

@@ -90,6 +90,11 @@ namespace SysAcopio.Repositories
             return GenericFuncDB.AffectRow(query, parametros);
         }
 
+        /// <summary>
+        /// Método para buscar proveedores basado en un string de busqueda
+        /// </summary>
+        /// <param name="searchQuery"></param>
+        /// <returns></returns>
         public DataTable SearchProveedores(string searchQuery)
         {
             string query = "SELECT id_proveedor, nombre_proveedor as NombreProveedor, estado FROM Proveedor WHERE estado = 1 AND nombre_proveedor LIKE @searchQuery;";
@@ -121,6 +126,33 @@ namespace SysAcopio.Repositories
             {
                 return 0;
             }
+        }
+
+        /// <summary>
+        /// Método que valida que exista un recurso por el nombre
+        /// </summary>
+        /// <param name="nombreRecurso"></param>
+        /// <returns></returns>
+        public bool ExistByName(string nombreRecurso)
+        {
+            SysAcopioDbContext dbContext = new SysAcopioDbContext();
+            using (SqlConnection conn = dbContext.ConnectionServer())
+            {
+                string query = " SELECT nombre_proveedor FROM Proveedor WHERE nombre_proveedor = @nombre";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", nombreRecurso);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     }
 }

@@ -1,264 +1,301 @@
 ﻿using SysAcopio.Controllers;
 using SysAcopio.Models;
+using SysAcopio.Utils;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysAcopio.Views
 {
+    /// <summary>
+    /// Clase que representa la vista para gestionar solicitudes.
+    /// Hereda de <see cref="Form"/> y proporciona una interfaz de usuario para visualizar y filtrar solicitudes.
+    /// </summary>
     public partial class SolicitudView : Form
     {
+        private readonly SolicitudController _controller; // Controlador para gestionar solicitudes
+        private readonly RecursoSolicitudController _recursoSolicitudController;
+        private int selectedRowIndex = -1; // Índice de la fila seleccionada en el DataGridView
+        private SqlDataAdapter _solicitudDataAdapter; // Adaptador de datos para las solicitudes
+        private BindingSource _solicitudBindingSource; // Fuente de datos para enlazar al DataGridView
+        private DataSet _solicitudDataSet; // Conjunto de datos para las solicitudes
 
-        private readonly SolicitudController _controller;
-        private int selectedRowIndex = -1; // Variable para almacenar el índice de la fila seleccionada
+        // variables utilizadas en filtros de urgencia en solicitud
+        //--------------------------------------------------------------------------------------------
+        private const int EstadoTodasLasSolicitudes = 0;
+        private const int EstadoSolicitudesNecesarias = 1;
+        private const int EstadoSolicitudesUrgentes = 2;
+        private const int EstadoSolicitudesSuperUrgentes = 3;
+        //--------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <see cref="SolicitudView"/>.
+        /// </summary>
         public SolicitudView()
         {
             InitializeComponent();
-            _controller = new SolicitudController(); // Asegúrate de inicializar el controlador
+            _controller = new SolicitudController(); // Inicializa el controlador de solicitudes
+            _recursoSolicitudController = new RecursoSolicitudController();
+            dbgSolicitudes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
-        SqlDataAdapter solicituDataAdapter;
-        BindingSource solicitudBindingSource;
-        DataSet SolicitudDS;
+        /// <summary>
+        /// Evento que se ejecuta al cargar la vista. Inicializa el DataGrid y carga las solicitudes.
+        /// </summary>
         private void SolicitudView_Load_1(object sender, EventArgs e)
         {
-            SolicitudDS = new DataSet();
-            var solicitudes = _controller.ObtenerTodasLasSolicitudes(); // Obtén las solicitudes
+            InicializarDataGrid(); // Inicializa el DataGridView
+            CargarSolicitudes(); // Carga las solicitudes desde el controlador
+        }
 
-            DataTable dtSolicitudes = ConvertToDataTable(solicitudes);
-            solicitudBindingSource = new BindingSource { DataSource = dtSolicitudes };
-            dataGridView1.DataSource = solicitudBindingSource;
-            dataGridView1.Columns["Id"].Visible = false;
+        /// <summary>
+        /// Inicializa el DataGridView y su fuente de datos.
+        /// </summary>
+        private void InicializarDataGrid()
+        {
+            _solicitudDataSet = new DataSet(); // Crea un nuevo conjunto de datos
+            _solicitudBindingSource = new BindingSource(); // Crea una nueva fuente de datos
+            dbgSolicitudes.DataSource = _solicitudBindingSource; // Establece la fuente de datos del DataGridView
+        }
 
-            // Crear la columna "EstadoString" y establecer el tipo de celda
-            var estadoColumn = new DataGridViewTextBoxColumn
+        /// <summary>
+        /// Carga todas las solicitudes y actualiza el DataGridView.
+        /// </summary>
+        private void CargarSolicitudes()
+        {
+            var solicitudes = _controller.ObtenerTodasLasSolicitudes(); // Obtiene todas las solicitudes
+            ActualizarDataGrid(solicitudes); // Actualiza el DataGridView con las solicitudes
+
+            // Oculta columnas innecesarias en el DataGridView
+            dbgSolicitudes.Columns["Id"].Visible = false;
+            dbgSolicitudes.Columns["cancelado"].Visible = false;
+            if (!dbgSolicitudes.Columns.Contains("detalleButton"))
             {
-                Name = "EstadoString",
-                HeaderText = "Estado",
-                ReadOnly = true
-            };
-
-            dataGridView1.Columns.Add(estadoColumn);
-
-            // Llenar la columna "EstadoString" con los valores formateados
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-                if (row.Cells["Estado"].Value is bool isActive)
+                dbgSolicitudes.Columns.Add(new DataGridViewButtonColumn
                 {
-                    row.Cells["EstadoString"].Value = isActive ? "Completado" : "Pendiente";
-                }
+                    Name = "detalleButton",
+                    HeaderText = "Detalle de Donaciones",
+                    Text = "Ver Detalle",
+                    UseColumnTextForButtonValue = true, // Usar el texto definido
+                    Width = 100, // Ajusta el ancho del botón
+                    FlatStyle = FlatStyle.Flat, // Estilo plano
+                });
             }
         }
 
-        private DataTable ConvertToDataTable(IEnumerable<Solicitud> solicitudes)
+        /// <summary>
+        /// Actualiza la fuente de datos del DataGridView con la lista de solicitudes.
+        /// </summary>
+        /// <param name="solicitudes">Lista de solicitudes a mostrar.</param>
+        private void ActualizarDataGrid(IEnumerable<Solicitud> solicitudes)
         {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Id", typeof(long));
-            dt.Columns.Add("Ubicacion", typeof(string));
-            dt.Columns.Add("Fecha", typeof(DateTime));
-            dt.Columns.Add("Estado", typeof(bool));
-            dt.Columns.Add("Solicitante", typeof(string));
-            dt.Columns.Add("Urgencia", typeof(byte));
-            dt.Columns.Add("Motivo", typeof(string));
-            dt.Columns.Add("cancelado", typeof(bool));
+            DataTable dtSolicitudes = ConvertirSolicitudesADatatable(solicitudes); // Convierte las solicitudes a DataTable
+            _solicitudBindingSource.DataSource = dtSolicitudes; // Establece la fuente de datos del BindingSource
+        }
 
+        /// <summary>
+        /// Convierte una lista de solicitudes a un DataTable.
+        /// </summary>
+        /// <param name="solicitudes">Lista de solicitudes a convertir.</param>
+        /// <returns>DataTable con la información de las solicitudes.</returns>
+        private DataTable ConvertirSolicitudesADatatable(IEnumerable<Solicitud> solicitudes)
+        {
+            var dt = new DataTable(); // Crea un nuevo DataTable
+            dt.Columns.Add("Id", typeof(long)); // Añade columna para ID
+            dt.Columns.Add("Ubicacion", typeof(string)); // Añade columna para ubicación
+            dt.Columns.Add("Fecha", typeof(DateTime)); // Añade columna para fecha
+            dt.Columns.Add("Estado", typeof(bool)); // Añade columna para estado
+            dt.Columns.Add("Solicitante", typeof(string)); // Añade columna para solicitante
+            dt.Columns.Add("Urgencia", typeof(byte)); // Añade columna para urgencia
+            dt.Columns.Add("Motivo", typeof(string)); // Añade columna para motivo
+            dt.Columns.Add("Cancelado", typeof(bool)); // Añade columna para estado de cancelación
+
+            // Añade cada solicitud al DataTable
             foreach (var solicitud in solicitudes)
             {
-                dt.Rows.Add(solicitud.IdSolicitud, solicitud.Ubicacion, solicitud.Fecha, solicitud.Estado, solicitud.NombreSolicitante, solicitud.Urgencia, solicitud.Motivo, solicitud.IsCancel); // Asegúrate de que las propiedades sean correctas
+                dt.Rows.Add(solicitud.IdSolicitud, solicitud.Ubicacion, solicitud.Fecha, solicitud.Estado, solicitud.NombreSolicitante, solicitud.Urgencia, solicitud.Motivo, solicitud.IsCancel);
             }
-
-            return dt;
-        }
-        private void btnGuardar_Click(object sender, EventArgs e)
-        {
-            // Obtener los valores de los TextBox
-            string ubicacion = txtUbicacion.Text;
-            string nombreSolicitante = txtNombreSolicitante.Text;
-            // Obtener el índice seleccionado del ComboBox
-            int selectedIndex = cmbUrgencia.SelectedIndex;
-
-            // Verificar que se haya seleccionado un índice válido
-            if (selectedIndex < 0)
-            {
-                MessageBox.Show("Por favor, seleccione un valor válido para la urgencia.");
-                return; // Salir del método si no hay selección
-            }
-
-            // Asignar el valor de urgencia basado en el índice seleccionado
-            byte urgencia = (byte)(selectedIndex + 1);
-
-            string motivo = txtMotivo.Text;
-
-            // Crear una nueva instancia de Solicitud
-            Solicitud nuevaSolicitud = new Solicitud(ubicacion, nombreSolicitante, urgencia, motivo);
-
-            // Agregar la nueva solicitud a la lista
-            long idSolicitud = _controller.CrearSolicitud(nuevaSolicitud);
-
-            // (Opcional) Limpiar los TextBox después de guardar
-            clearInputs();
-
-            var solicitudes = _controller.ObtenerTodasLasSolicitudes();
-
-            actualizarDataGrid(solicitudes);
+            return dt; // Retorna el DataTable con las solicitudes
         }
 
-        private void actualizarDataGrid(IEnumerable<Solicitud> solicitudes)
-        {
-            DataTable dt = ConvertToDataTable(solicitudes);
-            solicitudBindingSource.DataSource = dt;
-            dataGridView1.DataSource = solicitudBindingSource;
-        }
+        /// <summary>
+        /// Evento que se ejecuta al cambiar la selección en el combo box de filtros.
+        /// Filtra las solicitudes según el filtro seleccionado.
+        /// </summary>
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var solicitudes = ObtenerSolicitudesPorSeleccion(comboBox1.SelectedIndex);
-            actualizarDataGrid(solicitudes);
+            comboBox2.SelectedIndex = 0;
+            var solicitudes = ObtenerSolicitudesPorFiltro(comboBox1.SelectedIndex); // Obtiene las solicitudes filtradas
+            ActualizarDataGrid(solicitudes); // Actualiza el DataGridView con las solicitudes filtradas
         }
 
-        private IEnumerable<Solicitud> ObtenerSolicitudesPorSeleccion(int selectedIndex)
+
+        /// <summary>
+        /// Obtiene las solicitudes según el filtro seleccionado.
+        /// </summary>
+        /// <param name="selectedIndex">Índice del filtro seleccionado.</param>
+        /// <returns>Lista de solicitudes filtradas.</returns>
+        private IEnumerable<Solicitud> ObtenerSolicitudesPorFiltro(int selectedIndex)
         {
             switch (selectedIndex)
             {
                 case 0:
-                    return _controller.ObtenerTodasLasSolicitudes();
+                    return _controller.ObtenerTodasLasSolicitudes(); // Todas las solicitudes
                 case 1:
-                    return _controller.ObtenerSolicitudesActivas();
+                    return _controller.ObtenerSolicitudesActivas(); // Solicitudes activas
                 case 2:
-                    return _controller.ObtenerSolicitudesInactivas();
+                    return _controller.ObtenerSolicitudesInactivas(); // Solicitudes inactivas
                 default:
-                    return Enumerable.Empty<Solicitud>(); // Retorna una colección vacía si no hay coincidencia
+                    return Enumerable.Empty<Solicitud>(); // Retorna una lista vacía si no hay coincidencias
             }
         }
+
+        /// <summary>
+        /// Evento que se ejecuta al cambiar la selección en el combo box de urgencias.
+        /// Filtra las solicitudes según la urgencia seleccionada y actualiza el DataGridView.
+        /// </summary>
+        /// <param name="sender">El origen del evento.</param>
+        /// <param name="e">Los datos del evento.</param>
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox1.SelectedIndex = 0;
+            byte urgenciaSeleccionada = ObtenerUrgenciaSeleccionada();
+            var solicitudesFiltradas = ObtenerSolicitudesPorEstado(urgenciaSeleccionada); // Obtenemos IEnumerable con las solicitudes filtradas.
+            ActualizarDataGrid(solicitudesFiltradas); // Actualiza el dataGrid
+        }
+
+        /// <summary>
+        /// Obtiene el valor de la urgencia seleccionada en el combo box.
+        /// </summary>
+        /// <returns>Un byte que representa la urgencia seleccionada (1 basado en el índice).</returns>
+        private byte ObtenerUrgenciaSeleccionada()
+        {
+            return (byte)(comboBox2.SelectedIndex); // Convierte el indice seleccionado a byte para su posterios uso.
+        }
+
+        /// <summary>
+        /// Obtiene las solicitudes filtradas por urgencia.
+        /// </summary>
+        /// <param name="urgencia">El valor de la urgencia para filtrar las solicitudes.</param>
+        /// <returns>Una colección de solicitudes que cumplen con el criterio de urgencia.</returns>
+        private IEnumerable<Solicitud> ObtenerSolicitudesFiltradasPorUrgencia(byte urgencia)
+        {
+            return _controller.ObtenerSolicitudesPorUrgencia(urgencia);
+        }
+
+        /// <summary>
+        /// Obtiene las solicitudes según el estado seleccionado en el combo box.
+        /// </summary>
+        /// <param name="selectIndex">El índice seleccionado en el combo box que determina el estado.</param>
+        /// <returns>Una colección de solicitudes que corresponden al estado seleccionado.</returns>
+        private IEnumerable<Solicitud> ObtenerSolicitudesPorEstado(int selectIndex)
+        {
+            switch (selectIndex)
+            {
+                case EstadoTodasLasSolicitudes: return _controller.ObtenerTodasLasSolicitudes(); ;
+                case EstadoSolicitudesNecesarias:
+                case EstadoSolicitudesUrgentes:
+                case EstadoSolicitudesSuperUrgentes:
+                    byte urgencia = ObtenerUrgenciaSeleccionada();
+                    return ObtenerSolicitudesFiltradasPorUrgencia(urgencia);
+                default: return Enumerable.Empty<Solicitud>();
+            }
+        }
+        /// <summary>
+        /// Evento que se ejecuta al hacer clic en una celda del DataGridView.
+        /// Guarda el índice de la fila seleccionada.
+        /// </summary>
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (IsRowIndexValid(e.RowIndex))
+            if (e.RowIndex >= 0) selectedRowIndex = e.RowIndex; // Guarda el índice de la fila seleccionada
+        }
+
+        /// <summary>
+        /// Evento que se ejecuta al hacer clic en el botón de guardar.
+        /// Carga la vista para gestionar recursos.
+        /// </summary>
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            DashBoardManager.LoadForm(new RecursoSolicitudView()); // Carga la vista de solicitud de recursos
+        }
+
+        private void btnEditarSolicitud_Click_1(object sender, EventArgs e)
+        {
+
+            var row = dbgSolicitudes.CurrentRow;
+            if (!Sesion.isAdmin)
             {
-                selectedRowIndex = e.RowIndex;
-                long solicitudId = GetSolicitudIdFromSelectedRow(e.RowIndex);
-                DisplaySolicitudDetails(solicitudId);
+                Alerts.ShowAlertS("¡Solo un administrador puede editar la solicitud!", AlertsType.Error);
+                return;
+            }
+            if (row == null) return ;
+            
+            bool isCompletedTak = Convert.ToBoolean(row.Cells["Estado"].Value);
+            if (!isCompletedTak) {
+                Alerts.ShowAlertS("Solo puedes editar solicitudes activas!", AlertsType.Info);
+                return;
+            }
+                                    
+
+            if (dbgSolicitudes.SelectedRows.Count > 0) {
+                    long idSolicitud = Convert.ToInt32(row.Cells["Id"].Value);
+                    DashBoardManager.LoadForm(new FormularioEditarSolicitud(idSolicitud));
             }
         }
 
-        private bool IsRowIndexValid(int rowIndex)
+        // Método que maneja el evento
+        private void FormularioEditar_DatosGuardados(string campo1, string campo2)
         {
-            return rowIndex >= 0;
+            // Aquí puedes actualizar el DataGridView o realizar otras acciones
+            MessageBox.Show($"Datos guardados: {campo1}, {campo2}");
+            // Actualiza el DataGridView según sea necesario
         }
 
-        private long GetSolicitudIdFromSelectedRow(int rowIndex)
+        /// <summary>
+        /// Genera el reporte de solicitudes a partir del dataSource actual
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnGenerateReport_Click(object sender, EventArgs e)
         {
-            DataGridViewRow selectedRow = dataGridView1.Rows[rowIndex];
-            return Convert.ToInt64(selectedRow.Cells["Id"].Value);
-        }
 
-        private void DisplaySolicitudDetails(long solicitudId)
-        {
-            var solicitud = _controller.ObtenerSolicitudPorId(solicitudId);
-            if (solicitud != null)
+            // Obtiene el DataTable actual de la fuente de datos
+            DataTable dtSolicitud = _solicitudBindingSource.DataSource as DataTable;
+
+            // Verifica si hay datos para generar el reporte
+            if (dtSolicitud == null || dtSolicitud.Rows.Count == 0)
             {
-                ShowSolicitudId(solicitudId);
-                PopulateSolicitudFields(solicitud);
-            }
-            else
-            {
-                MessageBox.Show("No se encontró la solicitud.");
-            }
-        }
-
-        private void ShowSolicitudId(long solicitudId)
-        {
-            MessageBox.Show($"ID de la solicitud seleccionada: {solicitudId}");
-        }
-
-        private void PopulateSolicitudFields(Solicitud solicitud)
-        {
-            txtUbicacion.Text = solicitud.Ubicacion;
-            txtNombreSolicitante.Text = solicitud.NombreSolicitante;
-            cmbUrgencia.SelectedIndex = solicitud.Urgencia;
-            cmbEstado.Enabled = true;
-            cmbEstado.SelectedIndex = solicitud.Estado ? 0 : 1;
-            txtMotivo.Text = solicitud.Motivo;
-        }
-        private void btnActualizar_Click(object sender, EventArgs e)
-        {
-            if (selectedRowIndex < 0)
-            {
-                MessageBox.Show("No hay ninguna solicitud seleccionada para actualizar.");
+                Alerts.ShowAlertS("No hay datos para generar el reporte", AlertsType.Info);
                 return;
             }
 
-            // Obtener los valores de los TextBox
-            string ubicacion = txtUbicacion.Text;
-            string nombreSolicitante = txtNombreSolicitante.Text;
-
-            // Obtener el índice seleccionado del ComboBox
-            int selectedIndex = cmbUrgencia.SelectedIndex;
-
-            // Verificar que se haya seleccionado un índice válido
-            if (selectedIndex < 0)
-            {
-                MessageBox.Show("Por favor, seleccione un valor válido para la urgencia.");
-                return; // Salir del método si no hay selección
+            // Si hay datos, crea una instancia de ReportView y carga el reporte
+            ReportView reporte = new ReportView();
+            reporte.dataTable = dtSolicitud;
+            reporte.CargarReporte("dsRequest", "SysAcopio.Reports.RequestReport.rdlc");
+            reporte.ShowDialog();
             }
 
-            // Asignar el valor de urgencia basado en el índice seleccionado
-            byte urgencia = (byte)(selectedIndex + 1);
-
-            int selectedIndexActive = cmbEstado.SelectedIndex;
-            bool isActive = selectedIndexActive == 0; // 0 para "Activo", 1 para "Inactivo"
-
-            // Verificar que se haya seleccionado un índice válido
-            if (selectedIndexActive < 0)
+        private void dbgSolicitudes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dbgSolicitudes.Columns["detalleButton"].Index && e.RowIndex >= 0)
             {
-                MessageBox.Show("Por favor, seleccione un valor válido para verificar si está activo o no.");
-                return; // Salir del método si no hay selección
+                long solicitudId = Convert.ToInt64(dbgSolicitudes.Rows[e.RowIndex].Cells["Id"].Value);
+
+                
+                DataTable dtDonacionDetalle = _recursoSolicitudController.GetDetailSolicitud(solicitudId);
+
+                string fechaDonacion = dbgSolicitudes.Rows[e.RowIndex].Cells["Fecha"].Value.ToString();
+                string proveedor = dbgSolicitudes.Rows[e.RowIndex].Cells["Solicitante"].Value.ToString();
+                
+                string titulo = $"Solicitud de {proveedor} el día {fechaDonacion}";
+                string[] camposOcultos = { "id_recurso_Solicitud", "id_solicitud", "id_recurso" };
+
+                DetailsGridForm frm = new DetailsGridForm("Detalle de la Solicitud", titulo, dtDonacionDetalle, camposOcultos);
+                frm.Show();
             }
-
-            string motivo = txtMotivo.Text;
-
-            long idSolicitud = GetSolicitudIdFromSelectedRow(selectedRowIndex);
-            // Crear una nueva instancia de Solicitud
-            var solicitudObjetivo = _controller.ObtenerSolicitudPorId(idSolicitud);
-
-            solicitudObjetivo.Ubicacion = ubicacion;
-            solicitudObjetivo.NombreSolicitante = nombreSolicitante;
-            solicitudObjetivo.Urgencia = urgencia;
-            solicitudObjetivo.Estado = isActive;
-            solicitudObjetivo.Motivo = motivo;
-
-            // Agregar la nueva solicitud a la lista
-            bool isCompleted = _controller.ActualizarSolicitud(solicitudObjetivo);
-
-            MessageBox.Show("Operación realizada? " + isCompleted);
-            // (Opcional) Limpiar los TextBox después de guardar
-            clearInputs();
-
-            var solicitudes = _controller.ObtenerTodasLasSolicitudes();
-            actualizarDataGrid(solicitudes);
         }
-
-        private void clearInputs()
-        {
-            txtUbicacion.Clear();
-            txtNombreSolicitante.Clear();
-            cmbUrgencia.SelectedIndex = 0;
-            cmbEstado.Enabled = false;
-            cmbEstado.SelectedIndex = 0;
-            txtMotivo.Clear();
-        }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            byte selectOption = Convert.ToByte(comboBox2.SelectedIndex+1);
-            IEnumerable<Solicitud> solicitudes = _controller.ObtenerSolicitudesPorUrgencia(selectOption);
-            actualizarDataGrid(solicitudes);
-        }
-
     }
 }
