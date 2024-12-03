@@ -1,16 +1,7 @@
 ﻿using SysAcopio.Controllers;
-using SysAcopio.Models;
 using SysAcopio.Views;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysAcopio
@@ -21,7 +12,6 @@ namespace SysAcopio
         private Point mouseLocationDrag;
         public Button BtnUsuario => btnUsuario;
         public Button BtnInventario => btnInventario;
-        public Button BtnReporte => btnReporte;
         public Button BtnSolicitus => btnSolicitud;
         public Button BtnDonacion => btnDonacion;
         public Button Button1 => button1;
@@ -81,7 +71,7 @@ namespace SysAcopio
         {
 
             //Aquí iria la de Reporte cuando este
-
+            DashBoardManager.LoadForm(new ReportView());
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)

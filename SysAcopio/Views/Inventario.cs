@@ -351,5 +351,30 @@ namespace SysAcopio.Views
 
             (idRecurso == 0 ? (Action)Guardar : Modificar)();
         }
+
+        /// <summary>
+        /// Genera el reporte de productos en inventario a partir del DataSource del DataGridView
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnGenerateReport_Click(object sender, EventArgs e)
+        {
+
+            // Obtener el DataTable del DataGridView
+            DataTable dtInventario = dgvRecursos.DataSource as DataTable;
+
+            // Verificar si hay datos para generar el reporte
+            if (dtInventario == null || dtInventario.Rows.Count == 0)
+            {
+                Alerts.ShowAlertS("No existen datos para generar el reporte", AlertsType.Info);
+                return;
+            }
+
+            // Si hay datos, crea una instancia del ReportView y carga el reporte
+            ReportView reporte = new ReportView();
+            reporte.dataTable = dtInventario;
+            reporte.CargarReporte("dsInventory", "SysAcopio.Reports.InventoryReport.rdlc");
+            reporte.ShowDialog();
+        }
     }
 }

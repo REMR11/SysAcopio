@@ -88,8 +88,8 @@ namespace SysAcopio.Controllers
         {
             return usuarioRepository.ObtenerUsuariosDataTable();
         }
-        
 
+      
 
     }
 }

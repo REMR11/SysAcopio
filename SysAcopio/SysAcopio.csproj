@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,9 +33,34 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>home.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Win32Resource>
+    </Win32Resource>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BCrypt.Net-Next, Version=4.0.3.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
       <HintPath>..\packages\BCrypt.Net-Next.4.0.3\lib\net472\BCrypt.Net-Next.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1484.0\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1484.0\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1484.0\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1484.0\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1484.0\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -66,6 +92,19 @@
     <Compile Include="Controllers\DashBoardManager.cs" />
     <Compile Include="Controllers\DonacionesController.cs" />
     <Compile Include="Controllers\InventarioController.cs" />
+    <Compile Include="DbAcopioDeRLDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DbAcopioDeRLDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DbAcopioDeRLDataSet1.cs">
+      <DependentUpon>DbAcopioDeRLDataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DbAcopioDeRLDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DbAcopioDeRLDataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Repositories\InventarioRepository.cs" />
     <Compile Include="Controllers\ProveedoresController.cs" />
     <Compile Include="Controllers\RecursoDonacionController.cs" />
@@ -108,6 +147,7 @@
     <Compile Include="Repositories\TipoRecursoRepository.cs" />
     <Compile Include="Services\Alerts.cs" />
     <Compile Include="Services\GenericFuncDB.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Views\AlertForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +233,12 @@
     <Compile Include="Views\RecursoSolicitudView.Designer.cs">
       <DependentUpon>RecursoSolicitudView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\ReportView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ReportView.Designer.cs">
+      <DependentUpon>ReportView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\SolicitudView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -214,6 +260,7 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\InventoryReport.rdlc" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -224,6 +271,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Reports\DonationReport.rdlc" />
+    <EmbeddedResource Include="Reports\RequestReport.rdlc" />
     <EmbeddedResource Include="Views\AlertForm.resx">
       <DependentUpon>AlertForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -269,6 +318,9 @@
     <EmbeddedResource Include="Views\RecursoSolicitudView.resx">
       <DependentUpon>RecursoSolicitudView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\ReportView.resx">
+      <DependentUpon>ReportView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\SolicitudView.resx">
       <DependentUpon>SolicitudView.cs</DependentUpon>
     </EmbeddedResource>
@@ -278,7 +330,32 @@
     <EmbeddedResource Include="Views\UsuarioView.resx">
       <DependentUpon>UsuarioView.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="DbAcopioDeRLDataSet.xsc">
+      <DependentUpon>DbAcopioDeRLDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DbAcopioDeRLDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DbAcopioDeRLDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DbAcopioDeRLDataSet.xss">
+      <DependentUpon>DbAcopioDeRLDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DbAcopioDeRLDataSet1.xsc">
+      <DependentUpon>DbAcopioDeRLDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="DbAcopioDeRLDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DbAcopioDeRLDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DbAcopioDeRLDataSet1.xss">
+      <DependentUpon>DbAcopioDeRLDataSet1.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\SysAcopio.Models.Recurso.datasource" />
+    <None Include="Properties\DataSources\SysAcopio.Models.Solicitud.datasource" />
+    <None Include="Properties\DataSources\SysAcopio.Models.TipoRecurso.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -300,6 +377,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\iconoError.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="home.ico" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
